@@ -1,0 +1,34 @@
+# Compiled binaries and object files
+*.o
+*.obj
+*.exe
+*.out
+*.bin
+*.dll
+*.so
+*.dylib
+
+# Temporary files
+*~
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Build directories
+build/
+bin/
+obj/
+debug/
+release/
+
+# Editor-specific files (e.g., VS Code, Vim)
+.vscode/
+.history/
+*.code-workspace
+
+# Log files
+*.log
+
+# Other generated files
+a.out # Default executable name on some systems
