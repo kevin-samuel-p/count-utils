@@ -18,11 +18,38 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
+#include <stdbool.h>
 
 
+bool isRepeating(long);
 void sanitizer(char*);
 long backtrack(long, int, long, int);
 void testBackTrack(long);
+
+
+bool isRepeating(long number) {
+    /**
+     *  Checks whether a given number has repeating/recurring digits or not.
+     */
+
+    int mask = 0;   // Bitmask used as a set to keep track of digits
+    long rev = 0;       
+
+    long copy = number;
+    while (copy > 0) {
+        int rem = copy % 10;
+
+        if ((mask & (1 << rem)) != 0) 
+            return true;
+
+        mask |= (1 << rem);
+        rev = (rev * 10) + rem;
+        copy /= 10;
+    }
+
+    return false;
+}
 
 
 long nextNumber(long number) {
@@ -41,21 +68,17 @@ long nextNumber(long number) {
         return -1;
     }
 
-    int mask = 0;       // Bitmask used as a set
+    if (isRepeating(number)) {
+        printf("Bad Input: Input has repeating digits\n");
+        return -1;
+    }
+
     long rev = 0;       // Bitset used as a stack
     int digitCount = 0; // Stack length tracked using digit count
 
-    // Check for invalid input
-    long copy = number;
+    long copy = number + 1;
     while (copy > 0) {
         int rem = copy % 10;
-
-        if ((mask & (1 << rem)) != 0) {
-            printf("Bad Input: Input has repeating digits\n");
-            return -1;
-        }
-
-        mask |= (1 << rem);
         rev = (rev * 10) + rem;
         digitCount++;
         copy /= 10;
@@ -65,13 +88,13 @@ long nextNumber(long number) {
 }
 
 
+
+
 long backtrack(long number, int mask, long stack, int stackLen) {
     if (stackLen == 0) return number;
 
     int currDigit = stack % 10;
     for (int offset = 0; offset + currDigit <= 9; offset++) {
-        if (stackLen == 1 && offset == 0) continue;
-
         int trial;
         if ((mask & (1 << (offset + currDigit))) == 0 && 
             ((trial = backtrack(
