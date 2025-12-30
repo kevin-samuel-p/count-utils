@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <ctype.h>
+#include <time.h>
+#include <locale.h>
 
 
 // Overline ASCII : 773
@@ -206,13 +208,18 @@ wchar_t *toRoman(int number) {
 
 
 int main(int argc, char *argv[]) {
+    clock_t startTime, endTime;
+    startTime = clock();
+
     if (argc != 2) {
-        perror("Invalid Syntax: .\\norep.exe [number/roman]");
+        perror("Invalid Syntax: .\\roman.exe [number/roman]");
         return -1;
     }
 
     int number;
     wchar_t *roman = NULL;
+
+    setlocale(LC_ALL, "");
 
     if (isdigit(argv[1][0])) {
         number = 0;
@@ -252,10 +259,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    endTime = clock();
+
     if (roman != NULL) {
         printf("Next Number: %ls\n", roman);
         free(roman);
     }
-    
+
+    double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
+    printf("\nExecution time: %.4lf seconds", timeUsed);
+
     return 0;
 }
