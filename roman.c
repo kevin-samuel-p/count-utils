@@ -1,3 +1,28 @@
+/***
+ *      Roman numbers
+ *      Given a number, return its successor in Roman Nuemrals.
+ * 
+ *      ___Working__Procedure___
+ *      ->  The executable is called with a single parameter.
+ *      ->  The parameter can either be a numerical number or a Roman Numeral.
+ *      ->  If the parameter is a Roman Numeral, it is first parsed using toNumber() to identify its equivalent.
+ *      ->  The Roman Numeral format of the next number is returned by toRoman(number + 1).
+ *      ->  Invalid input cases will be handled.
+ * 
+ *      ___Input__Requirements___
+ *      ->  The inputted number can be a positive integer in the range [0, 1000000000).
+ *      ->  If a Roman Number is inputted, it should use the overline vinculum notation supported by this code.
+ *          (WILL BE DOCUMENTED IN DETAIL)
+ *      ->  For numeric parameter, non-digit characters should not be used.
+ *      ->  For Roman Numeral parameter, non-Roman numeral characters should not be used.
+ * 
+ *      ___NOTE___
+ *      ->  Windows does not render overlines in its Powershell terminal/command prompt.
+ *      ->  This is an OS bug, not an implementation error.
+ *      ->  Display might not work, but the characters will correctly be copied to the clipboard.
+ *      ->  For numbers above 4000, users are discouraged from using Roman Numeral parameter as it returns true -ves.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
