@@ -47,7 +47,7 @@ char *nextNumber(char *, enum Radix);
 
 //  BORDERLINE CASES
 //  For inputted decimal strings of length 20 + 1, ensure string does not exceed 18446744073709551615
-//  For inputted octal strings of length 22 + 1, ensure string does not exceed 17777777777777777777777
+//  For inputted octal strings of length 22 + 1, ensure string does not exceed 1777777777777777777777
 
 
 char *convertBinary(char *binary, enum Radix radix) {
@@ -58,18 +58,23 @@ char *convertBinary(char *binary, enum Radix radix) {
     }
 
     unsigned long long number = 0ULL;
-    for (int i = n-1; i >= 0; i--) {
+    for (int i = 0; i < n; i++) {
         if (binary[i] != '0' && binary[i] != '1') {
             printf("Bad Input: Invalid binary number\n");
             return NULL;
         }
-        number = (number << 1) + (binary[i] - '0');
+        number = (number << 1) | (binary[i] - '0');
     }
 
     char *numString;
     switch(radix) {
         case BINARY:
-            return binary;
+            numString = (char *)malloc((n + 1) * sizeof(char));
+
+            int k = 0;
+            while (binary[k] == '0') k++;
+            strcpy(numString, binary + k);
+        break;
         
         case DECIMAL:
             numString = (char *)malloc(21 * sizeof(char));
@@ -103,7 +108,7 @@ char *convertDecimal(char *decimal, enum Radix radix) {
     unsigned long long number = 0ULL;
     for (int i = 0; i < n; i++) {
         if (!isdigit(decimal[i])) {
-            printf("Bad Input: Invalid decimal number'n");
+            printf("Bad Input: Invalid decimal number\n");
             return NULL;
         }
         number = (number * 10) + (decimal[i] - '0');
@@ -116,10 +121,10 @@ char *convertDecimal(char *decimal, enum Radix radix) {
             int len = 0;
 
             // Construct in reverse order and then reverse string
-            while (number > 0) {
+            do {
                 numString[len++] = '0' + (number & 1);
                 number >>= 1;
-            }
+            } while (number > 0);
             numString[len] = '\0';
 
             // Reverse string order
@@ -132,7 +137,8 @@ char *convertDecimal(char *decimal, enum Radix radix) {
 
         case DECIMAL:
             numString = (char *)malloc((n + 1) * sizeof(char));
-            sprintf(numString, "%lld", number);
+            sprintf(numString, "%llu", number);
+        break;
 
         case HEXADECIMAL:
             numString = (char *)malloc(17 * sizeof(char));
@@ -280,7 +286,7 @@ char *convertHexadecimal(char *hexadecimal, enum Radix radix) {
 
         case DECIMAL:
             numString = (char *)malloc(21 * sizeof(char));
-            sprintf(numString, "%lld", number);
+            sprintf(numString, "%llu", number);
         break;
 
         case HEXADECIMAL:
@@ -359,7 +365,7 @@ char *convertOctal(char *octal, enum Radix radix) {
 
         case DECIMAL:
             numString = (char *)malloc(21 * sizeof(char));
-            sprintf(numString, "%lld", number);
+            sprintf(numString, "%llu", number);
         break;
 
         case HEXADECIMAL:
@@ -385,21 +391,23 @@ char *nextNumber(char *number, enum Radix radix) {
 
     switch(radix) {
         case BINARY:
-            for (int i = n - 1; i >= 0; i--) {
-                switch(number[i]) {
-                    case '0':
-                        number[i] = '1';
-                        return number;
+            res = (char *)malloc((n + 2) * sizeof(char));
+            strcpy(res, number);
 
-                    case '1':
-                        number[i] = '0';
-                }
+            // Add 1 from the end
+            int i = n - 1;
+            while (i >= 0 && res[i] == '1') {
+                res[i] = '0';
+                i--;
             }
 
-            res = (char *)malloc((n + 2) * sizeof(char));
-            res = "1";
-            strcat(res, number);
-
+            if (i >= 0) {
+                res[i] = '1';
+            } else {
+                // Overflow: prepend '1'
+                memmove(res + 1, res, n + 1);
+                res[0] = '1';
+            }
         break;
 
         case DECIMAL:
@@ -408,7 +416,7 @@ char *nextNumber(char *number, enum Radix radix) {
 
             switch(radix) {
                 case DECIMAL:
-                    sscanf(number, "%lld", &value);
+                    sscanf(number, "%llu", &value);
                 break;
 
                 case HEXADECIMAL:
@@ -429,7 +437,7 @@ char *nextNumber(char *number, enum Radix radix) {
             
             switch(radix) {
                 case DECIMAL:
-                    sprintf(res, "%lld", ++value);
+                    sprintf(res, "%llu", ++value);
                 break;
 
                 case HEXADECIMAL:
@@ -484,11 +492,11 @@ int main(int argc, char *argv[]) {
 
 
     int x = 2, y;
-    char *input, *output;       // Pointers for sanitized input and output strings respectively
-    char function;              // Function flag - stores either c or n
+    char *input, *output;           // Pointers for sanitized input and output strings respectively
+    char function;                  // Function flag - stores either c or n
     enum Radix 
-        inputRadix = DECIMAL,   // Input radix flag - stores input number's radix
-        conversionRadix;        // Conversion radix flag - stores radix for conversion, if needed
+        inputRadix = DECIMAL,       // Input radix flag - stores input number's radix
+        conversionRadix = DECIMAL;  // Conversion radix flag - stores radix for conversion, if needed
     clock_t startTime, endTime;
 
 
