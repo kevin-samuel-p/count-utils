@@ -3,7 +3,7 @@
  *      Given a number, find the next number with no repeating digits.
  * 
  *      ___Working__Procedure___ 
- *      ->  A sanitizer function verifies command line input to check for rogue or invalid input.
+ *      ->  Input is sanitized to check for rogue input or invalid numbers.
  *      ->  After validating input, number is fed to nextNumber() function, which returns the next number.
  *      ->  nextNumber() calls backtrack() if given input is feasible.
  *      ->  backtrack() recursively constructs the next viable number.
@@ -23,7 +23,6 @@
 
 
 bool isRepeating(long);
-void sanitizer(char*);
 long backtrack(long, int, long, int);
 void testBackTrack(long);
 
@@ -88,8 +87,6 @@ long nextNumber(long number) {
 }
 
 
-
-
 long backtrack(long number, int mask, long stack, int stackLen) {
     if (stackLen == 0) return number;
 
@@ -111,55 +108,43 @@ long backtrack(long number, int mask, long stack, int stackLen) {
 }
 
 
-void sanitizer(char* input) {
-    int n = strlen(input);
-
-    if (n > 11) {
-        printf("Bad Input: Input too large\n");
-        return;
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Invalid Syntax:\n.\\norep.exe <number>\n");
+        return -1;
     }
 
-    for (int i = 0; i < n - 1; i++) {
-        if (!isdigit(input[i])) {
-            printf("Bad Input: Enter a proper integer\n");
-            return;
-        }
-    }
-
-    long x;
-    sscanf(input, "%ld", &x);
-
-    testBackTrack(x);
-}
-
-
-void testBackTrack(long num) {
-    /**
-     *  XXX: Currently testing backtrack()
-     */
-
+    int n = strlen(argv[1]);
+    long num = 0L;
     clock_t startTime, endTime;
-    
+
     startTime = clock();
-    // printf("%d -> %ld\n", 12580, nextNumber(12580));
-    // printf("%d -> %ld\n", 43298, nextNumber(43298));
-    // printf("%ld -> %ld\n", 109876, nextNumber(109876));
-    // printf("%ld -> %ld\n", 1230123010, nextNumber(1230123010));
-    // printf("%d -> %ld\n", -5, nextNumber(-5));
-    // printf("%d -> %ld\n", 111, nextNumber(111));
-    printf("%ld -> %ld", num, nextNumber(num));
+
+    for (int i = 0; i < n; i++) {
+        if (!isdigit(argv[1][i])) {
+            printf("Bad Input - Invalid number\n");
+            return -1;
+        }
+        
+        if (num >= 9876543210) {
+            printf("Bad Input - Number too large\n");
+            return -1;
+        }
+        num = (num * 10) + (argv[1][i] - '0');
+    }
+
+    long nextNum = nextNumber(num);
+    if (nextNum == -1) return -1;
+
+    if (argc > 2) {
+        printf("WARNING: Extra arguments will be ignored...\n\n");
+    }
+
+    printf("%ld -> %ld\n", num, nextNumber(num));
     endTime = clock();
 
     double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
     printf("\nExecution time: %.4lf seconds", timeUsed);
-}
 
-
-int main(void) {
-    char input[100];
-    printf("Enter number: ");
-    fgets(input, 99, stdin);
-    input[99] = '\0';
-    sanitizer(input);
     return 0;
 }
