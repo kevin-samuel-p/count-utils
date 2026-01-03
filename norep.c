@@ -14,6 +14,7 @@
  *      ->  User input should be sanitized to prevent non-numeric inputs.
  */
 
+ 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -27,10 +28,10 @@ long backtrack(long, int, long, int);
 void testBackTrack(long);
 
 
+
+//  Checks whether a given number has repeating/recurring digits or not.
 bool isRepeating(long number) {
-    /**
-     *  Checks whether a given number has repeating/recurring digits or not.
-     */
+   
 
     int mask = 0;   // Bitmask used as a set to keep track of digits
     long rev = 0;       
@@ -51,11 +52,8 @@ bool isRepeating(long number) {
 }
 
 
+//  Finds next number with non-repeating digits, given a number with non-repeating digits.
 long nextNumber(long number) {
-    /**
-     *  Validate the given input.
-     *  The given input should not contain any repeating digits.
-     */
 
     if (number <= 0) {
         printf("Bad Input: Input a positive number\n");
@@ -109,6 +107,11 @@ long backtrack(long number, int mask, long stack, int stackLen) {
 
 
 int main(int argc, char *argv[]) {
+    /**
+     *      ___Command__Line__Syntax___
+     *          .\radix.exe <number>
+     */
+
     if (argc < 2) {
         printf("Invalid Syntax:\n.\\norep.exe <number>\n");
         return -1;
