@@ -27,9 +27,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <string.h>
 #include <ctype.h>
 #include <time.h>
 #include <locale.h>
+#include <fcntl.h>
+#include <io.h>
 
 
 // Overline ASCII : 773
@@ -50,7 +53,7 @@ int toNumber(wchar_t *roman) {
     int number = 0, vinculumCount = 0;
 
     if (n > 80) {
-        printf("Bad Input: Input too large\n");
+        wprintf(L"Bad Input: Input too large\n");
         return -1;
     }
 
@@ -58,12 +61,12 @@ int toNumber(wchar_t *roman) {
     for (int i = n-1; i >= 0; i--) {
         int baseValue = 1;
         if ((wint_t) roman[i] == 773 && ++vinculumCount >= 3) {
-            printf("Bad Input: Too many vinculums\n");
+            wprintf(L"Bad Input: Too many vinculums\n");
             return -1;
         } else switch(roman[i]) {
             case L'I':
                 if (vinculumCount > 0) {
-                    printf("Bad Input: Invalid Numeral\n");
+                    wprintf(L"Bad Input: Invalid Numeral\n");
                     return -1;
                 }
 
@@ -72,7 +75,7 @@ int toNumber(wchar_t *roman) {
                 } else if (number < 3) {
                     ++number;
                 } else {
-                    printf("Bad Input: Invalid Numeral\n");
+                    wprintf(L"Bad Input: Invalid Numeral\n");
                     return -1;
                 }
             break;
@@ -99,7 +102,7 @@ int toNumber(wchar_t *roman) {
                 } else if (number < 3 * baseValue) {
                     number += baseValue;
                 } else {
-                    printf("Bad Input: Invalid Numeral\n");
+                    wprintf(L"Bad Input: Invalid Numeral\n");
                     return -1;
                 }
 
@@ -123,7 +126,7 @@ int toNumber(wchar_t *roman) {
                 if (number < 4 * baseValue / 5) {
                     number += baseValue;
                 } else {
-                    printf("Bad Input: Invalid Number\n");
+                    wprintf(L"Bad Input: Invalid number\n");
                     return -1;
                 }
 
@@ -131,14 +134,14 @@ int toNumber(wchar_t *roman) {
             break;
 
             default:
-                printf("Bad Input: Invalid Number\n");
+                wprintf(L"Bad Input: Invalid Number\n");
                 return -1;
             break;
         }
     }
 
     if (vinculumCount != 0) {
-        printf("Bad Input: Invalid Numeral\n");
+        wprintf(L"Bad Input: Invalid Numeral\n");
         return -1;
     }
 
@@ -148,12 +151,12 @@ int toNumber(wchar_t *roman) {
 
 wchar_t *toRoman(int number) {
     if (number >= 1000000000) {
-        printf("Bad Input: Number too large\n");
+        wprintf(L"Bad Input: Number too large\n");
         return NULL;
     }
 
     if (number <= 0) {
-        printf("Bad Input: Non-positive number\n");
+        wprintf(L"Bad Input: Non-positive number\n");
         return NULL;
     }
 
@@ -234,66 +237,122 @@ wchar_t *toRoman(int number) {
 
 
 int main(int argc, char *argv[]) {
-    clock_t startTime, endTime;
-    startTime = clock();
+    /**
+     *      ___Command__Line__Syntax___
+     *          .\roman.exe [option-flag] <number>
+     *          
+     *      [] - optional flag
+     *      <> - required argument
+     * 
+     *      ___Option__Flags____
+     *      NOTE: If omitted, option defaults to -convert
+     *          -c / -convert : Converts given number to Roman number or vice versa
+     *          -n / -next    : Returns next Roman number
+     */
+    
 
-    if (argc != 2) {
-        perror("Invalid Syntax: .\\roman.exe [number/roman]");
+    if (argc < 2) {
+        printf("Invalid Syntax: Check docstring for command line syntax");
         return -1;
     }
 
-    int number;
+    int number, x = 1;
+    char option = 'c';
     wchar_t *roman = NULL;
+    clock_t startTime, endTime;
 
+    _setmode(_fileno(stdout), _O_U16TEXT);
     setlocale(LC_ALL, "");
+    startTime = clock();
 
-    if (isdigit(argv[1][0])) {
+    if (argv[x][0] == '-') {
+        if (
+            strcmp(argv[x], "-c") == 0 || 
+            strcmp(argv[x], "-convert") == 0
+        );  // Default argument
+        else if (
+            strcmp(argv[x], "-n") == 0 ||
+            strcmp(argv[x], "-next") == 0
+        ) { option = 'n'; }
+        else {
+            wprintf(L"Invalid Syntax: Check docstring for command line syntax");
+            return -1;
+        }
+        ++x;
+    }
+
+    if (isdigit(argv[x][0])) {
         number = 0;
-        int n = strlen(argv[1]);
+        int n = strlen(argv[x]);
         for (int i = 0; i < n; i++) {
             if (number >= 1000000000) {
-                printf("Bad Input: Number too big\n");
+                wprintf(L"Bad Input: Number too big\n");
                 return -1;
             }
 
-            if (!isdigit(argv[1][i])) {
-                printf("Bad Input: Invalid number\n");
+            if (!isdigit(argv[x][i])) {
+                wprintf(L"Bad Input: Invalid number\n");
                 return -1;
             }
 
-            int digit = argv[1][i] - '0';
+            int digit = argv[x][i] - '0';
             number = (number * 10) + digit;
         }
 
-        roman = toRoman(number + 1);
+        // roman = toRoman(number + 1);
+        switch(option) {
+            case 'c':
+                roman = toRoman(number);
+            break;
+
+            case 'n':
+                roman = toRoman(number + 1);
+            break;
+        }
     } else {
-        size_t len = mbstowcs(NULL, argv[1], 0);
+        size_t len = mbstowcs(NULL, argv[x], 0);
         if (len == (size_t) -1) {
-            perror("Bad Input: Could not convert to normal input form\n");
+            wprintf(L"Bad Input: Could not convert to normal input form\n");
             return -1;
         }
 
         roman = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
-        mbstowcs(roman, argv[1], len + 1);
+        mbstowcs(roman, argv[x], len + 1);
 
-        int number = toNumber(roman);
-        if (number == -1) {
-            free(roman);
-            roman = NULL;
-        } else {
+        number = toNumber(roman);
+
+        free(roman);
+        roman = NULL;
+
+        if (number != -1 && option == 'n') {
             roman = toRoman(number + 1);
         }
     }
 
     endTime = clock();
 
-    if (roman != NULL) {
-        printf("Next Number: %ls\n", roman);
-        free(roman);
+    if (argc > x + 1) {
+        wprintf(L"WARNING: Extra arguments will be ignored...\n\n");
+    }
+
+    switch(option) {
+        case 'c':
+            if (roman != NULL) {
+                wprintf(L"%ls\n", roman);
+            } else if (number != -1) {
+                wprintf(L"%d\n", number);
+            }
+        break;
+
+        case 'n':
+            if (roman != NULL) {
+                wprintf(L"Next Number: %ls\n", roman);
+            }
+        break;
     }
 
     double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
-    printf("\nExecution time: %.4lf seconds", timeUsed);
+    wprintf(L"\nExecution time: %.4lf seconds", timeUsed);
 
     return 0;
 }
