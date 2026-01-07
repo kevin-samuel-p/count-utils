@@ -22,6 +22,7 @@ const char *EMOJI_DIGITS[10] = {
 char *numberToEmoji(int number) {
     char numberString[10];
     char *res = (char *)malloc(71 * sizeof(char));
+    res[0] = '\0';
     
     sprintf(numberString, "%d", number);
 
@@ -53,7 +54,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, ".UTF-8");
+    system("chcp 65001 > nul");
 
     int x = 1, number = 0;  // Index for numeral argument (to track extra arguments in command line call) + var for number
     char function = 'c';    // Flag for type of operation (simple emojification vs next number)
