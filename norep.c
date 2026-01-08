@@ -16,24 +16,26 @@
 
  
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
 #include <stdbool.h>
+#include <errno.h>
 
 
-bool isRepeating(long);
-long backtrack(long, int, long, int);
-long nextNumber(long);
+bool isRepeating(long long);
+long long backtrack(long long, int, long long, int);
+long long nextNumber(long long);
 
 
 //  Checks whether a given number has repeating/recurring digits or not.
-bool isRepeating(long number) {
+bool isRepeating(long long number) {
     
     int mask = 0;   // Bitmask used as a set to keep track of digits      
 
-    long copy = number;
+    long long copy = number;
     while (copy > 0) {
         int rem = copy % 10;
 
@@ -49,27 +51,27 @@ bool isRepeating(long number) {
 
 
 //  Finds next number with non-repeating digits, given a number with non-repeating digits.
-long nextNumber(long number) {
+long long nextNumber(long long number) {
 
-    if (number <= 0) {
-        printf("Bad Input: Input a positive number\n");
+    if (number == 0) {
+        printf("Bad Input: Input a positive number");
         return -1;
     }
     
     if (number >= 9876543210) {
-        printf("Bad Input: Range's maximum limit exceeded\n");
+        printf("Bad Input: Range's maximum limit exceeded");
         return -1;
     }
 
     if (isRepeating(number)) {
-        printf("Bad Input: Input has repeating digits\n");
+        printf("Bad Input: Input has repeating digits");
         return -1;
     }
 
-    long rev = 0;       // Digit stack
-    int digitCount = 0; // Stack length tracked using digit count
+    long long rev = 0;      // Digit stack
+    int digitCount = 0;     // Stack length tracked using digit count
 
-    long copy = number + 1;
+    long long copy = number + 1;
     while (copy > 0) {
         int rem = copy % 10;
         rev = (rev * 10) + rem;
@@ -77,20 +79,23 @@ long nextNumber(long number) {
         copy /= 10;
     }
 
+    rev *= 10;      // Appending a zero to stack
+    digitCount++;   // Just in case of underflow during lexicographic DFS
+
     return backtrack(0L, 0, rev, digitCount);
 }
 
 
-long backtrack(long number, int mask, long stack, int stackLen) {
+long long backtrack(long long number, int mask, long long stack, int stackLen) {
     if (stackLen == 0) return number;
 
     int currDigit = stack % 10;
     for (int offset = 0; offset + currDigit <= 9; offset++) {
-        int trial;
+        long long trial;
         if ((mask & (1 << (offset + currDigit))) == 0 && 
             ((trial = backtrack(
                 number * 10 + offset + currDigit,  
-                mask | (1 << (offset + currDigit)),
+                (currDigit + offset == mask) ? mask : mask | (1 << (offset + currDigit)),
                 stack / 10,
                 stackLen - 1
             )) != -1)
@@ -109,37 +114,42 @@ int main(int argc, char *argv[]) {
      */
 
     if (argc < 2) {
-        printf("Invalid Syntax:\n.\\norep.exe <number>\n");
+        printf("Invalid Syntax:\n.\\norep.exe <number>");
         return -1;
     }
 
     int n = strlen(argv[1]);
-    long num = 0L;
+    long long input, output;
+    char *endChar;
     clock_t startTime, endTime;
+    errno = 0;
 
     startTime = clock();
 
-    for (int i = 0; i < n; i++) {
-        if (!isdigit(argv[1][i])) {
-            printf("Bad Input - Invalid number\n");
-            return -1;
-        }
-        
-        if (num >= 9876543210) {
-            printf("Bad Input - Number too large\n");
-            return -1;
-        }
-        num = (num * 10) + (argv[1][i] - '0');
+    input = strtoll(argv[1], &endChar, 10);
+    if (*endChar != '\0') {
+        printf("Bad Input - Invalid number");
+        return -1;
     }
 
-    long nextNum = nextNumber(num);
-    if (nextNum == -1) return -1;
+    if (errno == ERANGE || input >= 9876543210) {
+        printf("Bad Input - Number too large");
+        return -1;
+    }
+
+    if (input < 0) {
+        printf("Bad Input - Negative numbers not allowed");
+        return -1;
+    }
+
+    output = nextNumber(input);
+    if (output == -1) return -1;
 
     if (argc > 2) {
         printf("WARNING: Extra arguments will be ignored...\n\n");
     }
 
-    printf("%ld -> %ld\n", num, nextNumber(num));
+    printf("%lld\n", output);
     endTime = clock();
 
     double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
