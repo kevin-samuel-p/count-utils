@@ -25,16 +25,13 @@
 
 bool isRepeating(long);
 long backtrack(long, int, long, int);
-void testBackTrack(long);
-
+long nextNumber(long);
 
 
 //  Checks whether a given number has repeating/recurring digits or not.
 bool isRepeating(long number) {
-   
-
-    int mask = 0;   // Bitmask used as a set to keep track of digits
-    long rev = 0;       
+    
+    int mask = 0;   // Bitmask used as a set to keep track of digits      
 
     long copy = number;
     while (copy > 0) {
@@ -44,7 +41,6 @@ bool isRepeating(long number) {
             return true;
 
         mask |= (1 << rem);
-        rev = (rev * 10) + rem;
         copy /= 10;
     }
 
@@ -70,7 +66,7 @@ long nextNumber(long number) {
         return -1;
     }
 
-    long rev = 0;       // Bitset used as a stack
+    long rev = 0;       // Digit stack
     int digitCount = 0; // Stack length tracked using digit count
 
     long copy = number + 1;
@@ -81,7 +77,7 @@ long nextNumber(long number) {
         copy /= 10;
     }
 
-    return backtrack(0, 0, rev, digitCount);
+    return backtrack(0L, 0, rev, digitCount);
 }
 
 
@@ -109,7 +105,7 @@ long backtrack(long number, int mask, long stack, int stackLen) {
 int main(int argc, char *argv[]) {
     /**
      *      ___Command__Line__Syntax___
-     *          .\radix.exe <number>
+     *          .\norep.exe <number>
      */
 
     if (argc < 2) {
