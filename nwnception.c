@@ -2,7 +2,7 @@
  *      Numbers Within Numbers (NWN) with N Numbers
  * 
  *      Numbers are represented by period-separated numerals (similar to the format of an IPv4 address).
- *      Each digit encloses the succeeding digit, and the number is incremented by increasing the last digit until it exceeds its predecessor.
+ *      Each numeral encloses the succeeding numeral, and the number is incremented by increasing the last numeral until it exceeds its predecessor.
  *      It follows a custom place value system with a changing radix based on the initial numeral.
  * 
  *      Encapsulated numbers must reach their predecessors before getting reset.
