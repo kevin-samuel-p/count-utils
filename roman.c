@@ -351,6 +351,8 @@ int main(int argc, char *argv[]) {
         break;
     }
 
+    if (roman != NULL) free(roman);
+
     double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
     wprintf(L"\nExecution time: %.4lf seconds", timeUsed);
 
