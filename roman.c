@@ -299,7 +299,6 @@ int main(int argc, char *argv[]) {
             number = (number * 10) + digit;
         }
 
-        // roman = toRoman(number + 1);
         switch(option) {
             case 'c':
                 roman = toRoman(number);
