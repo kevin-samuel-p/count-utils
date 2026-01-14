@@ -281,6 +281,11 @@ int main(int argc, char *argv[]) {
         ++x;
     }
 
+    if (argc <= x) {
+        wprintf(L"Invalid Syntax: Check docstring for command line syntax");
+        return -1;
+    }
+
     if (isdigit(argv[x][0])) {
         number = 0;
         int n = strlen(argv[x]);

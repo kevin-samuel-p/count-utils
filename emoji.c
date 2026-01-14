@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
      */
 
     if (argc < 2) {
-        printf("Invalid Syntax:\n.\\emoji.exe <number>\n");
+        printf("Invalid Syntax: .\\emoji.exe [function-flag] <number>");
         return -1;
     }
 
@@ -76,21 +76,26 @@ int main(int argc, char *argv[]) {
             function = 'n';
             ++x;
         } else if (argc > 2) {
-            printf("Invalid Syntax:\t.\\emoji.exe <number>\n");
+            printf("Invalid Syntax: .\\emoji.exe [function-flag] <number>");
             return -1;
         }
+    }
+
+    if (argc <= x) {
+        printf("Invalid Syntax: .\\emoji.exe [function-flag] <number>");
+        return -1;
     }
 
     int n = strlen(argv[x]);
     for (int i = 0; i < n; i++) {
         if (!isdigit(argv[x][i])) {
-            printf("Bad Input - Invalid number\n");
+            printf("Bad Input - Invalid number");
             return -1;
         }
 
         if (number >= 100000000) {
             // Maximum allowed number for this implementation is upto 1 billion
-            printf("Bad Input - Number too large\n");
+            printf("Bad Input - Number too large");
             return -1;
         }
         number = (number * 10) + (argv[x][i] - '0');
