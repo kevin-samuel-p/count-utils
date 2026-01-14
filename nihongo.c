@@ -1,6 +1,20 @@
 /**
  *      Japanese Numbers
  *      Given a number, converts it to a Japanese Number using Kanji numerals
+ * 
+ *      ___Working__Procedure___
+ *      ->  User uses CLI argument to either translate or find the next number.
+ *      ->  If user passes a number as an argument, it is translated to Japanese, or incremented and translated.
+ *      ->  If user passes Japanese text, it is parsed into a number.
+ * 
+ *      ___Input__Requirements___
+ *      ->  Only Japanese numerals following proper Kanji rules will be parsed.
+ *      ->  Support for Mandarin numbers is either nonexistent or very limited.
+ *      ->  Input range can value from [1, 10^50).
+ * 
+ *      NOTE: Due to UNICODE display and parsing issues with CLI arguments, design choice has been changed.
+ *      All modules will eventually be rewritten to accept input from stdin as opposed to argv, 
+ *      starting from the time of this commit.
  */
 
 
@@ -10,6 +24,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <time.h>
+#include <locale.h>
+#include <fcntl.h>
+#include <io.h>
 
 
 const wchar_t DIGITS[10] = {
@@ -32,7 +50,7 @@ const wchar_t LARGE_UNITS[12] = {
 wchar_t *translateToJapanese(char *number) {
     int n = strlen(number);
     if (n > 50) {
-        printf("Bad Input - Number too large");
+        wprintf(L"Bad Input - Number too large");
         return NULL;
     }
 
@@ -71,7 +89,7 @@ wchar_t *translateToJapanese(char *number) {
                 break;
 
                 default:
-                    printf("Bad Input - Invalid number");
+                    wprintf(L"Bad Input - Invalid number");
                     free(chunk);
                     free(japaneseNumber);
                 return NULL;
@@ -96,7 +114,7 @@ wchar_t *translateToJapanese(char *number) {
     chunkPtr = 0;
     for (int j = n % 4; j > 0; j--) {
         if (!isdigit(number[n%4 - j])) {
-            printf("Bad Input - Invalid number");
+            wprintf(L"Bad Input - Invalid number");
             free(chunk);
             free(japaneseNumber);
             return NULL;
@@ -171,7 +189,7 @@ char *decipherJapaneseNumber(wchar_t *japaneseNumber) {
                 // Value should have been reset to base value of 0
                 // If it wasn't, then a larger value succeeds a unit value - invalid sequence
                 if (value != 0) {
-                    printf("Bad Input - Invalid number");
+                    wprintf(L"Bad Input - Invalid number");
                     free(number);
                     return NULL;
                 }
@@ -188,7 +206,7 @@ char *decipherJapaneseNumber(wchar_t *japaneseNumber) {
                 
                 // For bad sequences involving wrong order, check boundaryPtr position
                 if (blockPtr >= j) {
-                    printf("Bad Input - Invalid number");
+                    wprintf(L"Bad Input - Invalid number");
                     free(number);
                     return NULL;
                 }
@@ -229,7 +247,7 @@ char *decipherJapaneseNumber(wchar_t *japaneseNumber) {
 
         // If no operation has been done then there is no valid match for the given character
         if (!op) {
-            printf("Bad Input - Invalid number");
+            wprintf(L"Bad Input - Invalid number");
             free(number);
             return NULL;
         }
@@ -280,6 +298,106 @@ int main(int argc, char *argv[]) {
      *          -c/-convert : Converts given number to Japanese or vice versa
      *          -n/-next    : Returns next number in Japanese
      */
+
+    if (argc < 2) {
+        wprintf(L"Invalid Syntax: .\\nihongo.exe [option-flag] <number>");
+        return -1;
+    }
+
+    int x = 1;
+    char option = 'c';
+    char* number = NULL;
+    wchar_t *japaneseNumber = NULL;
+    clock_t startTime, endTime;
+
+    _setmode(_fileno(stdout), _O_U16TEXT);
+    setlocale(LC_ALL, "");
+    startTime = clock();
+
+    if (
+        strcmp(argv[1], "-c") == 0 || 
+        strcmp(argv[1], "-convert") == 0
+    ) { ++x; }
+    else if (
+        strcmp(argv[1], "-n") == 0 || 
+        strcmp(argv[1], "-next") == 0
+    ) {
+        option = 'n';
+        ++x;
+    }
+
+    if (argc <= x) {
+        wprintf(L"Invalid Syntax: .\\nihongo.exe [option-flag] <number>");
+        return -1;
+    }
+
+    int n = strlen(argv[x]);
+    for (int i = 0; i < n; i++) {
+
+        // If there are any non-digit characters, attempt conversion to Japanese
+        if (!isdigit((unsigned char)argv[x][i])) {
+            size_t len = mbstowcs(NULL, argv[x], 0);
+            if (len == (size_t)-1) {
+                wprintf(L"Bad Input - Could not convert to Japanese format");
+                return -1;
+            }
+            japaneseNumber = (wchar_t *)malloc((len + 1) * sizeof(wchar_t));
+            mbstowcs(japaneseNumber, argv[x], len + 1);
+            break;
+        }
+
+        // If the inputted string is a number, it should reach the last iteration of the loop
+        if (i == n - 1) {
+            number = (char *)malloc((n + 1) * sizeof(char));
+            strcpy(number, argv[x]);
+        }
+    }
+
+    switch(option) {
+        case 'c':
+            if (!number) {
+                number = decipherJapaneseNumber(japaneseNumber);
+                free(japaneseNumber);
+                if (!number) return -1;
+                japaneseNumber = NULL;
+            } else {
+                japaneseNumber = translateToJapanese(number);
+                free(number);
+                if (!japaneseNumber) return -1;
+                number = NULL;
+            }
+        break;
+
+        case 'n':
+            if (!number) {
+                number = decipherJapaneseNumber(japaneseNumber);
+                free(japaneseNumber);
+                if (!number) return -1;
+            }
+            increment(&number);
+            japaneseNumber = translateToJapanese(number);
+            free(number);
+            if (!japaneseNumber) return -1;
+            number = NULL;
+        break;
+    }
+
+    endTime = clock();
+
+    if (argc > x + 1) {
+        wprintf(L"WARNING: Extra arguments will be ignored...\n\n");
+    }
+
+    if (number) {
+        wprintf(L"%hs\n", number);
+        free(number);
+    } else if (japaneseNumber) {
+        wprintf(L"%ls\n", japaneseNumber);
+        free(japaneseNumber);
+    }
+
+    double timeUsed = ((double) (endTime - startTime)) / CLOCKS_PER_SEC;
+    wprintf(L"\nExecution time: %.4lf seconds", timeUsed);
 
     return 0;
 }
