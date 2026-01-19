@@ -124,6 +124,12 @@ char *convert(char *number, enum Radix convertFrom, enum Radix convertTo)
     }
 
     numString = (char *)malloc(65 * sizeof(char));
+    if (!numString)
+    {
+        printf("Error - malloc failure");
+        return NULL;
+    }
+
     number_to_string(numString, value, convertTo);
 
     return numString;
@@ -143,6 +149,12 @@ char *next_number(char *number, enum Radix base)
     }
 
     nextNumber = (char *)malloc(65 * sizeof(char));
+    if (!nextNumber)
+    {
+        printf("Error - malloc failure");
+        return NULL;
+    }
+
     number_to_string(nextNumber, value + 1, base);
 
     return nextNumber;

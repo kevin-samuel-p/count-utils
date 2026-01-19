@@ -1,6 +1,6 @@
 /**
  *      Emoji
- *      Functions to emojify numbers
+ *      Function to emojify numbers
  */
 
 
@@ -20,7 +20,6 @@ const char *EMOJI_DIGITS[10] =
 // Emojifies number, only accepts inputs upto 1 billion
 char *numberToEmoji(char *number)
 {
-    int n = strlen(number);
     if (number[0] == '-')
     {
         printf("Bad Input - Negative numbers not allowed");
