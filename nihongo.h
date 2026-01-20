@@ -13,16 +13,19 @@
 #include <ctype.h>
 
 
-const wchar_t DIGITS[10] = {
+const wchar_t DIGITS[10] = 
+{
     L'零', L'一', L'二', L'三', L'四',      // 0, 1, 2, 3, 4
     L'五', L'六', L'七', L'八', L'九'       // 5, 6, 7, 8, 9
 };
 
-const wchar_t SMALL_UNITS[3] = {
+const wchar_t SMALL_UNITS[3] = 
+{
     L'十', L'百', L'千'                     // 10, 100, 1000
 };
 
-const wchar_t LARGE_UNITS[12] = {
+const wchar_t LARGE_UNITS[12] = 
+{
     L'万', L'億', L'兆', L'京',             // 10^4, 10^8, 10^12, 10^16
     L'垓', L'秭', L'穣', L'溝',             // 10^20, 10^24, 10^28, 10^32
     L'澗', L'正', L'載', L'極'              // 10^36, 10^40, 10^42, 10^48
