@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdbool.h>
 
 
@@ -36,8 +35,17 @@ char *next_69_number(char *number)
         return NULL;
     }
 
-    // Trivial case
-    if (strcmp(number, "69") == 0)
+    // Trivial case: number less than 69
+    if (
+        n < 2 || 
+        n == 2 && strcmp(number, "69") < 0
+    ) {
+        strcpy(nextNumber, "69");
+        return nextNumber;
+    }
+
+    // Trivial case: other two digit numbers
+    if (n == 2)
     {
         strcpy(nextNumber, "169");
         return nextNumber;
@@ -111,7 +119,7 @@ char *next_69_number(char *number)
         }
         else break;
 
-        // Quit while early to avoid segfault
+        // Quit while ahead to avoid segfault
         if (pre69 == nextNumber)
         {
             memmove(nextNumber + 1, nextNumber, n + 1);
@@ -136,8 +144,17 @@ char *next_420_number(char *number)
         return NULL;
     }
 
-    // Trivial case
-    if (strcmp(number, "420") == 0)
+    // Trivial case: number less than 420
+    if (
+        n < 3 ||
+        n == 3 && strcmp(number, "420") < 0
+    ) {
+        strcpy(nextNumber, "420");
+        return nextNumber;
+    }
+
+    // Trivial case: other three-digit numbers
+    if (n == 3)
     {
         strcpy(nextNumber, "1420");
         return nextNumber;
@@ -195,7 +212,7 @@ char *next_420_number(char *number)
 
     for (;; pre420--)
     {
-        *(pre420)++;
+        (*pre420)++;
 
         if (pre420 > nextNumber && strncmp(pre420 - 1, "42", 2) == 0)
         {
@@ -240,9 +257,20 @@ char *next_69420_number(char *number)
     int m = strlen(next69Number);
     int n = strlen(next420Number);
 
-    if (m < n) return next69Number;
-    if (m > n) return next420Number;
+    if (m < n)
+    {
+        free(next420Number);
+        return next69Number;
+    }
+    
+    if (m > n)
+    {
+        free(next69Number);
+        return next420Number;
+    }
 
     int comparison = strcmp(next69Number, next420Number);
+    
+    free((comparison < 0) ? next420Number : next69Number);
     return (comparison < 0) ? next69Number : next420Number;
 }
