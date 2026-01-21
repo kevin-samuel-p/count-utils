@@ -17,7 +17,7 @@ const char *EMOJI_DIGITS[10] =
 };
 
 
-// Emojifies number, only accepts inputs upto 1 billion
+// Emojifies number, ONLY USE INPUT WITH LEADING ZEROES STRIPPED
 char *numberToEmoji(char *number)
 {
     if (number[0] == '-')
@@ -26,34 +26,27 @@ char *numberToEmoji(char *number)
         return NULL;
     }
 
-    char *res = (char *)malloc(64 * sizeof(char));
+    int n = strlen(number);
+    
+    char *res = (char *)malloc((7*n + 1) * sizeof(char));
     if (!res)
     {
         printf("Error - malloc failure");
         return NULL;
     }
-    res[0] = '\n';
+    res[0] = '\0';
 
-    for (int i = 0; number[i] != '\0'; i++) 
+    for (int i = 0; i < n; i++) 
     {
         // Catch invalid inputs
-        if (!isdigit(number[i]))
+        if (!isdigit((unsigned char)number[i]))
         {
             printf("Bad Input - Invalid number");
             free(res);
             return NULL;
         }
 
-        // Catch extra large numbers
-        // Only supports numbers < 1 billion
-        if (i >= 9)
-        {
-            printf("Bad Input - Number too large");
-            free(res);
-            return NULL;
-        }
-
-        strcat(res, EMOJI_DIGITS[number[i]]);
+        strcat(res, EMOJI_DIGITS[number[i] - '0']);
     }
 
     return res;

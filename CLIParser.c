@@ -4,6 +4,17 @@
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
 
+#include "emoji.h"
+#include "increasing.h"
+#include "meme.h"
+#include "morse.h"
+#include "nihongo.h"
+#include "nwnception.h"
+#include "radix.h"
+#include "reps.h"
+#include "reversals.h"
+#include "roman.h"
+
 
 /**
  *      ____________Command__Line__Syntax____________
