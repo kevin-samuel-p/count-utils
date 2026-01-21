@@ -1,6 +1,14 @@
 /**
  *      Roman Numbers
  *      Given a number, return its successor in Roman Numerals
+ * 
+ *      NOTE: For number_to_roman, regardless of representation,
+ *            take a round-trip by feeding the output to roman_to_number()
+ * 
+ *            if (strcmp(number, "4000") < 0)
+ *                return number_to_roman(number, 'i');
+ * 
+ *      Ensure to strip leading zeroes beforehand
  */
 
 
@@ -15,14 +23,14 @@
 static wchar_t VINCULUM = (wchar_t) 773;
 static char NUMERALS[3][3] = 
 {
-    {'M', 'V', 'X'},
+    {'I', 'V', 'X'},
     {'X', 'L', 'C'},
     {'C', 'D', 'M'}
 };
 
 
 char *roman_to_number(wchar_t *);
-wchar_t *number_to_roman(char *);
+wchar_t *number_to_roman(char *, char);
 
 
 char *roman_to_number(wchar_t *roman)
@@ -291,3 +299,226 @@ char *roman_to_number(wchar_t *roman)
 }
 
 
+wchar_t *number_to_roman(char *number, char representation)
+{
+    if (number[0] == '-')
+    {
+        printf("Bad Input - Non-positive numbers not allowed");
+        return NULL;
+    }
+
+    int n = strlen(number);
+    int currSize = 80;
+    wchar_t *roman = (wchar_t *)malloc(currSize * sizeof(wchar_t));   // Expand size dynamically
+    if (!roman)
+    {
+        printf("Error - malloc failure");
+        return NULL;
+    }
+    
+    int romanPtr = 0;
+
+    // Generate number in reverse order
+    // Then reverse order of characters
+
+    for (int i = 0; i < n; i++)
+    {
+        char digit = number[n - i - 1];
+        switch(digit)
+        {
+            case '0':
+                break;
+
+            case '1':
+            case '2':
+            case '3':
+            case '6':
+            case '7':
+            case '8':
+
+                for (int j = 0; j < (digit - '0') % 5; j++)
+                {
+                    for (int k = 0; k < i / 3; k++) 
+                    {
+                        roman[romanPtr++] = VINCULUM;
+                        if (romanPtr == currSize - 2)
+                        {
+                            currSize += 80;
+                            wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                            if (!temp)
+                            {
+                                printf("Error - realloc failure");
+                                free(roman);
+                                return NULL;
+                            }
+                            roman = temp;
+                        }
+                    }
+                    
+                    roman[romanPtr++] = (wchar_t)NUMERALS[i % 3][0];
+                    if (romanPtr == currSize - 2)
+                    {
+                        currSize += 80;
+                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        if (!temp)
+                        {
+                            printf("Error - realloc failure");
+                            free(roman);
+                            return NULL;
+                        }
+                        roman = temp;
+                    }
+                }
+            
+                if (digit <= '3')
+                    break;
+
+            case '4':
+            case '5':
+                for (int j = 0; j < i / 3; j++)
+                {
+                    roman[romanPtr++] = VINCULUM;
+                    if (romanPtr == currSize - 2)
+                    {
+                        currSize += 80;
+                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        if (!temp)
+                        {
+                            printf("Error - realloc failure");
+                            free(roman);
+                            return NULL;
+                        }
+                        roman = temp;
+                    }
+                }
+
+                roman[romanPtr++] = (wchar_t)NUMERALS[i % 3][1];
+                if (romanPtr == currSize - 2)
+                {
+                    currSize += 80;
+                    wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                    if (!temp)
+                    {
+                        printf("Error - realloc failure");
+                        free(roman);
+                        return NULL;
+                    }
+                    roman = temp;
+                }
+
+                if (digit != '4')
+                    break;
+
+            case '9':
+                if (digit == '9')
+                {
+                    for (int j = 0; j < i / 3; j++)
+                    {
+                        roman[romanPtr++] = VINCULUM;
+                        if (romanPtr == currSize - 2)
+                        {
+                            currSize += 80;
+                            wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                            if (!temp)
+                            {
+                                printf("Error - realloc failure");
+                                free(roman);
+                                return NULL;
+                            }
+                            roman = temp;
+                        }
+                    }
+
+                    roman[romanPtr++] = (wchar_t)NUMERALS[i % 3][2];
+                    if (romanPtr == currSize - 2)
+                    {
+                        currSize += 80;
+                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        if (!temp)
+                        {
+                            printf("Error - realloc failure");
+                            free(roman);
+                            return NULL;
+                        }
+                        roman = temp;
+                    }
+                }
+
+
+                for (int k = 0; k < i / 3; k++) 
+                {
+                    roman[romanPtr++] = VINCULUM;
+                    if (romanPtr == currSize - 2)
+                    {
+                        currSize += 80;
+                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        if (!temp)
+                        {
+                            printf("Error - realloc failure");
+                            free(roman);
+                            return NULL;
+                        }
+                        roman = temp;
+                    }
+                }
+
+                roman[romanPtr++] = (wchar_t)NUMERALS[i % 3][0];
+                if (romanPtr == currSize - 2)
+                {
+                    currSize += 80;
+                    wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                    if (!temp)
+                    {
+                        printf("Error - realloc failure");
+                        free(roman);
+                        return NULL;
+                    }
+                    roman = temp;
+                }
+            break;
+
+            default:
+                printf("Bad Input - Invalid number");
+                free(roman);
+                return NULL;
+        }
+    }
+
+    // If number is zero, all iterations would have been skipped
+    if (romanPtr == 0)
+    {
+        printf("Bad Input - Non-positive numbers not allowed");
+        free(roman);
+        return NULL;
+    }
+
+    roman[romanPtr] = L'\0';
+
+    // Reverse order
+    for (int left = 0, right = romanPtr - 1; left < right; left++, right--)
+    {
+        wchar_t temp = roman[left];
+        roman[left] = roman[right];
+        roman[right] = temp;
+    }
+
+    // Final touchups: default is legal representation
+    if (representation == 'i')  // Idiomatic representation replacing I̅ with M
+    {
+        wchar_t *replacer = wcsstr(roman, L"I̅");
+        while (replacer)
+        {
+            *replacer = L'M';
+
+            size_t tailLen = (roman + romanPtr) - (replacer + 2);
+            memmove(replacer + 1, replacer + 2, tailLen * sizeof(wchar_t));
+            
+            --romanPtr;
+            replacer = wcsstr(roman, L"I̅");
+        }
+
+        roman[romanPtr] = L'\0';
+    }
+
+    return roman;
+}

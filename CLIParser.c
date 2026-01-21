@@ -106,8 +106,15 @@
  *      |                |   check / c   |          NIL           | Checks whether an inputted number contains at least one   |
  *      |                |               |                        | repeating digit.                                          |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
- *      |                |    run / r    |          NIL           | Initiates a counting run with Roman Numerals.             |
- *      |      roman     |---------------+------------------------+-----------------------------------------------------------+
+ *      |                |               |                        | Initiates a counting run with Roman Numerals using their  |
+ *      |                |               |     i / idiomatic      | idiomatic representations (inclusion of M as a recurring  |
+ *      |                |               |                        | numeral in each chunk).                                   |
+ *      |                |    run / r    |------------------------+-----------------------------------------------------------+
+ *      |                |               |                        | Initiates a counting run with Roman Numerals using their  |
+ *      |      roman     |               |        l / legal       | legal semantically correct standard representations       |
+ *      |                |               |                        | (clustering groups of thousand by a single combining      |
+ *      |                |               |                        | overline).                                                |
+ *      |                |---------------+------------------------+-----------------------------------------------------------+
  *      |                |  convert / c  |          NIL           | Converts an inputted Roman number to its numerical value, |
  *      |                |               |                        | and an inputted number to its Roman numeral equivalent.   |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
