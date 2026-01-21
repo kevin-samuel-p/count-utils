@@ -69,7 +69,7 @@ char *next_increasing_number(char *number)
     {
         if (lastDigit == '9')
         {
-            lastDigit = buffer[--depth];
+            lastDigit = buffer[(depth > 0) ? --depth : depth--];
         }
         else
         {
