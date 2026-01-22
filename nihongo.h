@@ -333,13 +333,15 @@ void increment_numstring(char **number)
             return;
     }
 
-    *number = (char *)realloc(*number, n + 2);
-    if (number == NULL)
+    char *temp = (char *)realloc(*number, n + 2);
+    if (!temp)
     {
         printf("Error - realloc failed");
+        free(*number);
         return;
     }
 
-    memmove(*number + 1, *number, n + 1);
     (*number)[0] = '1';
+    (*number)[n] = '0';
+    (*number)[n + 1] = '\0';
 }

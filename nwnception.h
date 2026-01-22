@@ -23,11 +23,8 @@ enum nwn_mode
 void increment_nwn(long **arr, long *arrSize, enum nwn_mode mode)
 {
     long depth = *arrSize - 1;
-    for (; depth >= 0; depth--)
+    for (; depth > 0; depth--)
     {
-        if (depth == 0 && mode == NWNWNN) 
-            break;
-
         if (++(*arr)[depth] > (*arr)[depth - 1])
         {
             (*arr)[depth] = 1;
@@ -36,17 +33,26 @@ void increment_nwn(long **arr, long *arrSize, enum nwn_mode mode)
         break;
     }
 
-    if (depth == 0 && mode == NWNWNN)
+    if (depth == 0)
     {
-        *arr = (long *)realloc(*arr, (*arrSize + 1) * sizeof(long));
-        if (!(*arr))
+        if (mode == NWNWNN)
         {
-            printf("Error - realloc failure");
-            return;
-        }
+            long *temp = (long *)realloc(*arr, (*arrSize + 1) * sizeof(long));
+            if (!(*temp))
+            {
+                printf("Error - realloc failure");
+                free(*arr);
+                return;
+            }
 
-        (*arr)[0] = *arrSize + 1;
-        (*arr)[(*arrSize)++] = 1L;
+            *arr = temp;
+            (*arr)[0] = *arrSize + 1;
+            (*arr)[(*arrSize)++] = 1L;
+        }
+        else
+        {
+            ++(*arr)[0];
+        }
     }
 }
 

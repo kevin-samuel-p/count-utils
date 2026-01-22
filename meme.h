@@ -73,7 +73,7 @@ char *next_69_number(char *number)
 
         if (post69 < peak + 2) 
         {
-            strncpy(peak, "70", 2);
+            memcpy(peak, "70", 2);
             strcpy(nextNumber + n - 2, "69");
         }
 
