@@ -1,90 +1,57 @@
-/**
- *      *Increasing Digits
- *      Given a number with its digits in non-decreasing order, find the next such number
- *      Validate input before calling functions
- */
+#ifndef INCREASING_H
+#define INCREASING_H
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
-#include <ctype.h>
+
+/**
+ * @file increasing.h
+ * @brief Utilities for working with numbers whose digits are in non-decreasing order.
+ *
+ * Provides validation and generation of numbers whose digits
+ * appear in non-decreasing (increasing) order.
+**/
 
 
-bool has_increasing_digits(char *);     // Finds whether digits are in non-decreasing order
-char *next_increasing_number(char *);   // Iterative lexicographic generator
+/**
+ * @brief Checks whether the digits of a numerical string are in non-decreasing order.
+ *
+ * @param number
+ *      Null-terminated numerical string to check.
+ *
+ * @pre
+ *      - @p number contains digits only ('0'–'9')
+ *      - No negative sign
+ *
+ * @return
+ *      - true  if digits are in non-decreasing order
+ *      - false otherwise
+ */
+bool has_increasing_digits(const char *number);
 
 
-bool has_increasing_digits(char *number)
-{
-    // Use only verified input
-    char prev = '\0';
-    for (int i = 0; number[i] != '\0'; i++)
-    {
-        if (prev > number[i])
-            return false;
+/**
+ * @brief Generates the next number whose digits are in non-decreasing order.
+ *
+ * Given a validated numerical string whose digits are already
+ * in non-decreasing order, this function returns the next
+ * such number in lexicographic order.
+ *
+ * @param number
+ *      Null-terminated numerical string with non-decreasing digits.
+ *
+ * @pre
+ *      - @p number is already validated
+ *      - Digits are in non-decreasing order
+ *      - No negative sign
+ *
+ * @return
+ *      - Heap-allocated numerical string on success
+ *      - NULL on allocation failure
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ */
+char *next_increasing_number(const char *number);
 
-        prev = number[i];
-    }
-    return true;
-}
 
-
-char *next_increasing_number(char *number)
-{
-    int n = strlen(number);
-    char *buffer = (char *)malloc((n + 2) * sizeof(char));
-    if (!buffer)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-    
-    // If input number's digits are not in non-decreasing order, return next number early
-    char lastDigit = '\0';
-    int depth = 0;
-    
-    for (; depth < n; depth++)
-    {
-        if (lastDigit > number[depth])
-        {  
-            // Trivial case
-            for (; depth < n; depth++)
-            {
-                buffer[depth] = lastDigit;
-            }
-            buffer[depth] = '\0';
-
-            return buffer;
-        }
-
-        buffer[depth] = lastDigit = number[depth];
-    }
-    buffer[depth] = '\0';
-
-    depth = n - 1;
-
-    while (depth >= 0 && depth < n)
-    {
-        if (lastDigit == '9')
-        {
-            lastDigit = buffer[(depth > 0) ? --depth : depth--];
-        }
-        else
-        {
-            buffer[depth++] = lastDigit + 1;
-        }
-    }
-
-    if (depth == -1)
-    {
-        for (++depth; depth < n + 1; depth++)
-        {
-            buffer[depth] = '1';
-        }
-        buffer[n + 1] = '\0';
-    }
-
-    return buffer;
-}
+#endif /* INCREASING_H */

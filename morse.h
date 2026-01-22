@@ -1,166 +1,78 @@
+#ifndef MORSE_H
+#define MORSE_H
+
 /**
- *      Morse Code Counting
- *      Clusters of five per digit
- *      Digit clusters are separated by spaces.
+ * @file morse.h
+ * @brief Morse code utilities for numeric strings.
+ *
+ * Implements conversion between numerical strings and
+ * their Morse code representations.
+ *
+ * Encoding rules:
+ *  - Each digit is represented by a cluster of five symbols
+ *  - Digit clusters are separated by single spaces
+**/
+
+
+/**
+ * @brief Morse code representations of digits 0–9.
+ *
+ * Each entry contains a null-terminated string of
+ * five Morse symbols representing the corresponding digit.
+ *
+ * @note
+ * This lookup table is read-only and must not be modified.
  */
+extern const char * const MORSE_CODE_DIGITS[10];
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+/**
+ * @brief Translates a numerical string into Morse code.
+ *
+ * @param number
+ *      Null-terminated numerical string to convert.
+ *
+ * @pre
+ *      - @p number contains digits only ('0'–'9')
+ *      - No negative sign
+ *
+ * @note
+ *      Leading zeroes in the input are removed.
+ *
+ * @return
+ *      - Heap-allocated Morse code string on success
+ *      - NULL on invalid input or allocation failure
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ */
+char *translate_to_morse_code(const char *number);
 
 
-const char *MORSE_CODE_DIGITS[10] = 
-{
-    "-----",        // 0
-    ".----",        // 1
-    "..---",        // 2
-    "...--",        // 3
-    "....-",        // 4
-    ".....",        // 5
-    "-....",        // 6
-    "--...",        // 7
-    "---..",        // 8
-    "----."         // 9
-};
+/**
+ * @brief Translates Morse code into a numerical string.
+ *
+ * Converts a Morse code string consisting of digit clusters
+ * separated by spaces back into a numerical string.
+ *
+ * @param morseNumber
+ *      Null-terminated Morse code string.
+ *
+ * @pre
+ *      - Each digit cluster consists of exactly five symbols
+ *      - Digit clusters are separated by single spaces
+ *
+ * @warning
+ *      This function modifies the input buffer.
+ *
+ * @return
+ *      - Heap-allocated numerical string on success
+ *      - NULL on invalid input or allocation failure
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ */
+char *translate_from_morse_code(char *morseNumber);
 
 
-char *translate_to_morse_code(char *number)
-{
-    int n = strlen(number);
-
-    char *morseNumber = (char *)malloc(6 * n * sizeof(char));
-    if (!morseNumber)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-
-    int morseCodePointer = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (!isdigit(number[i]))
-        {
-            printf("Bad Input - Invalid number");
-            free(morseNumber);
-            return NULL;
-        }
-
-        if (
-            morseCodePointer == 0 && 
-            number[i] == '0' && 
-            i < n - 1
-        ) { continue; }     // Removing leading zeroes
-
-        memcpy(morseNumber + morseCodePointer, MORSE_CODE_DIGITS[number[i] - '0'], 5);
-        morseNumber[morseCodePointer + 5] = ' ';
-        morseCodePointer += 6;
-    }
-    morseNumber[morseCodePointer - 1] = '\0';
-
-    return morseNumber;
-}
-
-
-char *translate_from_morse_code(char *morseNumber)
-{
-    int n = strlen(morseNumber);
-
-    char *number = (char *)malloc(n/4 * sizeof(char));
-    if (!number)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-
-    int numPointer = 0;
-    char *digit = strtok(morseNumber, " ");
-    while (digit)
-    {
-        if (strlen(digit) != 5)
-        {
-            printf("Bad Input - Illegal morse code");
-            free(number);
-            return NULL;
-        }
-
-        if (digit[0] == '.')
-        {
-            int i, j, k = 0;
-
-            for (i = 0; i < 5; i++)
-            {
-                if (digit[i] == '.')
-                    ++k;
-                else if (digit[i] == '-')
-                    break;
-                else
-                {
-                    printf("Bad Input - Illegal morse code");
-                    free(number);
-                    return NULL;
-                }
-            }
-
-            for (j = i + 1; j < 5; j++)
-            {
-                if (digit[j] != '-')
-                {
-                    printf("Bad Input - Illegal morse code");
-                    free(number);
-                    return NULL;
-                }
-            }
-
-            number[numPointer++] = '0' + k;
-        }
-        else if (digit[0] == '-')
-        {
-            int i, j, k = 5;
-
-            for (i = 0; i < 5; i++)
-            {
-                if (digit[i] == '-')
-                    ++k;
-                else if (digit[i] == '.')
-                    break;
-                else
-                {
-                    printf("Bad Input - Illegal morse code");
-                    free(number);
-                    return NULL;
-                }
-            }
-
-            for (j = i + 1; j < 5; j++)
-            {
-                if (digit[j] != '.')
-                {
-                    printf("Bad Input - Illegal morse code");
-                    free(number);
-                    return NULL;
-                }
-            }
-
-            number[numPointer++] = '0' + (k % 10);
-        }
-        else
-        {
-            printf("Bad Input - Illegal morse code");
-            free(number);
-            return NULL;
-        }
-
-        digit = strtok(NULL, " ");
-    }
-
-    number[numPointer] = '\0';
-
-    // Skip leading zeroes
-    int offset = -1;
-    while (number[++offset] == '0' && offset < numPointer - 1);
-    memmove(number, number + offset, numPointer - offset + 1);
-
-    return number;
-}
+#endif /* MORSE_H */

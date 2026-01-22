@@ -1,195 +1,124 @@
+#ifndef NWNCEPTION_H
+#define NWNCEPTION_H
+
 /**
- *      Numbers Within Numbers (NWN)
- *      Numbers Within Numbers Within Numbers (NWNWN)
- *      Numbers within Numbers with N Numbers (NWNWNN)
+ * @file nwnception.h
+ * @brief Numbers-Within-Numbers (NWN) utilities.
+ *
+ * Provides operations on dot-separated numeric strings representing
+ * nested numeric structures:
+ *
+ *  - Numbers Within Numbers (NWN)
+ *  - Numbers Within Numbers Within Numbers (NWNWN)
+ *  - Numbers Within Numbers with N Numbers (NWNWNN)
+ *
+ * Example representation:
+ * @code
+ * 5.3.1
+ * @endcode
+**/
+
+
+/**
+ * @enum NWN_Mode
+ * @brief Specifies the NWN operating mode.
+ *
+ * Controls the number of numeric partitions and resizing behavior.
  */
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <limits.h>
-
-
-enum nwn_mode 
+enum NWN_Mode
 {
+    /** Exactly 2 numeric partitions */
     NWN = 2,
+
+    /** Exactly 3 numeric partitions */
     NWNWN = 3,
+
+    /**
+     * Variable number of partitions.
+     *
+     * The number of partitions is determined by
+     * the first numeric value.
+     */
     NWNWNN
 };
 
 
-void increment_nwn(long **arr, long *arrSize, enum nwn_mode mode)
-{
-    long depth = *arrSize - 1;
-    for (; depth > 0; depth--)
-    {
-        if (++(*arr)[depth] > (*arr)[depth - 1])
-        {
-            (*arr)[depth] = 1;
-            continue;
-        }
-        break;
-    }
-
-    if (depth == 0)
-    {
-        if (mode == NWNWNN)
-        {
-            long *temp = (long *)realloc(*arr, (*arrSize + 1) * sizeof(long));
-            if (!(*temp))
-            {
-                printf("Error - realloc failure");
-                free(*arr);
-                return;
-            }
-
-            *arr = temp;
-            (*arr)[0] = *arrSize + 1;
-            (*arr)[(*arrSize)++] = 1L;
-        }
-        else
-        {
-            ++(*arr)[0];
-        }
-    }
-}
+/**
+ * @brief Increments an NWN numeric representation in-place.
+ *
+ * @param arr
+ *      Pointer to a heap-allocated array of numeric partitions.
+ *
+ * @param arrSize
+ *      Pointer to the current number of elements in @p arr.
+ *
+ * @param mode
+ *      NWN mode controlling increment and resizing behavior.
+ *
+ * @post
+ *      - The array contents are modified
+ *      - The array may be reallocated (especially in @ref NWNWNN mode)
+ *      - On allocation failure, *@p arr is freed and set to NULL
+ *
+ * @warning
+ *      Callers must not use *@p arr after failure unless reinitialized.
+ */
+void increment_nwn(long **arr, long *arrSize, enum NWN_Mode mode);
 
 
-char *stringify_nwn(long *arr, long arrSize)
-{
-    char *numString = (char *)malloc(15 * (size_t)arrSize * sizeof(char));
-    if (!numString)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-    numString[0] = '\0';
-
-    char *number = (char *)malloc(15 * sizeof(char));
-    if (!number)
-    {
-        printf("Error - malloc failure");
-        free(numString);
-        return NULL;
-    }
-
-    for (int i = 0; i < arrSize; i++)
-    {
-        if (i != 0)
-            strcat(numString, ".");
-
-        sprintf(number, "%ld", arr[i]);
-        strcat(numString, number);
-    }
-    free(number);
-
-    return numString;
-}
+/**
+ * @brief Converts an NWN numeric array into a dot-separated string.
+ *
+ * @param arr
+ *      Array of numeric partitions.
+ *
+ * @param arrSize
+ *      Number of elements in @p arr.
+ *
+ * @return
+ *      - Heap-allocated dot-separated string on success
+ *      - NULL on allocation failure
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ *
+ * @example
+ * @code
+ * [5, 3, 1] -> "5.3.1"
+ * @endcode
+ */
+char *stringify_nwn(const long *arr, long arrSize);
 
 
-char *nwns(char *numString, enum nwn_mode mode)
-{
-    char *endPtr, *token, *nextNumString;
-    long *arr, arrPtr = 0, size, x;
-    errno = 0;
+/**
+ * @brief Computes the next NWN value from a dot-separated string.
+ *
+ * @param numString
+ *      Dot-separated numeric string representing an NWN structure.
+ *
+ * @param mode
+ *      NWN operating mode.
+ *
+ * @pre
+ *      - Input must contain positive integers only
+ *      - Numeric partitions must be in non-increasing order
+ *
+ * @par Mode behavior:
+ *      - @ref NWN     : expects exactly 2 partitions
+ *      - @ref NWNWN   : expects exactly 3 partitions
+ *      - @ref NWNWNN  : number of partitions determined by first value
+ *
+ * @warning
+ *      This function modifies the input buffer using strtok().
+ *
+ * @return
+ *      - Heap-allocated string representing the next NWN value
+ *      - NULL on invalid input or allocation failure
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ */
+char *nwns(char *numString, enum NWN_Mode mode);
 
-    token = strtok(numString, ".");
-    x = strtol(token, &endPtr, 10);
 
-    if (*endPtr != '\0')
-    {
-        printf("Bad Input - Non-numeral prtition in string");
-        return NULL;
-    }
-    
-    if (x <= 0)
-    {
-        printf("Bad Input - Non-positive numerals not allowed");
-        return NULL;
-    }
-    
-    if (errno == ERANGE || x == LONG_MAX)
-    {
-        printf("Bad Input - Numeral too large");
-        return NULL;
-    }
-
-    
-    if (mode == NWNWNN)
-    {
-        size = x;
-    }
-    else
-    {
-        size = mode;
-    }
-
-    arr = (long *)malloc(size * sizeof(long));
-    if (!arr)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-
-    arr[arrPtr++] = x;
-    while ((token = strtok(NULL, ".")) != NULL && arrPtr < size)
-    {
-        errno = 0;
-        arr[arrPtr] = strtol(token, &endPtr, 10);
-
-        if (*endPtr != '\0')
-        {
-            printf("Bad Input - Non-numeral partition in string");
-            free(arr);
-            return NULL;
-        }
-        
-        if (arr[arrPtr] <= 0)
-        {
-            printf("Bad Input - Non-positive numerals not allowed");
-            free(arr);
-            return NULL;
-        }
-        
-        if (errno == ERANGE || arr[arrPtr] == LONG_MAX)
-        {
-            printf("Bad Input - Numeral too large");
-            free(arr);
-            return NULL;
-        }
-        
-        if (arr[arrPtr] > arr[arrPtr - 1])
-        {
-            printf("Bad Input - Numeral partitions are not in non-increasing order");
-            free(arr);
-            return NULL;
-        }
-
-        ++arrPtr;
-    }
-
-    if (arrPtr != size)
-    {
-        printf("Bad Input - Too few partitions for %ld numerals", size);
-        free(arr);
-        return NULL;
-    }
-
-    if (token != NULL)
-    {
-        printf("Bad Input - Too many partitions for %ld numerals", size);
-        free(arr);
-        return NULL;
-    }
-
-    increment_nwn(&arr, &size, mode);
-    if (!arr)
-        return NULL;
-
-    nextNumString = stringify_nwn(arr, size);
-    free(arr);
-
-    return nextNumString;
-}
+#endif /* NWNCEPTION_H */

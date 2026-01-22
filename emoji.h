@@ -1,53 +1,46 @@
+#ifndef EMOJI_H
+#define EMOJI_H
+
 /**
- *      Emoji
- *      Function to emojify numbers
+ * @file emoji.h
+ * @brief Emoji-based numeric formatting utilities.
+ *
+ * Provides functionality for converting numerical strings
+ * into their corresponding emoji representations.
+**/
+
+
+/**
+ * @brief UTF-8 emoji representations of digits 0–9.
+ *
+ * Each entry corresponds to the emoji representation
+ * of its index value.
+ *
+ * @note
+ * This array is read-only and must not be modified.
  */
+extern const char * const EMOJI_DIGITS[];
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+/**
+ * @brief Converts a numerical string into an emoji string.
+ *
+ * @param number
+ *      Null-terminated numerical string to convert.
+ *
+ * @pre
+ *      - @p number contains digits only ('0'–'9')
+ *      - No leading zeroes (except the number "0")
+ *      - No negative sign
+ *
+ * @return
+ *      - Heap-allocated emoji string on success
+ *      - NULL on allocation failure or invalid input
+ *
+ * @note
+ *      The caller is responsible for freeing the returned string.
+ */
+char *number_to_emoji(const char *number);
 
 
-const char *EMOJI_DIGITS[10] = 
-{
-    "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣",
-    "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"
-};
-
-
-// Emojifies number, ONLY USE INPUT WITH LEADING ZEROES STRIPPED
-char *numberToEmoji(char *number)
-{
-    if (number[0] == '-')
-    {
-        printf("Bad Input - Negative numbers not allowed");
-        return NULL;
-    }
-
-    int n = strlen(number);
-    
-    char *res = (char *)malloc((7*n + 1) * sizeof(char));
-    if (!res)
-    {
-        printf("Error - malloc failure");
-        return NULL;
-    }
-    res[0] = '\0';
-
-    for (int i = 0; i < n; i++) 
-    {
-        // Catch invalid inputs
-        if (!isdigit((unsigned char)number[i]))
-        {
-            printf("Bad Input - Invalid number");
-            free(res);
-            return NULL;
-        }
-
-        strcat(res, EMOJI_DIGITS[number[i] - '0']);
-    }
-
-    return res;
-}
+#endif /* EMOJI_H */
