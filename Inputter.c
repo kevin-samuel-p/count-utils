@@ -4,7 +4,10 @@
 #include <stdlib.h>
 
 
-const char TEMP_FILE_NAME[] = "Enter the number here, press Ctrl + S, and the file..txt";
+const char TEMP_FILE_NAME[] = 
+    "Enter the number here, "
+    "press Ctrl + S, "
+    "and close the file..txt";
 
 
 int create_temp_file() 
