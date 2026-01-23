@@ -17,10 +17,18 @@
 #include <ctype.h>
 
 
-const char * fiveBar[] = "~~||||~~";
-const char * fiftyLine[] = 
+enum Display_Mode
+{
+    COMPACT,        // No newline characters used
+    IMPACT,         // Big text formatter on every non-header line
+    TINY_TEXT,      // Small text formatter on every non-header line
+    DEFAULT
+};
+
+const char * FIVE_BAR = "~~||||~~";
+const char * FIFTY_LINE = 
     "~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ "
-    "~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ";
+    "~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~";
 
 
 // Parses tally marks according to Discord formatting and returns integer depicting number, else -1 in case of error
@@ -97,7 +105,7 @@ int parse_tally_marks(char *textWall)
     
     while (chunk)
     {
-        if (strcmp(chunk, fiveBar) == 0)
+        if (strcmp(chunk, FIVE_BAR) == 0)
         {
             number += 5;
             chunk = strtok(NULL, delimiter);
@@ -138,4 +146,126 @@ int parse_tally_marks(char *textWall)
     }
 
     return number;
+}
+
+/**
+ *  Format:
+ *      - s / standard  - 1k marker + tally mark wall
+ *      - t / truncated - 1k/500 marker + tally mark wall
+ */
+char *tally(int number, char format, enum Display_Mode displayMode)
+{
+    if (number <= 0)
+    {
+        printf("Bad Input - Tally marks cannot represent non-positive numbers");
+        return NULL;
+    }
+    
+    char *slab, header[20], body[1980], *prefix;
+    int headerPtr = 0, bodyPtr = 0;
+
+    slab = (char *)malloc(2000 * sizeof(char));
+    if (!slab)
+    {
+        printf("Error - malloc failure");
+        return NULL;
+    }
+
+    switch(displayMode)
+    {
+        case COMPACT:
+            prefix = " ";
+        break;
+
+        case IMPACT:
+            prefix = "\n# ";
+        break;
+
+        case TINY_TEXT:
+            prefix = "\n-# ";
+        break;
+
+        case DEFAULT:
+            prefix = "\n";
+        break;
+    }
+
+    if (number >= 1000)
+    {
+        headerPtr += snprintf(header, sizeof(header), "%d", number / 1000);
+        number %= 1000;
+
+        if (number >= 500 && format != 's')
+        {
+            strcpy(header + headerPtr, ".5");
+            headerPtr += 2;
+            number -= 500;
+        }
+
+        strcpy(header + headerPtr, "K");
+        headerPtr += 1;
+    }
+    else
+    {
+        header[0] = '\0';
+    }
+
+    for (; number >= 50; number -= 50)
+    {
+        bodyPtr += snprintf(
+            body + bodyPtr, 
+            sizeof(body) - bodyPtr, 
+            "%s%s", 
+            prefix, FIFTY_LINE
+        );
+    }
+
+    if (number > 0)
+    {
+        bodyPtr += snprintf(
+            body + bodyPtr, 
+            sizeof(body) - bodyPtr, 
+            "%s", 
+            prefix
+        );
+    }
+
+    for (; number >= 5; number -= 5)
+    {
+        bodyPtr += snprintf(
+            body + bodyPtr, 
+            sizeof(body) - bodyPtr, 
+            "%s%c", 
+            FIVE_BAR, ' '
+        );
+    }
+
+    for (; number > 0; number--)
+    {
+        body[bodyPtr++] = '|';
+    }
+    body[bodyPtr] = '\0';
+
+    // Attempt to mitigate overallocation
+    char *temp = realloc(slab, headerPtr + bodyPtr + 10);   // 10 just to be safe
+    if (!temp)
+    {
+        printf("Warning - realloc failure\n");
+    }
+    else
+    {
+        slab = temp;
+    }
+
+    const char separator[] = (
+        header[0] != '\0' && body[0] != '\0'
+    ) ? " +" : "";
+
+    sprintf(
+        slab, 
+        "%s%s%s", 
+        header, separator, body
+    );
+
+    return slab;
 }
