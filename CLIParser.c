@@ -129,9 +129,26 @@
  *      |                |  convert / c  |          NIL           | Converts an inputted Roman number to its numerical value, |
  *      |                |               |                        | and an inputted number to its Roman numeral equivalent.   |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
- *      |                |    run / r    |          NIL           | Initiates a counting run using tally marks.               |
+ *      |                |               |         b / big        | Initiates a counting run using tally marks with big text  |
+ *      |                |               |                        | formatting.                                               |
+ *      |                |               |------------------------+-----------------------------------------------------------+
+ *      |                |               |       c / compact      | Initiates a counting run using tally marks with compact   |
+ *      |                |               |                        | formatting (removal of newline characters).               |
+ *      |                |               |------------------------+-----------------------------------------------------------+
+ *      |                |               |                        | Initiates a counting run using tally marks with default   |
+ *      |                |               |       d / default      | formatting (max 50 tallies per line). Default selected    |
+ *      |                |               |                        | parameter if options are omitted from command.            |
+ *      |                |    run / r    |------------------------+-----------------------------------------------------------+
+ *      |                |               |        g / giant       | Initiates a counting run using tally marks with giant     |
+ *      |      tally     |               |                        | text formatting.                                          |
+ *      |                |               |------------------------+-----------------------------------------------------------+
+ *      |                |               |       i / impact       | Initiates a counting run using tally marks with impact    |
+ *      |                |               |                        | formatting (slightly big and bold text).                  |
+ *      |                |               |------------------------+-----------------------------------------------------------+
+ *      |                |               |        t / tiny        | Initiates a counting run using tally marks with tiny text |
+ *      |                |               |                        | formatting.                                               |
  *      |                |---------------+------------------------+-----------------------------------------------------------+
- *      |      tally     |               |                        | Converts an inputted number to its tally mark form        |
+ *      |                |               |                        | Converts an inputted number to its tally mark form        |
  *      |                |  convert / c  |          NIL           | (incorporating tally mark strikethrough according to      |
  *      |                |               |                        | Discord markdown rules), and counts tally marks to assess |
  *      |                |               |                        | its true numerical value.                                 |

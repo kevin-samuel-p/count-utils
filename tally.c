@@ -1,3 +1,5 @@
+#include "tally.h"
+
 /**
  *      Tally Marks
  *      
@@ -17,21 +19,12 @@
 #include <ctype.h>
 
 
-enum Display_Mode
-{
-    COMPACT,        // No newline characters used
-    IMPACT,         // Big text formatter on every non-header line
-    TINY_TEXT,      // Small text formatter on every non-header line
-    DEFAULT
-};
-
 const char * FIVE_BAR = "~~||||~~";
 const char * FIFTY_LINE = 
     "~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ "
     "~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~ ~~||||~~";
 
 
-// Parses tally marks according to Discord formatting and returns integer depicting number, else -1 in case of error
 int parse_tally_marks(char *textWall)
 {
     int number = 0,     // tracks the number while parsing text wall
@@ -112,8 +105,13 @@ int parse_tally_marks(char *textWall)
             continue;
         }
 
-        if (strcmp(chunk, "#") == 0 || strcmp(chunk, "-#") == 0)    // Discord markdown formatters
-        {
+        // Check for Discord markdown formatters
+        if (
+            strcmp(chunk, "#") == 0 || 
+            strcmp(chunk, "##") == 0 || 
+            strcmp(chunk, "###") == 0 ||
+            strcmp(chunk, "-#") == 0
+        ) {
             chunk = strtok(NULL, delimiter);
             continue;
         }
@@ -148,12 +146,8 @@ int parse_tally_marks(char *textWall)
     return number;
 }
 
-/**
- *  Format:
- *      - s / standard  - 1k marker + tally mark wall
- *      - t / truncated - 1k/500 marker + tally mark wall
- */
-char *tally(int number, char format, enum Display_Mode displayMode)
+
+char *tally(int number, enum Formatting formatting)
 {
     if (number <= 0)
     {
@@ -171,14 +165,22 @@ char *tally(int number, char format, enum Display_Mode displayMode)
         return NULL;
     }
 
-    switch(displayMode)
+    switch(formatting)
     {
+        case BIG:
+            prefix = "\n## ";
+        break;
+
         case COMPACT:
             prefix = " ";
         break;
 
-        case IMPACT:
+        case GIANT:
             prefix = "\n# ";
+        break;
+
+        case IMPACT:
+            prefix = "\n### ";
         break;
 
         case TINY_TEXT:
@@ -195,7 +197,7 @@ char *tally(int number, char format, enum Display_Mode displayMode)
         headerPtr += snprintf(header, sizeof(header), "%d", number / 1000);
         number %= 1000;
 
-        if (number >= 500 && format != 's')
+        if (number >= 500)
         {
             strcpy(header + headerPtr, ".5");
             headerPtr += 2;
@@ -257,8 +259,8 @@ char *tally(int number, char format, enum Display_Mode displayMode)
         slab = temp;
     }
 
-    const char separator[] = (
-        header[0] != '\0' && body[0] != '\0'
+    const char *separator = (
+        header[0] && body[0]
     ) ? " +" : "";
 
     sprintf(
