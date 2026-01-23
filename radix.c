@@ -108,7 +108,7 @@ char *convert(const char *number, enum Radix convertFrom, enum Radix convertTo)
         return NULL;
     }
 
-    numString = (char *)malloc(65 * sizeof(char));
+    numString = malloc(65 * sizeof(char));
     if (!numString)
     {
         printf("Error - malloc failure");
@@ -133,7 +133,7 @@ char *next_number(const char *number, enum Radix base)
         return NULL;
     }
 
-    nextNumber = (char *)malloc(65 * sizeof(char));
+    nextNumber = malloc(65 * sizeof(char));
     if (!nextNumber)
     {
         printf("Error - malloc failure");

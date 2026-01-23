@@ -2,19 +2,25 @@
 #define INPUTTER_H
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <wchar.h>
 
 /**
  * @file Inputter.h
  * @brief Utilities for handling user input via temporary files.
  *
  * This module allows creating a temporary file, opening it for user input,
- * and deleting it afterward. It is designed for simple user interaction
- * where input is typed in a text editor.
+ * reading the contents back into memory, and deleting the file afterward.
+ *
+ * Input is read as UTF-8 encoded text. ASCII-only modules may consume the
+ * input directly, while Unicode-aware modules may convert it to wide
+ * characters using the provided helper.
  *
  * @note
- *  - The current implementation uses Notepad on Windows.
- *  - Temporary file is defined by `TEMP_FILE_NAME`.
-**/
+ *  - This implementation is Windows-specific.
+ *  - Notepad is used as the editor for user input.
+ *  - UTF-16 encoded files are explicitly rejected.
+ */
 
 
 /**
@@ -29,10 +35,10 @@ extern const char TEMP_FILE_NAME[];
  * @brief Creates a temporary file for user input.
  *
  * @return
- *  - 1 on success
- *  - 0 on failure (file could not be created)
+ *  - true on success
+ *  - false on failure (file could not be created)
  */
-int create_temp_file(void);
+bool create_temp_file(void);
 
 
 /**
@@ -42,20 +48,63 @@ int create_temp_file(void);
  * until Notepad is closed.
  *
  * @return
- *  - 1 if Notepad exited successfully
- *  - 0 if there was an error launching Notepad
+ *  - true if Notepad exited successfully
+ *  - false if there was an error launching Notepad
  */
-int await_user_input(void);
+bool await_user_input(void);
+
+
+/**
+ * @brief Reads the temporary input file as a UTF-8 encoded byte string.
+ *
+ * The file is read in binary mode and returned as a null-terminated
+ * `char *` buffer. The function explicitly checks for UTF-16 byte-order
+ * marks (BOMs) and fails early if one is detected.
+ *
+ * @note
+ *  - The returned buffer contains raw UTF-8 bytes.
+ *  - ASCII-only input is always valid UTF-8.
+ *  - The caller is responsible for freeing the returned buffer.
+ *
+ * @return
+ *  - Pointer to a heap-allocated UTF-8 string on success
+ *  - NULL on failure (I/O error, allocation failure, or UTF-16 input)
+ */
+char *read_temp_file_utf8(void);
+
+
+/**
+ * @brief Converts a UTF-8 encoded string to a wide-character string.
+ *
+ * This function converts a null-terminated UTF-8 `char *` string into
+ * a dynamically allocated `wchar_t *` using Windows-native Unicode
+ * conversion (`MultiByteToWideChar`).
+ *
+ * The conversion is strict: invalid UTF-8 sequences will cause the
+ * function to fail.
+ *
+ * @note
+ *  - This function is intended for Unicode-aware modules only.
+ *  - The caller is responsible for freeing the returned buffer.
+ *
+ * @param utf8
+ *  Pointer to a null-terminated UTF-8 encoded string.
+ *
+ * @return
+ *  - Pointer to a heap-allocated wide-character string on success
+ *  - NULL on failure (invalid UTF-8 or allocation failure)
+ */
+wchar_t *utf8_to_wide(const char *utf8);
 
 
 /**
  * @brief Deletes the temporary input file.
  *
  * @return
- *  - 1 on successful deletion
- *  - 0 if the file could not be deleted
+ *  - true on successful deletion
+ *  - false if the file could not be deleted
  */
-int delete_temp_file(void);
+bool delete_temp_file(void);
 
 
 #endif /* INPUTTER_H */

@@ -28,7 +28,7 @@ char *number_to_emoji(const char *number)
 
     int n = strlen(number);
     
-    char *res = (char *)malloc((7*n + 1) * sizeof(char));
+    char *res = malloc((7*n + 1) * sizeof(char));
     if (!res)
     {
         printf("Error - malloc failure");

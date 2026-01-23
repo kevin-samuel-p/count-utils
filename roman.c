@@ -69,7 +69,7 @@ char *roman_to_number(const wchar_t *roman)
         i++, size++, vinculumCount++
     );
 
-    chunks = (int *)calloc(size, sizeof(int)); 
+    chunks = calloc(size, sizeof(int)); 
     if (!chunks)
     {
         printf("Error - calloc failure");
@@ -275,7 +275,7 @@ char *roman_to_number(const wchar_t *roman)
         }
     }
 
-    char *number = (char *)malloc((3*size + 2) * sizeof(char));
+    char *number = malloc((3*size + 2) * sizeof(char));
     if (!number)
     {
         printf("Error - malloc failure");
@@ -307,7 +307,7 @@ wchar_t *number_to_roman(const char *number, char representation)
 
     int n = strlen(number);
     int currSize = 80;
-    wchar_t *roman = (wchar_t *)malloc(currSize * sizeof(wchar_t));   // Expand size dynamically
+    wchar_t *roman = malloc(currSize * sizeof(wchar_t));   // Expand size dynamically
     if (!roman)
     {
         printf("Error - malloc failure");
@@ -342,7 +342,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         if (romanPtr == currSize - 2)
                         {
                             currSize += 80;
-                            wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                            wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                             if (!temp)
                             {
                                 printf("Error - realloc failure");
@@ -357,7 +357,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     if (romanPtr == currSize - 2)
                     {
                         currSize += 80;
-                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
                             printf("Error - realloc failure");
@@ -379,7 +379,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     if (romanPtr == currSize - 2)
                     {
                         currSize += 80;
-                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
                             printf("Error - realloc failure");
@@ -394,7 +394,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                 if (romanPtr == currSize - 2)
                 {
                     currSize += 80;
-                    wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                    wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                     if (!temp)
                     {
                         printf("Error - realloc failure");
@@ -416,7 +416,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         if (romanPtr == currSize - 2)
                         {
                             currSize += 80;
-                            wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                            wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                             if (!temp)
                             {
                                 printf("Error - realloc failure");
@@ -431,7 +431,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     if (romanPtr == currSize - 2)
                     {
                         currSize += 80;
-                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
                             printf("Error - realloc failure");
@@ -449,7 +449,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     if (romanPtr == currSize - 2)
                     {
                         currSize += 80;
-                        wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                        wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
                             printf("Error - realloc failure");
@@ -464,7 +464,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                 if (romanPtr == currSize - 2)
                 {
                     currSize += 80;
-                    wchar_t *temp = (wchar_t *)realloc(roman, currSize * sizeof(wchar_t));
+                    wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                     if (!temp)
                     {
                         printf("Error - realloc failure");

@@ -25,7 +25,7 @@ bool has_increasing_digits(char *number)
 char *next_increasing_number(const char *number)
 {
     int n = strlen(number);
-    char *buffer = (char *)malloc((n + 2) * sizeof(char));
+    char *buffer = malloc((n + 2) * sizeof(char));
     if (!buffer)
     {
         printf("Error - malloc failure");

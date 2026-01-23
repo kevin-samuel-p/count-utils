@@ -1,16 +1,13 @@
 #include "ClipboardFunctions.h"
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <windows.h>
 
 
-int copy_to_clipboard(const wchar_t *);
-int copy_utf8_to_clipboard(const char *);
-
-
-int copy_to_clipboard(const wchar_t *text) 
+bool copy_to_clipboard(const wchar_t *text) 
 {
-    if (!OpenClipboard(NULL)) return 0;
+    if (!OpenClipboard(NULL)) return false;
         
     EmptyClipboard();
 
@@ -19,7 +16,7 @@ int copy_to_clipboard(const wchar_t *text)
     if (!hMem) 
     {
         CloseClipboard();
-        return 0;
+        return false;
     }
 
     void *mem = GlobalLock(hMem);
@@ -29,24 +26,24 @@ int copy_to_clipboard(const wchar_t *text)
     SetClipboardData(CF_UNICODETEXT, hMem);
 
     CloseClipboard();
-    return 1;
+    return true;
 }
 
 
 // ANSI Wrapper for UTF-8/ASCII
-int copy_utf8_to_clipboard(const char *text) 
+bool copy_utf8_to_clipboard(const char *text) 
 {
     int wcharCount = MultiByteToWideChar(CP_UTF8, 0, text, -1, NULL, 0);
     if (wcharCount == 0) 
-        return 0;
+        return false;
 
-    wchar_t *wtext = (wchar_t *)malloc(wcharCount * sizeof(wchar_t));
+    wchar_t *wtext = malloc(wcharCount * sizeof(wchar_t));
     if (!wtext) 
-        return 0;
+        return false;
 
     MultiByteToWideChar(CP_UTF8, 0, text, -1, wtext, wcharCount);
 
-    int result = copy_to_clipboard(wtext);
+    bool result = copy_to_clipboard(wtext);
     free(wtext);
 
     return result;

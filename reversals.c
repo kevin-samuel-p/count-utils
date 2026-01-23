@@ -54,7 +54,7 @@ char *next_palindrome(const char *number)
 
     // Attempt malloc to new number string
     int n = strlen(numberStripped);
-    nextNumber = (char *)malloc((n + 3) * sizeof(char));
+    nextNumber = malloc((n + 3) * sizeof(char));
     if (!nextNumber)
     {
         printf("Error - malloc failure");
@@ -135,7 +135,7 @@ char *next_mirror_number(char *number, char mode)
                 return NULL;
             }
 
-            nextNumber = (char *)malloc((n + 2) * sizeof(char));
+            nextNumber = malloc((n + 2) * sizeof(char));
             if (!nextNumber)
             {
                 printf("Error - malloc failure");
@@ -164,7 +164,7 @@ char *next_mirror_number(char *number, char mode)
                 offset < n - 1
             );
 
-            nextNumber = (char *)malloc((n - offset + 2) * sizeof(char));
+            nextNumber = malloc((n - offset + 2) * sizeof(char));
             if (!nextNumber)
             {
                 printf("Error - malloc failure");

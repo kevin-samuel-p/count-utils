@@ -43,7 +43,7 @@ wchar_t *translate_to_japanese(const char *number)
         return NULL;
     }
 
-    wchar_t *japaneseNumber = (wchar_t *)malloc((2*n + 1) * sizeof(wchar_t));
+    wchar_t *japaneseNumber = malloc((2*n + 1) * sizeof(wchar_t));
     if (!japaneseNumber)
     {
         printf("Error - malloc failure");
@@ -59,7 +59,7 @@ wchar_t *translate_to_japanese(const char *number)
         return japaneseNumber;
     }
 
-    wchar_t *chunk = (wchar_t *)malloc(12 * sizeof(wchar_t));
+    wchar_t *chunk = malloc(12 * sizeof(wchar_t));
     if (!chunk)
     {
         printf("Error - malloc failure");
@@ -179,7 +179,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         wcscmp(japaneseNumber, L"零") == 0 ||
         wcscmp(japaneseNumber, L"〇") == 0
     ) {
-        number = (char *)malloc(2 * sizeof(char));
+        number = malloc(2 * sizeof(char));
         if (!number)
         {
             printf("Error - malloc failure");
@@ -196,7 +196,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         blockPtr = -1;          // Pointer to ensure no duplicate place values or unordered structure
     bool op;                    // Flag to check whether an operation was done or not
 
-    number = (char *)malloc(53 * sizeof(char));
+    number = malloc(53 * sizeof(char));
     if (!number)
     {
         printf("Error - malloc failure");
@@ -328,7 +328,7 @@ void increment_numstring(char **number)
             return;
     }
 
-    char *temp = (char *)realloc(*number, n + 2);
+    char *temp = realloc(*number, n + 2);
     if (!temp)
     {
         printf("Error - realloc failed");

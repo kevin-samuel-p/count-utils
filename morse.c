@@ -32,7 +32,7 @@ char *translate_to_morse_code(const char *number)
 {
     int n = strlen(number);
 
-    char *morseNumber = (char *)malloc(6 * n * sizeof(char));
+    char *morseNumber = malloc(6 * n * sizeof(char));
     if (!morseNumber)
     {
         printf("Error - malloc failure");
@@ -69,7 +69,7 @@ char *translate_from_morse_code(char *morseNumber)
 {
     int n = strlen(morseNumber);
 
-    char *number = (char *)malloc(n/4 * sizeof(char));
+    char *number = malloc(n/4 * sizeof(char));
     if (!number)
     {
         printf("Error - malloc failure");

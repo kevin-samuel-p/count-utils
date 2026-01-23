@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
@@ -14,6 +16,7 @@
 #include "reps.h"
 #include "reversals.h"
 #include "roman.h"
+#include "tally.h"
 
 
 /**
@@ -160,14 +163,24 @@ int main(int argc, char *argv[])
 {
     if (argc < 3) 
     {
-        printf("Invalid Syntax: %s <mode> <option> [option-parameters]\n\nPlease review documentation for more information on the command line syntax...");
+        printf(
+            "Invalid Syntax: %s <mode> <option> [option-parameters]\n\n"
+            "Please review documentation for more information on the command line syntax...\n"
+        );
         return 1;
     }
 
     char option;
     char param[4] = {0};
 
-    create_temp_file();
+    if (!create_temp_file())
+    {
+        printf(
+            "Error: Could not create input file.\n"
+            "Please make sure you are running this tool as an administrator.\n"
+        );
+        return 1;
+    }
 
     if (strcmp(argv[1], "binary") == 0)
     {

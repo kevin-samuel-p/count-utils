@@ -158,7 +158,7 @@ char *tally(int number, enum Formatting formatting)
     char *slab, header[20], body[1980], *prefix;
     int headerPtr = 0, bodyPtr = 0;
 
-    slab = (char *)malloc(2000 * sizeof(char));
+    slab = malloc(2000 * sizeof(char));
     if (!slab)
     {
         printf("Error - malloc failure");

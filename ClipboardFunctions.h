@@ -2,6 +2,7 @@
 #define CLIPBOARDFUNCTIONS_H
 
 #include <wchar.h>
+#include <stdbool.h>
 
 /**
  * @file ClipboardFunctions.h
@@ -26,7 +27,7 @@
  *      - 1 if the copy was successful
  *      - 0 if the operation failed (clipboard could not be opened or memory allocation failed)
  */
-int copy_to_clipboard(const wchar_t *text);
+bool copy_to_clipboard(const wchar_t *text);
 
 
 /**
@@ -42,7 +43,7 @@ int copy_to_clipboard(const wchar_t *text);
  *      - 1 if the copy was successful
  *      - 0 if the operation failed (conversion failure, memory allocation failure, or clipboard access error)
  */
-int copy_utf8_to_clipboard(const char *text);
+bool copy_utf8_to_clipboard(const char *text);
 
 
 #endif /* CLIPBOARDFUNCTIONS_H */

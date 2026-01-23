@@ -2,35 +2,147 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <windows.h>
 
 
 const char TEMP_FILE_NAME[] = 
     "Enter the number here, "
     "press Ctrl + S, "
-    "and close the file..txt";
+    "and close the file..txt"
+;
 
 
-int create_temp_file() 
+bool create_temp_file() 
 {
     FILE *fp = fopen(TEMP_FILE_NAME, "w");
-    if (!fp) return 0;
+    if (!fp) return false;
 
     fclose(fp);
-    return 1;
+    return true;
 }
 
 
-int await_user_input() 
+bool await_user_input() 
 {
     char cmd[256];
-    snprintf(cmd, sizeof(cmd), 
-             "notepad \"%s\"", 
-             TEMP_FILE_NAME);
+    snprintf(
+        cmd, sizeof(cmd), 
+        "notepad \"%s\"", 
+        TEMP_FILE_NAME
+    );
     return system(cmd) == 0;
 }
 
 
-int delete_temp_file()
+char *read_temp_file_utf8()
+{
+    FILE *fp = fopen(TEMP_FILE_NAME, "rb");
+    if (!fp)
+    {
+        printf("Error: Could not open input file");
+        return NULL;
+    }
+
+    if (fseek(fp, 0, SEEK_END) != 0)
+    {
+        printf("Error: Failed to determine size of input file");
+        fclose(fp);
+        return NULL;
+    }
+
+    long size = ftell(fp);
+    if (size < 0)
+    {
+        printf("Error: Failed to determine size of input file");
+        fclose(fp);
+        return NULL;
+    }
+
+    rewind(fp);
+
+    char *buf = malloc((size_t)size + 1);
+    if (!buf)
+    {
+        printf("Error: Out of memory while reading input file");
+        fclose(fp);
+        return NULL;
+    }
+
+    size_t read = fread(buf, 1, (size_t)size, fp);
+    fclose(fp);
+
+    if (read != (size_t)size)
+    {
+        printf("Error: Failed to read input file completely");
+        free(buf);
+        return NULL;
+    }
+
+    buf[size] = '\0';
+
+    /* ---- UTF-16 BOM detection ---- */
+    if (size >= 2)
+    {
+        unsigned char b0 = (unsigned char)buf[0];
+        unsigned char b1 = (unsigned char)buf[1];
+
+        if (
+            b0 == 0xFF && b1 == 0xFE ||
+            b0 == 0xFE && b1 == 0xFF
+        ) {
+            printf(
+                "Bad Input - File is encoded in UTF-16.\n"
+                "Please save the file as UTF-8 and try again.\n"
+            );
+            free(buf);
+            return NULL;
+        }
+    }
+
+    return buf;
+}
+
+
+wchar_t *utf8_to_wide(const char *utf8)
+{
+    if (!utf8)
+        return NULL;
+
+    int len = MultiByteToWideChar(
+        CP_UTF8,
+        MB_ERR_INVALID_CHARS,
+        utf8,
+        -1,
+        NULL, 
+        0
+    );
+
+    if (len == 0)
+        return NULL;
+
+    wchar_t *wide = malloc((size_t)len * sizeof(wchar_t));
+    if (!wide)
+        return NULL;
+
+    if (!MultiByteToWideChar(
+        CP_UTF8,
+        0,
+        utf8,
+        -1,
+        wide,
+        len
+    )) {
+        printf("Bad Input - Input contains malformed UTF-8 sequences");
+        free(wide);
+        return NULL;
+    }
+
+    return wide;
+}
+
+
+bool delete_temp_file()
 {
     return remove(TEMP_FILE_NAME) == 0;
 }

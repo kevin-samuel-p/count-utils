@@ -31,7 +31,7 @@ void increment_nwn(long **arr, long *arrSize, enum NWN_Mode mode)
     {
         if (mode == NWNWNN)
         {
-            long *temp = (long *)realloc(*arr, (*arrSize + 1) * sizeof(long));
+            long *temp = realloc(*arr, (*arrSize + 1) * sizeof(long));
             if (!(*temp))
             {
                 printf("Error - realloc failure");
@@ -53,7 +53,7 @@ void increment_nwn(long **arr, long *arrSize, enum NWN_Mode mode)
 
 char *stringify_nwn(const long *arr, long arrSize)
 {
-    char *numString = (char *)malloc(15 * (size_t)arrSize * sizeof(char));
+    char *numString = malloc(15 * (size_t)arrSize * sizeof(char));
     if (!numString)
     {
         printf("Error - malloc failure");
@@ -61,7 +61,7 @@ char *stringify_nwn(const long *arr, long arrSize)
     }
     numString[0] = '\0';
 
-    char *number = (char *)malloc(15 * sizeof(char));
+    char *number = malloc(15 * sizeof(char));
     if (!number)
     {
         printf("Error - malloc failure");
@@ -120,7 +120,7 @@ char *nwns(char *numString, enum NWN_Mode mode)
         size = mode;
     }
 
-    arr = (long *)malloc(size * sizeof(long));
+    arr = malloc(size * sizeof(long));
     if (!arr)
     {
         printf("Error - malloc failure");
