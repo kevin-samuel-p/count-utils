@@ -89,7 +89,7 @@ char *convert(const char *number, enum Radix convertFrom, enum Radix convertTo)
 
     if (number[0] == '-')
     {
-        printf("Bad Input: Negative numbers not allowed");
+        printf("Bad Input - Negative numbers not allowed.\n");
         return NULL;
     }
 
@@ -97,20 +97,20 @@ char *convert(const char *number, enum Radix convertFrom, enum Radix convertTo)
 
     if (*endChar != '\0')
     {
-        printf("Bad Input: Invalid %s number", radix_name(convertFrom));
+        printf("Bad Input - Invalid %s number.\n", radix_name(convertFrom));
         return NULL;
     }
 
     if (errno == ERANGE)
     {
-        printf("Bad Input: Number too large");
+        printf("Bad Input: Number too large.\n");
         return NULL;
     }
 
     numString = malloc(65 * sizeof(char));
     if (!numString)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -128,14 +128,14 @@ char *next_number(const char *number, enum Radix base)
     
     if (value == ULLONG_MAX)  // Subtle detail: value increments here
     {
-        printf("Bad Input - Maximum allowed number");
+        printf("Bad Input - Maximum allowed number.\n");
         return NULL;
     }
 
     nextNumber = malloc(65 * sizeof(char));
     if (!nextNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 

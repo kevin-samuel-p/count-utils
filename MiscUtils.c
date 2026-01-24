@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
+#include <string.h>
+#include <wchar.h>
+#include <ctype.h>
 #include <windows.h>
 #include <errno.h>
 
@@ -65,13 +69,13 @@ void string_to_number(const char *number, unsigned long long **v)
 
     if (number[0] == '-')
     {
-        printf("Bad Input: Negative numbers not allowed");
+        printf("Bad Input: Negative numbers not allowed.\n");
         return;
     }
 
     if (number[0] == '\0')
     {
-        printf("Bad Input: Empty string");
+        printf("Bad Input: Empty string.\n");
         return;
     }
 
@@ -79,22 +83,77 @@ void string_to_number(const char *number, unsigned long long **v)
 
     if (*endChar != '\0')
     {
-        printf("Bad Input: Invalid number");
+        printf("Bad Input: Invalid number.\n");
         return;
     }
 
     if (errno == ERANGE)
     {
-        printf("Bad Input: Number too large");
+        printf("Bad Input: Number too large.\n");
         return;
     }
 
     *v = malloc(sizeof(unsigned long long));
     if (!(*v))
     {
-        printf("Error: malloc failed");
+        printf("Error: malloc failed.\n");
         return;
     }
 
     **v = value;
+}
+
+
+bool is_valid_number(const char *number)
+{
+    if (!number) return false;
+
+    for (int i = 0; number[i] != '\0'; i++)
+        if (!isdigit((unsigned char)number[i]))
+            return false;
+
+    return true;
+}
+
+
+char *strip_leading_zeroes(const char *number)
+{
+    // Only works for valid numbers
+    if (!number)
+    {
+        printf("Bad Input - NULL ptr");
+        return NULL;
+    }
+
+    int n = strlen(number);
+    char *strippedNumber;
+
+    int offset;
+    for (
+        offset = 0; 
+        offset < n - 1 && *(number + offset) == '0'; 
+        offset++
+    );
+
+    strippedNumber = malloc((n - offset + 1) * sizeof(char));
+    if (!strippedNumber)
+    {
+        printf("Error - malloc failure.\n");
+        return NULL;
+    }
+
+    for (int i = offset; i < n; i++)
+    {
+        if (!isdigit((unsigned char)number[i]))
+        {
+            printf("Bad Input - Invalid number.\n");
+            free(strippedNumber);
+            return NULL;
+        }
+
+        strippedNumber[i - offset] = number[i];
+    }
+    strippedNumber[n - offset] = '\0';
+    
+    return strippedNumber;
 }

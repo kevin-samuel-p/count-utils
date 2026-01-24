@@ -30,7 +30,6 @@ bool copy_to_clipboard(const wchar_t *text)
 }
 
 
-// ANSI Wrapper for UTF-8/ASCII
 bool copy_utf8_to_clipboard(const char *text) 
 {
     int wcharCount = MultiByteToWideChar(CP_UTF8, 0, text, -1, NULL, 0);

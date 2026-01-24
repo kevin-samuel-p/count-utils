@@ -6,6 +6,7 @@
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
 #include "MiscUtils.h"
+#include "Runner.c"
 
 #include "emoji.h"
 #include "increasing.h"
@@ -66,7 +67,7 @@
  *      |                |               |------------------------+-----------------------------------------------------------+
  *      |                |  convert / c  |    d / dec / decimal   | Converts an inputted hexadecimal number to decimal.       |
  *      |                |               |------------------------+-----------------------------------------------------------+
- *      |                |               |     o / oct / octal    | Converts an inputted hexadecimal number to octal.         |   
+ *      |                |               |     o / oct / octal    | Converts an inputted hexadecimal number to octal.         |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
  *      |                |    run / r    |          NIL           | Initiates a counting run using numbers with digits in     |
  *      |                |               |                        | non-decreasing order.                                     |
@@ -92,7 +93,7 @@
  *      |                |               |------------------------+-----------------------------------------------------------+
  *      |                |  convert / c  |    d / dec / decimal   | Converts an inputted octal number to decimal.             |
  *      |                |               |------------------------+-----------------------------------------------------------+
- *      |                |               |  h / hex / hexadecimal | Converts an inputted octal number to hexadecimal.         |   
+ *      |                |               |  h / hex / hexadecimal | Converts an inputted octal number to hexadecimal.         |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
  *      |                |               |          69            | Initiates a counting run using '69' numbers.              |
  *      |                |               |------------------------+-----------------------------------------------------------+
@@ -145,7 +146,7 @@
  *      |                |               |                        | within Numbers.                                           |
  *      |      nwnwn     |---------------+------------------------+-----------------------------------------------------------+
  *      |                |  solorun / s  |          NIL           | Initiates a solo counting run using Numbers within        |
- *      |                |               |                        | Numbers within Numbers.
+ *      |                |               |                        | Numbers within Numbers.                                   |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
  *      |                |    run / r    |          NIL           | Initiates a counting run using Numbers within Numbers     |
  *      |                |               |                        | with N Numbers.                                           |
@@ -246,13 +247,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    char option;
-    char param[4] = {0};
+    char option, param;     // Used for parsing the CLI call
 
     char 
         *n,         // Pointer for number from user input
         *s_n,       // Pointer for sanitized number (in case of input sanitization functions)
-        *n_n,       // Pointer for next number in sequence (can be reused)
+        *o_n,       // Pointer for output number (can be reused)
 
         *i,         // Pointer for general user input (for modules that take non-numerical strings as input)
         *o          // Pointer for general user output (for modules that return non-numerical strings as output)
@@ -262,6 +262,8 @@ int main(int argc, char *argv[])
         *i_w,       // Pointer for wide input strings
         *o_w        // Pointer for wide output strings
     ;
+
+    struct Func_Call call;  // Used for function call to runner engine
 
     if (!create_temp_file())
     {
@@ -274,6 +276,68 @@ int main(int argc, char *argv[])
 
     if (strcmp(argv[1], "binary") == 0)
     {
+        if (
+            strcmp(argv[2], "r")  == 0 || 
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 || 
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+
+            // Parse parameter
+            if (
+                strcmp(argv[3], "d") == 0 ||
+                strcmp(argv[3], "dec") == 0 ||
+                strcmp(argv[3], "decimal") == 0
+            ) {
+                param = 'd';    // Convert to decimal
+            }
+            else if (
+                strcmp(argv[3], "h") == 0 ||
+                strcmp(argv[3], "hex") == 0 ||
+                strcmp(argv[3], "hexadecimal") == 0
+            ) {
+                param = 'h';    // Convert to hexadecimal
+            }
+            else if (
+                strcmp(argv[3], "o") == 0 ||
+                strcmp(argv[3], "oct") == 0 ||
+                strcmp(argv[3], "octal") == 0
+            ) {
+                param = 'o';    // Convert to octal
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for binary conversion.\n"
+                    "Please refer to the official documentation for the supported bases, "
+                    "or use the help option.\n", 
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for binary mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n", 
+                argv[2]
+            );
+            return 1;
+        }
+
         if (!await_user_input())
         {
             printf(
@@ -284,7 +348,598 @@ int main(int argc, char *argv[])
         }
 
         n = read_temp_file_utf8();
+        if (!n)
+            return 1;
 
-        
+        s_n = convert(n, BINARY, BINARY);   // Self-conversion to sanitize
+        if (!s_n)
+        {
+            printf("Please enter a valid number.\n");
+            free(n);
+            return 1;
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 4)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            switch(param)
+            {
+                case 'd':
+                    o_n = convert(s_n, BINARY, DECIMAL);
+                break;
+
+                case 'h':
+                    o_n = convert(s_n, BINARY, HEXADECIMAL);
+                break;
+
+                case 'o':
+                    o_n = convert(s_n, BINARY, OCTAL);
+                break;
+            }
+
+            if (!o_n)
+            {
+                free(s_n);
+                free(n);
+                return 1;
+            }
+
+            printf("\n%s\n", o_n);
+            if (copy_utf8_to_clipboard(o_n))
+                printf("Copied value to clipboard!\n");
+
+            free(o_n);
+            free(s_n);
+            free(n);
+
+            return 0;
+        }
+        else
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            // Prepare args for function call
+            enum Radix base = BINARY;
+            struct Arg list[] = 
+            {
+                ARG(ARG_CONST_CHAR_PTR, s_n),
+                ARG(ARG_INT, &base)
+            };
+
+            call.args_list = list;
+            call.func = (void *)next_number;
+            call.mode = RADIX_MODE;
+            
+            // TODO: Call Dispatcher/Runner
+        }
+    }
+    else if (
+        strcmp(argv[1], "decimal") == 0 || 
+        strcmp(argv[1], "normal") == 0
+    ) {
+        if (
+            strcmp(argv[2], "r")  == 0 || 
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 || 
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+
+            // Parse parameter
+            if (
+                strcmp(argv[3], "b") == 0 ||
+                strcmp(argv[3], "bin") == 0 ||
+                strcmp(argv[3], "binary") == 0
+            ) {
+                param = 'b';    // Convert to binary
+            }
+            else if (
+                strcmp(argv[3], "h") == 0 ||
+                strcmp(argv[3], "hex") == 0 ||
+                strcmp(argv[3], "hexadecimal") == 0
+            ) {
+                param = 'h';    // Convert to hexadecimal
+            }
+            else if (
+                strcmp(argv[3], "o") == 0 ||
+                strcmp(argv[3], "oct") == 0 ||
+                strcmp(argv[3], "octal") == 0
+            ) {
+                param = 'o';    // Convert to octal
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for decimal conversion.\n"
+                    "Please refer to the official documentation for the supported bases, "
+                    "or use the help option.\n", 
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for decimal mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n", 
+                argv[2]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error: Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        s_n = convert(n, DECIMAL, DECIMAL);   // Self-conversion to sanitize
+        if (!s_n)
+        {
+            printf("Please enter a valid number.\n");
+            free(n);
+            return 1;
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 4)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            switch(param)
+            {
+                case 'b':
+                    o_n = convert(s_n, DECIMAL, BINARY);
+                break;
+
+                case 'h':
+                    o_n = convert(s_n, DECIMAL, HEXADECIMAL);
+                break;
+
+                case 'o':
+                    o_n = convert(s_n, DECIMAL, OCTAL);
+                break;
+            }
+
+            if (!o_n)
+            {
+                free(s_n);
+                free(n);
+                return 1;
+            }
+
+            printf("\n%s\n", o_n);
+            if (copy_utf8_to_clipboard(o_n))
+                printf("Copied value to clipboard!\n");
+
+            free(o_n);
+            free(s_n);
+            free(n);
+
+            return 0;
+        }
+        else
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            // Prepare args for function call
+            enum Radix base = DECIMAL;
+            struct Arg list[] = 
+            {
+                ARG(ARG_CONST_CHAR_PTR, s_n),
+                ARG(ARG_INT, &base)
+            };
+
+            call.args_list = list;
+            call.func = (void *)next_number;
+            call.mode = RADIX_MODE;
+            
+            // TODO: Call Dispatcher/Runner
+        }
+    }
+    else if (strcmp(argv[1], "emoji") == 0)
+    {
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';   // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';   // Solorun
+        } else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "e") == 0 ||
+            strcmp(argv[2], "convert") == 0 ||
+            strcmp(argv[2], "emojify") == 0
+        ) {
+            option = 'c';   // Convert
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for emoji mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error: Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        // Figure out what to do with incrementer function and emojification function
+    }
+    else if (strcmp(argv[1], "hexadecimal") == 0)
+    {
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+
+            // Parse parameter
+            if (
+                strcmp(argv[3], "b") == 0 ||
+                strcmp(argv[3], "bin") == 0 ||
+                strcmp(argv[3], "binary") == 0
+            ) {
+                param = 'b';    // Convert to binary
+            }
+            else if (
+                strcmp(argv[3], "d") == 0 ||
+                strcmp(argv[3], "dec") == 0 ||
+                strcmp(argv[3], "decimal") == 0
+            ) {
+                param = 'd';    // Convert to decimal
+            }
+            else if (
+                strcmp(argv[3], "o") == 0 ||
+                strcmp(argv[3], "oct") == 0 ||
+                strcmp(argv[3], "octal") == 0
+            ) {
+                param = 'o';    // Convert to octal
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for hexadecimal conversion.\n"
+                    "Please refer to the official documentation for the supported bases, "
+                    "or use the help option.\n", 
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for hexadecimal mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error: Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        s_n = convert(n, HEXADECIMAL, HEXADECIMAL);     // Self-conversion to sanitize
+        if (!s_n)
+        {
+            printf("Please enter a valid number.\n");
+            free(n);
+            return 1;
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 4)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            switch(param)
+            {
+                case 'b':
+                    o_n = convert(s_n, HEXADECIMAL, BINARY);
+                break;
+
+                case 'd':
+                    o_n = convert(s_n, HEXADECIMAL, DECIMAL);
+                break;
+
+                case 'o':
+                    o_n = convert(s_n, HEXADECIMAL, OCTAL);
+                break;
+            }
+
+            if (!o_n)
+            {
+                free(s_n);
+                free(n);
+                return 1;
+            }
+
+            printf("\n%s\n", o_n);
+            if (copy_utf8_to_clipboard(o_n))
+                printf("Copied value to clipboard!\n");
+
+            free(o_n);
+            free(s_n);
+            free(n);
+
+            return 0;
+        }
+        else
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            // Prepare args for function call
+            enum Radix base = HEXADECIMAL;
+            struct Arg list[] =
+            {
+                ARG(ARG_CONST_CHAR_PTR, s_n),
+                ARG(ARG_INT, &base)
+            };
+
+            call.args_list = list;
+            call.func = (void *)next_number;
+            call.mode = RADIX_MODE;
+
+            // TODO: Call Dispatcher/Runner
+        }
+    }
+    else if (strcmp(argv[1], "increasing") == 0)
+    {}
+    else if (strcmp(argv[1], "japanese") == 0)
+    {}
+    else if (strcmp(argv[1], "octal") == 0)
+    {
+        if (
+            strcmp(argv[2], "r")  == 0 || 
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 || 
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+
+            // Parse parameter
+            if (
+                strcmp(argv[3], "b") == 0 ||
+                strcmp(argv[3], "bin") == 0 ||
+                strcmp(argv[3], "binary") == 0
+            ) {
+                param = 'b';    // Convert to binary
+            }
+            else if (
+                strcmp(argv[3], "d") == 0 ||
+                strcmp(argv[3], "dec") == 0 ||
+                strcmp(argv[3], "decimal") == 0
+            ) {
+                param = 'd';    // Convert to decimal
+            }
+            else if (
+                strcmp(argv[3], "h") == 0 ||
+                strcmp(argv[3], "hex") == 0 ||
+                strcmp(argv[3], "hexadecimal") == 0
+            ) {
+                param = 'h';    // Convert to hexadecimal
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for octal conversion.\n"
+                    "Please refer to the official documentation for the supported bases, "
+                    "or use the help option.\n", 
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for octal mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n", 
+                argv[2]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error: Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        s_n = convert(n, OCTAL, OCTAL);   // Self-conversion to sanitize
+        if (!s_n)
+        {
+            printf("Please enter a valid number.\n");
+            free(n);
+            return 1;
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 4)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            switch(param)
+            {
+                case 'b':
+                    o_n = convert(s_n, OCTAL, BINARY);
+                break;
+
+                case 'd':
+                    o_n = convert(s_n, OCTAL, DECIMAL);
+                break;
+
+                case 'h':
+                    o_n = convert(s_n, OCTAL, HEXADECIMAL);
+                break;
+            }
+
+            if (!o_n)
+            {
+                free(s_n);
+                free(n);
+                return 1;
+            }
+
+            printf("\n%s\n", o_n);
+            if (copy_utf8_to_clipboard(o_n))
+                printf("Copied value to clipboard!\n");
+
+            free(o_n);
+            free(s_n);
+            free(n);
+
+            return 0;
+        }
+        else
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            // Prepare args for function call
+            enum Radix base = OCTAL;
+            struct Arg list[] = 
+            {
+                ARG(ARG_CONST_CHAR_PTR, s_n),
+                ARG(ARG_INT, &base)
+            };
+
+            call.args_list = list;
+            call.func = (void *)next_number;
+            call.mode = RADIX_MODE;
+            
+            // TODO: Call Dispatcher/Runner
+        }
+    }
+    else if (strcmp(argv[1], "meme") == 0)
+    {}
+    else if (strcmp(argv[1], "mirror") == 0)
+    {}
+    else if (strcmp(argv[1], "morse") == 0)
+    {}
+    else if (strcmp(argv[1], "norep") == 0)
+    {}
+    else if (strcmp(argv[1], "nwn") == 0)
+    {}
+    else if (strcmp(argv[1], "nwnwn") == 0)
+    {}
+    else if (strcmp(argv[1], "nwnwnn") == 0)
+    {}
+    else if (strcmp(argv[1], "palindrome") == 0)
+    {}
+    else if (strcmp(argv[1], "rep") == 0)
+    {}
+    else if (strcmp(argv[1], "roman") == 0)
+    {}
+    else if (strcmp(argv[1], "tally") == 0)
+    {}
+    else
+    {
+        printf(
+            "Invalid Syntax - %s is not a valid use mode.\n"
+            "To learn more, please refer to the official documentation of this tool.\n",
+            argv[1]
+        );
+        return 1;
     }
 }

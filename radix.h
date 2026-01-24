@@ -60,8 +60,11 @@ enum Radix
  *  - HEXADECIMAL
  *  - OCTAL
  */
-void number_to_string(char *buffer, unsigned long long number, enum Radix base);
-
+void number_to_string(
+    char *buffer, 
+    unsigned long long number, 
+    enum Radix base
+);
 
 
 /**
@@ -92,9 +95,11 @@ void number_to_string(char *buffer, unsigned long long number, enum Radix base);
  * @note
  *      The caller is responsible for freeing the returned string.
  */
-char *convert(const char *number,
-              enum Radix convertFrom,
-              enum Radix convertTo);
+char *convert(
+    const char *number, 
+    enum Radix convertFrom, 
+    enum Radix convertTo
+);
 
 
 /**

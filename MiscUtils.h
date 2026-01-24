@@ -2,6 +2,7 @@
 #define MISCUTILS_H
 
 #include <wchar.h>
+#include <stdbool.h>
 
 /**
  * @file MiscUtils.h
@@ -66,6 +67,62 @@ wchar_t *utf8_to_wide(const char *utf8);
  *  - The caller is responsible for freeing the allocated memory on success.
  */
 void string_to_number(const char *number, unsigned long long **v);
+
+
+/**
+ * @brief Checks whether a string represents a valid non-negative decimal number.
+ *
+ * This function verifies that the input string consists exclusively of
+ * ASCII decimal digit characters (`0`–`9`). It does not allow leading signs,
+ * whitespace, decimal points, or any other non-digit characters.
+ *
+ * @param number
+ *  Pointer to a null-terminated string to validate.
+ *
+ * @return
+ *  - true  if the string is non-NULL and contains only decimal digits
+ *  - false if the string is NULL or contains any non-digit characters
+ *
+ * @note
+ *  - An empty string ("") is considered valid by this function.
+ *  - This function does not perform numeric range checking.
+ *  - Locale-independent: digit checks are restricted to ASCII digits.
+ *
+ * @see isdigit
+ */
+bool is_valid_number(const char *number);
+
+
+/**
+ * @brief Removes leading zeroes from a decimal number string.
+ *
+ * This function allocates and returns a new string containing the input
+ * number with all leading `'0'` characters removed. At least one digit
+ * is preserved, so an input consisting entirely of zeroes will result
+ * in a single `"0"` character.
+ *
+ * The input string is assumed to represent a valid non-negative decimal
+ * number (digits only). Any violation of this assumption results in
+ * an error and a NULL return value.
+ *
+ * @param number
+ *  Pointer to a null-terminated string containing a decimal number.
+ *
+ * @return
+ *  - Pointer to a newly allocated null-terminated string with leading
+ *    zeroes removed
+ *  - NULL if memory allocation fails or if invalid characters are detected
+ *
+ * @note
+ *  - The caller is responsible for freeing the returned string.
+ *  - The input string must not be NULL.
+ *  - This function does not accept signed numbers or non-decimal formats.
+ *  - Validation occurs during copying, not during offset calculation.
+ *
+ * @warning
+ *  - This function assumes the input has already been validated.
+ */
+char *strip_leading_zeroes(const char *number);
 
 
 #endif /* MISCUTILS_H */
