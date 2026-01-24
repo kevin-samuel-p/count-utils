@@ -274,6 +274,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    /* -------- BINARY MODE -------- */
     if (strcmp(argv[1], "binary") == 0)
     {
         if (
@@ -395,8 +396,6 @@ int main(int argc, char *argv[])
             free(o_n);
             free(s_n);
             free(n);
-
-            return 0;
         }
         else
         {
@@ -414,16 +413,19 @@ int main(int argc, char *argv[])
             };
 
             call.args_list = list;
-            call.func = (void *)next_number;
+            call.incrementer_function = (void *)next_number;
+            call.formatter_function = NULL;
             call.mode = RADIX_MODE;
             
             // TODO: Call Dispatcher/Runner
         }
     }
+
+    /* -------- DECIMAL MODE -------- */
     else if (
         strcmp(argv[1], "decimal") == 0 || 
         strcmp(argv[1], "normal") == 0
-    ) {
+    ) { 
         if (
             strcmp(argv[2], "r")  == 0 || 
             strcmp(argv[2], "run") == 0
@@ -543,8 +545,6 @@ int main(int argc, char *argv[])
             free(o_n);
             free(s_n);
             free(n);
-
-            return 0;
         }
         else
         {
@@ -562,12 +562,15 @@ int main(int argc, char *argv[])
             };
 
             call.args_list = list;
-            call.func = (void *)next_number;
+            call.incrementer_function = (void *)next_number;
+            call.formatter_function = NULL;
             call.mode = RADIX_MODE;
             
             // TODO: Call Dispatcher/Runner
         }
     }
+
+    /* -------- EMOJI MODE -------- */
     else if (strcmp(argv[1], "emoji") == 0)
     {
         if (
@@ -613,8 +616,58 @@ int main(int argc, char *argv[])
         if (!n)
             return 1;
 
-        // Figure out what to do with incrementer function and emojification function
+        if (!is_valid_number(n))
+        {
+            printf("Bad Input - Invalid number.\n");
+            free(n);
+            return 1;
+        }
+
+        s_n = strip_leading_zeroes(n);
+        if (!s_n)
+        {
+            free(n);
+            return 1;
+        }
+
+        if (argc > 3)
+        {
+            printf("Warning - Extra arguments will be ignored...\n");
+        }
+
+        if (option == 'c')
+        {
+            o_n = number_to_emoji(s_n);
+            if (!o_n)
+            {
+                free(s_n);
+                free(n);
+                return 1;
+            }
+
+            printf("\n%s\n", o_n);
+            if (copy_utf8_to_clipboard(o_n))
+                printf("Copied value to clipboard!\n");
+
+            free(o_n);
+            free(s_n);
+            free(n);
+        }
+        else
+        {
+            // Prepare args for function call
+            struct Arg list[] = { ARG(ARG_CONST_CHAR_PTR, s_n) };
+
+            call.args_list = list;
+            call.formatter_function = number_to_emoji;
+            call.incrementer_function = increment_numstring;
+            call.mode = EMOJI_MODE;
+
+            // TODO: Figure out what to do with incrementer function and emojification function
+        }
     }
+
+    /* -------- HEXADECIMAL MODE -------- */
     else if (strcmp(argv[1], "hexadecimal") == 0)
     {
         if (
@@ -736,8 +789,6 @@ int main(int argc, char *argv[])
             free(o_n);
             free(s_n);
             free(n);
-
-            return 0;
         }
         else
         {
@@ -755,7 +806,8 @@ int main(int argc, char *argv[])
             };
 
             call.args_list = list;
-            call.func = (void *)next_number;
+            call.incrementer_function = (void *)next_number;
+            call.formatter_function = NULL;
             call.mode = RADIX_MODE;
 
             // TODO: Call Dispatcher/Runner
@@ -765,6 +817,8 @@ int main(int argc, char *argv[])
     {}
     else if (strcmp(argv[1], "japanese") == 0)
     {}
+
+    /* -------- OCTAL MODE -------- */
     else if (strcmp(argv[1], "octal") == 0)
     {
         if (
@@ -886,8 +940,6 @@ int main(int argc, char *argv[])
             free(o_n);
             free(s_n);
             free(n);
-
-            return 0;
         }
         else
         {
@@ -905,7 +957,8 @@ int main(int argc, char *argv[])
             };
 
             call.args_list = list;
-            call.func = (void *)next_number;
+            call.incrementer_function = (void *)next_number;
+            call.formatter_function = NULL;
             call.mode = RADIX_MODE;
             
             // TODO: Call Dispatcher/Runner

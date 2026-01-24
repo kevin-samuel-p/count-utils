@@ -125,4 +125,23 @@ bool is_valid_number(const char *number);
 char *strip_leading_zeroes(const char *number);
 
 
+/**
+ * @brief Increments a numerical string by one.
+ *
+ * @param number
+ *      Pointer to a heap-allocated null-terminated numerical string.
+ *
+ * @pre
+ *      - @p number points to a valid heap-allocated string
+ *
+ * @post
+ *      - On success, *@p number contains the incremented value
+ *      - On allocation failure, *@p number is freed and set to NULL
+ *
+ * @note
+ *      This function may reallocate the string.
+ */
+void increment_numstring(char **number);
+
+
 #endif /* MISCUTILS_H */

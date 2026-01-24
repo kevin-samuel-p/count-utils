@@ -44,9 +44,10 @@ struct Arg
 
 struct Func_Call
 {
-    enum RunMode mode;
-    void *func;
-    struct Arg *args_list;
+    enum RunMode mode;          // Running mode enum to match function signature(s)
+    void *formatter_function;   // Function pointer to formatting function (for some modules)
+    void *incrementer_function; // Function pointer to main incrementer function 
+    struct Arg *args_list;      // List of arguments for both functions in sequence
 };
 
 
@@ -113,7 +114,20 @@ void *dispatcher(struct Func_Call *call)
     {
         case EMOJI_MODE:
         {
-            
+            char *arg0;
+
+            DISPATCH_ARG_ASSIGN(arg0, call->args_list[0]);
+
+            // Casting generic function pointers to respective signatures
+            void (*incr)(char **) = call->incrementer_function;
+            char *(*form)(const char *) = call->formatter_function;
+
+            incr(&arg0);    // Alters arg0
+            if (!arg0)
+                return NULL;
+
+            char *res = form(arg0);
+            return (void *)res;
         }
 
         case RADIX_MODE:
@@ -125,11 +139,10 @@ void *dispatcher(struct Func_Call *call)
             DISPATCH_ARG_ASSIGN(arg1, call->args_list[1]);
 
             // Cast the generic function pointer to actual signature
-            char *(*func)(const char *, int) = call->func;
+            char *(*incr)(const char *, int) = call->incrementer_function;
 
-            char *result = func(arg0, arg1);
-
-            return (void *)result;
+            char *res = incr(arg0, arg1);
+            return (void *)res;
         }
 
         case RET_VOID:

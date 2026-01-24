@@ -315,28 +315,3 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
 
     return number;
 }
-
-
-void increment_numstring(char **number)
-{
-    int n = strlen(*number);
-    for (int i = n - 1; i >= 0; i--)
-    {
-        if (++(*number)[i] > '9')
-            (*number)[i] = '0';
-        else 
-            return;
-    }
-
-    char *temp = realloc(*number, n + 2);
-    if (!temp)
-    {
-        printf("Error - realloc failed");
-        free(*number);
-        return;
-    }
-
-    (*number)[0] = '1';
-    (*number)[n] = '0';
-    (*number)[n + 1] = '\0';
-}
