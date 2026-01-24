@@ -32,18 +32,36 @@ enum Radix
 
 
 /**
- * @brief Returns the human-readable name of a radix.
+ * @brief Converts an unsigned integer to a null-terminated string in the given radix.
  *
- * @param radix
- *      One of the supported @ref Radix values.
+ * This function writes the textual representation of an unsigned long long
+ * integer into the provided buffer using the specified numeric base.
  *
- * @return
- *      Pointer to a static, null-terminated string.
+ * Supported bases include binary, decimal, hexadecimal, and octal. The
+ * resulting string is always null-terminated.
  *
  * @note
- *      The returned string must not be freed.
+ *  - The caller is responsible for providing a buffer large enough to hold
+ *    the resulting string, including the null terminator.
+ *  - No bounds checking is performed on the buffer.
+ *  - Hexadecimal output uses uppercase letters (A–F).
+ *
+ * @param buffer
+ *  Pointer to a writable character buffer where the result will be stored.
+ *
+ * @param number
+ *  Unsigned integer value to convert.
+ *
+ * @param base
+ *  Radix used for conversion.
+ *  Supported values are:
+ *  - BINARY
+ *  - DECIMAL
+ *  - HEXADECIMAL
+ *  - OCTAL
  */
-const char *radix_name(enum Radix radix);
+void number_to_string(char *buffer, unsigned long long number, enum Radix base);
+
 
 
 /**

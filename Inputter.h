@@ -74,30 +74,6 @@ char *read_temp_file_utf8(void);
 
 
 /**
- * @brief Converts a UTF-8 encoded string to a wide-character string.
- *
- * This function converts a null-terminated UTF-8 `char *` string into
- * a dynamically allocated `wchar_t *` using Windows-native Unicode
- * conversion (`MultiByteToWideChar`).
- *
- * The conversion is strict: invalid UTF-8 sequences will cause the
- * function to fail.
- *
- * @note
- *  - This function is intended for Unicode-aware modules only.
- *  - The caller is responsible for freeing the returned buffer.
- *
- * @param utf8
- *  Pointer to a null-terminated UTF-8 encoded string.
- *
- * @return
- *  - Pointer to a heap-allocated wide-character string on success
- *  - NULL on failure (invalid UTF-8 or allocation failure)
- */
-wchar_t *utf8_to_wide(const char *utf8);
-
-
-/**
  * @brief Deletes the temporary input file.
  *
  * @return

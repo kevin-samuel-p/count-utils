@@ -104,44 +104,6 @@ char *read_temp_file_utf8()
 }
 
 
-wchar_t *utf8_to_wide(const char *utf8)
-{
-    if (!utf8)
-        return NULL;
-
-    int len = MultiByteToWideChar(
-        CP_UTF8,
-        MB_ERR_INVALID_CHARS,
-        utf8,
-        -1,
-        NULL, 
-        0
-    );
-
-    if (len == 0)
-        return NULL;
-
-    wchar_t *wide = malloc((size_t)len * sizeof(wchar_t));
-    if (!wide)
-        return NULL;
-
-    if (!MultiByteToWideChar(
-        CP_UTF8,
-        0,
-        utf8,
-        -1,
-        wide,
-        len
-    )) {
-        printf("Bad Input - Input contains malformed UTF-8 sequences");
-        free(wide);
-        return NULL;
-    }
-
-    return wide;
-}
-
-
 bool delete_temp_file()
 {
     return remove(TEMP_FILE_NAME) == 0;

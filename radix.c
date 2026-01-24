@@ -13,6 +13,7 @@
 #include <errno.h>
 
 
+// Helper function: stringifies radix's name
 const char *radix_name(enum Radix radix) 
 {
     switch(radix)
@@ -25,8 +26,6 @@ const char *radix_name(enum Radix radix)
     }
 }
 
-// Helper function
-void number_to_string(char *, unsigned long long, enum Radix);
 
 //  For inputted binary strings, ensure string length doesn't exceed 64 + 1
 //  For inputted decimal strings, ensure string length doesn't exceed 20 + 1
