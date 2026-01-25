@@ -2,11 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <wchar.h>
 
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
 #include "MiscUtils.h"
-#include "Runner.c"
+#include "Runner.h"
 
 #include "emoji.h"
 #include "increasing.h"
@@ -263,8 +264,6 @@ int main(int argc, char *argv[])
         *o_w        // Pointer for wide output strings
     ;
 
-    struct Func_Call call;  // Used for function call to runner engine
-
     if (!create_temp_file())
     {
         printf(
@@ -404,20 +403,7 @@ int main(int argc, char *argv[])
                 printf("Warning - Extra arguments will be ignored...\n");
             }
 
-            // Prepare args for function call
-            enum Radix base = BINARY;
-            struct Arg list[] = 
-            {
-                ARG(ARG_CONST_CHAR_PTR, s_n),
-                ARG(ARG_INT, &base)
-            };
-
-            call.args_list = list;
-            call.incrementer_function = (void *)next_number;
-            call.formatter_function = NULL;
-            call.mode = RADIX_MODE;
-            
-            // TODO: Call Dispatcher/Runner
+            o_n = next_number(s_n, BINARY);
         }
     }
 
@@ -656,7 +642,7 @@ int main(int argc, char *argv[])
         else
         {
             // Prepare args for function call
-            struct Arg list[] = { ARG(ARG_CONST_CHAR_PTR, s_n) };
+            struct Arg list[] = { ARG(ARG_CHAR_PTR, s_n) };
 
             call.args_list = list;
             call.formatter_function = number_to_emoji;

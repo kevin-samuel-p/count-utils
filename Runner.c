@@ -1,93 +1,14 @@
+#include "Runner.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <wchar.h>
 #include <windows.h>
 
+#include <ClipboardFunctions.h>
+#include <MiscUtils.h>
 
-enum RunMode
-{
-    EMOJI_MODE,
-    INCREASING_MODE,
-    JAPANESE_MODE,
-    RADIX_MODE,
-    MEME_MODE,
-    MIRROR_MODE,
-    MORSE_MODE,
-    NOREP_MODE,
-    NWN_MODE,
-    NWNWN_MODE,
-    NWNWNN_MODE,
-    PALINDROME_MODE,
-    REP_MODE,
-    ROMAN_MODE,
-    TALLY_MODE
-};
-
-enum ArgType
-{
-    ARG_INT,
-    ARG_ULLONG,
-    ARG_CHAR,
-    ARG_CHAR_PTR,
-    ARG_CONST_CHAR_PTR,
-    ARG_CHAR_DOUBLE_PTR,
-    ARG_WCHAR_PTR,
-    ARG_CONST_WCHAR_PTR
-};
-
-struct Arg
-{
-    enum ArgType type;
-    void *arg_ptr;
-};
-
-struct Func_Call
-{
-    enum RunMode mode;          // Running mode enum to match function signature(s)
-    void *formatter_function;   // Function pointer to formatting function (for some modules)
-    void *incrementer_function; // Function pointer to main incrementer function 
-    struct Arg *args_list;      // List of arguments for both functions in sequence
-};
-
-
-#define ARG(type_enum, value_ptr)                                   \
-    (struct Arg){ type_enum, (void *)(value_ptr) }
-
-#define ARG_AS(type, ptr) (*(type *)(ptr))
-
-#define DISPATCH_ARG_ASSIGN(dst, arg)                               \
-    do {                                                            \
-        switch ((arg).type) {                                       \
-            case ARG_INT:                                           \
-                (dst) = ARG_AS(int, (arg).arg_ptr);                 \
-                break;                                              \
-            case ARG_ULLONG:                                        \
-                (dst) = ARG_AS(unsigned long long, (arg).arg_ptr);  \
-                break;                                              \
-            case ARG_CHAR:                                          \
-                (dst) = ARG_AS(char, (arg).arg_ptr);                \
-                break;                                              \
-            case ARG_CHAR_PTR:                                      \
-                (dst) = (char *)(arg).arg_ptr;                      \
-                break;                                              \
-            case ARG_CONST_CHAR_PTR:                                \
-                (dst) = (const char *)(arg).arg_ptr;                \
-                break;                                              \
-            case ARG_WCHAR_PTR:                                     \
-                (dst) = (wchar_t *)(arg).arg_ptr;                   \
-                break;                                              \
-            case ARG_CONST_WCHAR_PTR:                               \
-                (dst) = (const wchar_t *)(arg).arg_ptr;             \
-                break;                                              \
-            case ARG_CHAR_DOUBLE_PTR:                               \
-                (dst) = (char **)(arg).arg_ptr;                     \
-                break;                                              \
-            default:                                                \
-                fprintf(stderr, "Unsupported ArgType\n");           \
-                break;                                              \
-        }                                                           \
-    } while (0)
 
 // #define DISPATCH_RETURN(ret_type, value)                            \
 //     do {                                                            \
@@ -108,57 +29,206 @@ struct Func_Call
 //     } while (0)
 
 
-void *dispatcher(struct Func_Call *call)
+struct Func_Call *dispatcher(struct Func_Call call)
 {
-    switch (call->mode)
+    void *res;
+
+    struct Func_Call *payload = calloc(1, sizeof *payload);
+    if (!payload)
+        return NULL;
+
+    switch (call.mode)
     {
         case EMOJI_MODE:
+        case MORSE_MODE:
         {
-            char *arg0;
-
-            DISPATCH_ARG_ASSIGN(arg0, call->args_list[0]);
-
-            // Casting generic function pointers to respective signatures
-            void (*incr)(char **) = call->incrementer_function;
-            char *(*form)(const char *) = call->formatter_function;
-
-            incr(&arg0);    // Alters arg0
-            if (!arg0)
+            if (!call.arg.num_char_ptr)
+            {
+                free(payload);
                 return NULL;
+            }
 
-            char *res = form(arg0);
-            return (void *)res;
+            size_t n = strlen(call.arg.num_char_ptr);
+
+            // Match signature to number_to_emoji()
+            char *(*form)(const char *) = call.func.formatter;
+
+            payload->mode = call.mode;
+            payload->func.formatter = form;
+            
+            payload->arg.num_char_ptr = malloc(n + 1);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            memcpy(payload->arg.num_char_ptr, call.arg.num_char_ptr, n + 1);
+
+            increment_numstring(&payload->arg.num_char_ptr);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)form(payload->arg.num_char_ptr); 
+            break;
+        }
+
+        case MEME_MODE:
+        {
+            if (
+                !call.extra_args || ( 
+                    strcmp(call.extra_args, "69") != 0 && 
+                    strcmp(call.extra_args, "420") != 0 && 
+                    strcmp(call.extra_args, "69420") != 0
+                )
+            ) {
+                free(payload);
+                return NULL;
+            }
+        }
+        case INCREASING_MODE:
+        {
+            if (!call.arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            // Match signature to next_increasing_number()
+            char *(*incr)(const char *) = call.func.incrementer;
+
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+            if (call.mode != INCREASING_MODE)
+                payload->extra_args = call.extra_args;  // For memes
+
+            payload->arg.num_char_ptr = incr(call.arg.num_char_ptr);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)payload->arg.num_char_ptr;
+            break;
+        }
+
+        case JAPANESE_MODE:
+        {
+            if (!call.arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            size_t n = strlen(call.arg.num_char_ptr);
+
+            // Match signature to translate_to_japanese()
+            wchar_t *(*form)(const char *) = call.func.formatter;
+
+            payload->mode = call.mode;
+            payload->func.formatter = form;
+
+            payload->arg.num_char_ptr = malloc(n + 1);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            memcpy(payload->arg.num_char_ptr, call.arg.num_char_ptr, n + 1);
+
+            increment_numstring(&payload->arg.num_char_ptr);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)form(payload->arg.num_char_ptr);
+            break;
+        }
+
+        case MIRROR_MODE:
+        {
+            if (
+                !call.arg.num_char_ptr || 
+                !call.extra_args || (
+                    call.extra_args[0] != 'm' && 
+                    call.extra_args[0] != 'n'
+                )
+            ) {
+                free(payload);
+                return NULL;
+            }
+
+            // Match signature to next_mirror_number()
+            char *(*incr)(char *, char) = call.func.incrementer;
+
+            // Instead of the usual method, we can store mirror numbers
+            // More efficient for this particular mode
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+            payload->extra_args = "m";
+
+            payload->arg.num_char_ptr = incr(
+                call.arg.num_char_ptr, 
+                call.extra_args[0]
+            );
+
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)payload->arg.num_char_ptr;
+            break;
         }
 
         case RADIX_MODE:
         {
-            const char *arg0;
-            int arg1;
+            if (
+                !call.arg.num_char_ptr || 
+                !call.extra_args || (
+                    call.extra_args[0] != (char)2 && 
+                    call.extra_args[0] != (char)8 && 
+                    call.extra_args[0] != (char)10 && 
+                    call.extra_args[0] != (char)16
+                )
+            ) {
+                free(payload);
+                return NULL;
+            }
 
-            DISPATCH_ARG_ASSIGN(arg0, call->args_list[0]);
-            DISPATCH_ARG_ASSIGN(arg1, call->args_list[1]);
+            // Match signature to next_number()
+            char *(*incr)(const char *, int) = call.func.incrementer;
 
-            // Cast the generic function pointer to actual signature
-            char *(*incr)(const char *, int) = call->incrementer_function;
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+            payload->extra_args = call.extra_args;  // extra_args will be passed as a const pointer so this is fine
 
-            char *res = incr(arg0, arg1);
-            return (void *)res;
+            payload->arg.num_char_ptr = incr(
+                call.arg.num_char_ptr, 
+                (int)call.extra_args[0]
+            );
+
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)payload->arg.num_char_ptr;
+            break;
         }
-
-        case RET_VOID:
-        {
-            // Example for void functions
-            int arg0;
-            if (call->arg_count > 0) DISPATCH_ARG_ASSIGN(arg0, call->args_list[0]);
-
-            void (*func)(int) = call->func;
-            func(arg0);
-
-            DISPATCH_RETURN(RET_VOID, 0);
-        }
-
+        
         default:
             fprintf(stderr, "Unsupported return type\n");
+            free(payload);
             return NULL;
     }
 }
@@ -169,4 +239,103 @@ void *dispatcher(struct Func_Call *call)
  *      r - run (normal duos run)
  *      s - solorun
  */
-bool runner();
+bool runner(struct Func_Call payload, char run_type)
+{
+    void *temp, *next;
+    
+    // Run mode enum only needed for context
+    next = dispatcher(&payload);
+    if (!next)
+        return false;
+
+    // Return early if number doesn't get copied to clipboard
+    if (
+        !((run_mode == JAPANESE_MODE || run_mode == ROMAN_MODE) ? 
+            copy_to_clipboard((wchar_t *)next) : 
+            copy_utf8_to_clipboard((char *)next)
+        )
+    ) {
+        printf("Error - Problem copying value, run cancelled...\n");
+        free(next);
+        return false;
+    }
+
+    printf(
+        "\nNext value copied to clipboard!\n"
+        "Press Tab to copy next value, "
+        "or press Esc to end the run.\n"
+    );
+
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    INPUT_RECORD ir;
+    DWORD eventsRead;
+
+    // Optional: disable line buffering & echo
+    DWORD mode;
+    GetConsoleMode(hIn, &mode);
+    SetConsoleMode(hIn, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
+
+    while (true) 
+    {
+        ReadConsoleInput(hIn, &ir, 1, &eventsRead);
+
+        if (ir.EventType != KEY_EVENT)
+            continue;
+
+        KEY_EVENT_RECORD key = ir.Event.KeyEvent;
+
+        // Only care about key-down events
+        if (!key.bKeyDown)
+            continue;
+
+        // Abort on Esc
+        if (key.wVirtualKeyCode == VK_ESCAPE) 
+            break;
+
+        // Detect standalone Tab
+        if (key.wVirtualKeyCode == VK_TAB) 
+        {
+            DWORD mods = key.dwControlKeyState;
+
+            if (((mods & (
+                    LEFT_ALT_PRESSED | 
+                    RIGHT_ALT_PRESSED |
+                    LEFT_CTRL_PRESSED | 
+                    RIGHT_CTRL_PRESSED |
+                    SHIFT_PRESSED)
+                ) == 0)
+            ) {
+                for (int i = 0; i < ('s' - run_type) + 1; i++)
+                {
+                    // Alter payload depending on run mode
+                    switch(run_mode)
+                    {
+                        case BINARY_MODE:
+
+                        case EMOJI_MODE:
+                        case INCREASING_MODE:
+                        
+                        break;
+                        
+                        case JAPANESE_MODE:
+
+                        case MEME_MODE:
+                        case MIRROR_MODE:
+                        case MORSE_MODE:
+                        case NOREP_MODE:
+                        case NWN_MODE:
+                        case NWNWN_MODE:
+                        case NWNWNN_MODE:
+                        case PALINDROME_MODE:
+                        case REP_MODE:
+                        case ROMAN_MODE:
+                        case TALLY_MODE:
+
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
