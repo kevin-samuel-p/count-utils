@@ -32,10 +32,14 @@
 struct Func_Call *dispatcher(struct Func_Call call)
 {
     void *res;
+    char buffer[32];        // Optional buffer
 
     struct Func_Call *payload = calloc(1, sizeof *payload);
     if (!payload)
+    {
+        printf("Error - calloc failure.\n");
         return NULL;
+    }
 
     switch (call.mode)
     {
@@ -50,7 +54,11 @@ struct Func_Call *dispatcher(struct Func_Call call)
 
             size_t n = strlen(call.arg.num_char_ptr);
 
-            // Match signature to number_to_emoji()
+            /**
+             *  Signatures that match:
+             *      number_to_emoji()
+             *      translate_to_morse_code()
+             */
             char *(*form)(const char *) = call.func.formatter;
 
             payload->mode = call.mode;
@@ -77,19 +85,8 @@ struct Func_Call *dispatcher(struct Func_Call call)
         }
 
         case MEME_MODE:
-        {
-            if (
-                !call.extra_args || ( 
-                    strcmp(call.extra_args, "69") != 0 && 
-                    strcmp(call.extra_args, "420") != 0 && 
-                    strcmp(call.extra_args, "69420") != 0
-                )
-            ) {
-                free(payload);
-                return NULL;
-            }
-        }
         case INCREASING_MODE:
+        case PALINDROME_MODE:
         {
             if (!call.arg.num_char_ptr)
             {
@@ -97,13 +94,18 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 return NULL;
             }
 
-            // Match signature to next_increasing_number()
+            /**
+             *  Signatures that match:
+             *      next_69_number()
+             *      next_420_number()
+             *      next_69420_number()
+             *      next_increasing_number()
+             *      next_palindrome()
+             */
             char *(*incr)(const char *) = call.func.incrementer;
 
             payload->mode = call.mode;
             payload->func.incrementer = incr;
-            if (call.mode != INCREASING_MODE)
-                payload->extra_args = call.extra_args;  // For memes
 
             payload->arg.num_char_ptr = incr(call.arg.num_char_ptr);
             if (!payload->arg.num_char_ptr)
@@ -126,7 +128,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
 
             size_t n = strlen(call.arg.num_char_ptr);
 
-            // Match signature to translate_to_japanese()
+            // Signature matches translate_to_japanese()
             wchar_t *(*form)(const char *) = call.func.formatter;
 
             payload->mode = call.mode;
@@ -165,7 +167,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 return NULL;
             }
 
-            // Match signature to next_mirror_number()
+            // Signature matches next_mirror_number()
             char *(*incr)(char *, char) = call.func.incrementer;
 
             // Instead of the usual method, we can store mirror numbers
@@ -189,22 +191,45 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
+        case NOREP_MODE:
+        {
+            // Signature matches next_non_repeating_number()
+            long long (*incr)(unsigned long long) = call.func.incrementer;
+
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+
+            payload->arg.num_llong = incr(call.arg.num_llong);
+            if (payload->arg.num_llong == -1)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            sprintf(buffer, "%lld", payload->arg.num_llong);
+
+            res = (void *)buffer;
+            break;
+        }
+
+        case NWN_MODE:
+        case NWNWN_MODE:
+        case NWNWNN_MODE:
         case RADIX_MODE:
         {
             if (
                 !call.arg.num_char_ptr || 
-                !call.extra_args || (
-                    call.extra_args[0] != (char)2 && 
-                    call.extra_args[0] != (char)8 && 
-                    call.extra_args[0] != (char)10 && 
-                    call.extra_args[0] != (char)16
-                )
+                !call.extra_args
             ) {
                 free(payload);
                 return NULL;
             }
 
-            // Match signature to next_number()
+            /**
+             *  Matching signatures:
+             *      nwns()
+             *      next_number()
+             */
             char *(*incr)(const char *, int) = call.func.incrementer;
 
             payload->mode = call.mode;
@@ -226,6 +251,27 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
         
+        case REP_MODE:
+        {
+            // Match signature to next_repeating_number()
+            unsigned long long (*incr)(unsigned long long) = call.func.incrementer;
+
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+
+            payload->arg.num_ullong = incr(call.arg.num_ullong);
+            if (!payload->arg.num_ullong)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            sprintf(buffer, "%llu", payload->arg.num_ullong);
+        
+            res = (void *)buffer;
+            break;
+        }
+
         default:
             fprintf(stderr, "Unsupported return type\n");
             free(payload);
