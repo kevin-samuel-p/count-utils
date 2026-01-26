@@ -3,30 +3,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <limits.h>
 #include <wchar.h>
 #include <windows.h>
 
 #include <ClipboardFunctions.h>
 #include <MiscUtils.h>
-
-
-// #define DISPATCH_RETURN(ret_type, value)                            \
-//     do {                                                            \
-//         switch (ret_type) {                                         \
-//             case RET_INT:                                           \
-//                 return (void *)(intptr_t)(value);                   \
-//             case RET_BOOL:                                          \
-//                 return (void *)(intptr_t)(value);                   \
-//             case RET_CHAR_PTR:                                      \
-//                 return (void *)(value);                             \
-//             case RET_WCHAR_PTR:                                     \
-//                 return (void *)(value);                             \
-//             case RET_VOID:                                          \
-//                 return NULL;                                        \
-//             default:                                                \
-//                 return NULL;                                        \
-//         }                                                           \
-//     } while (0)
 
 
 struct Func_Call *dispatcher(struct Func_Call call)
@@ -137,6 +119,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             payload->arg.num_char_ptr = malloc(n + 1);
             if (!payload->arg.num_char_ptr)
             {
+                printf("Error - malloc failure.\n");
                 free(payload);
                 return NULL;
             }
@@ -272,11 +255,92 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
+        case ROMAN_MODE:
+        {
+            if (
+                !call.arg.num_char_ptr || 
+                !call.extra_args
+            ) {
+                free(payload);
+                return NULL;
+            }
+
+            size_t n = strlen(call.arg.num_char_ptr);
+
+            // Signature matches number_to_roman()
+            wchar_t *(*form)(const char *, char) = call.func.formatter;
+
+            payload->mode = call.mode;
+            payload->func = call.func;
+
+            payload->arg.num_char_ptr = malloc(n + 1);
+            if (!payload->arg.num_char_ptr)
+            {
+                printf("Error - malloc failure.\n");
+                free(payload);
+                return NULL;
+            }
+
+            memcpy(payload->arg.num_char_ptr, call.arg.num_char_ptr, n + 1);
+
+            increment_numstring(&payload->arg.num_char_ptr);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)form(
+                payload->arg.num_char_ptr, 
+                call.extra_args[0]
+            );
+            break;
+        }
+
+        case TALLY_MODE:
+        {
+            if (
+                !call.extra_args || 
+                call.arg.num_llong == INT_MAX
+            ) {
+                free(payload);
+                return NULL;
+            }
+
+            // Signature matches tally()
+            char *(*form)(int, int) = call.func.formatter;
+
+            payload->mode = call.mode;
+            payload->func = call.func;
+            payload->arg.num_llong = call.arg.num_llong + 1;
+            payload->extra_args = call.extra_args;
+
+            res = (void *)form(
+                payload->arg.num_llong, 
+                payload->extra_args[0]
+            );
+            break;       
+        }
+
         default:
             fprintf(stderr, "Unsupported return type\n");
             free(payload);
             return NULL;
     }
+
+    if ((
+        // Copying to clipboard failed
+        (call.mode == JAPANESE_MODE || call.mode == ROMAN_MODE) ? 
+            !copy_to_clipboard((wchar_t *)res) : 
+            !copy_utf8_to_clipboard((char *)res)
+        )
+    ) {
+        printf("Error - Could not copy value to clipboard.\n");
+        free(payload);
+        return NULL;
+    }
+
+    return payload;
 }
 
     
@@ -287,30 +351,9 @@ struct Func_Call *dispatcher(struct Func_Call call)
  */
 bool runner(struct Func_Call payload, char run_type)
 {
-    void *temp, *next;
-    
-    // Run mode enum only needed for context
-    next = dispatcher(&payload);
-    if (!next)
-        return false;
-
-    // Return early if number doesn't get copied to clipboard
-    if (
-        !((run_mode == JAPANESE_MODE || run_mode == ROMAN_MODE) ? 
-            copy_to_clipboard((wchar_t *)next) : 
-            copy_utf8_to_clipboard((char *)next)
-        )
-    ) {
-        printf("Error - Problem copying value, run cancelled...\n");
-        free(next);
-        return false;
-    }
-
-    printf(
-        "\nNext value copied to clipboard!\n"
-        "Press Tab to copy next value, "
-        "or press Esc to end the run.\n"
-    );
+    struct Func_Call *curr, *next;
+    int iters = ('s' - run_type) + 1;
+    bool ok = true;     // Return value
 
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     INPUT_RECORD ir;
@@ -320,6 +363,20 @@ bool runner(struct Func_Call payload, char run_type)
     DWORD mode;
     GetConsoleMode(hIn, &mode);
     SetConsoleMode(hIn, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
+
+    // Run mode enum only needed for context
+    curr = dispatcher(payload);
+    if (!curr)
+    {
+        ok = false;
+        goto cleanup;
+    }
+
+    printf(
+        "\nNext value copied to clipboard!\n"
+        "Press Tab to copy next value, "
+        "or press Esc to end the run.\n"
+    );
 
     while (true) 
     {
@@ -336,7 +393,10 @@ bool runner(struct Func_Call payload, char run_type)
 
         // Abort on Esc
         if (key.wVirtualKeyCode == VK_ESCAPE) 
-            break;
+        {
+            free(curr);
+            goto cleanup;
+        }
 
         // Detect standalone Tab
         if (key.wVirtualKeyCode == VK_TAB) 
@@ -351,37 +411,24 @@ bool runner(struct Func_Call payload, char run_type)
                     SHIFT_PRESSED)
                 ) == 0)
             ) {
-                for (int i = 0; i < ('s' - run_type) + 1; i++)
+                for (int i = 0; i < iters; i++)
                 {
-                    // Alter payload depending on run mode
-                    switch(run_mode)
+                    next = dispatcher(*curr);
+                    free(curr);
+                    
+                    if (!next)
                     {
-                        case BINARY_MODE:
-
-                        case EMOJI_MODE:
-                        case INCREASING_MODE:
-                        
-                        break;
-                        
-                        case JAPANESE_MODE:
-
-                        case MEME_MODE:
-                        case MIRROR_MODE:
-                        case MORSE_MODE:
-                        case NOREP_MODE:
-                        case NWN_MODE:
-                        case NWNWN_MODE:
-                        case NWNWNN_MODE:
-                        case PALINDROME_MODE:
-                        case REP_MODE:
-                        case ROMAN_MODE:
-                        case TALLY_MODE:
-
+                        ok = false;
+                        goto cleanup;
                     }
+
+                    curr = next;
                 }
             }
         }
     }
 
-    return true;
+    cleanup:
+        SetConsoleMode(hIn, mode);
+        return ok;
 }

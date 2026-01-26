@@ -1,95 +1,178 @@
 #ifndef RUNNER_H
 #define RUNNER_H
 
+#include <stdbool.h>
+#include <wchar.h>
+
+/**
+ * @file Runner.h
+ * @brief Function-dispatch and interactive runner API.
+ *
+ * This module defines the core data structures and public entry points used
+ * to dispatch numeric transformations, formatting operations, and clipboard
+ * output based on a runtime-selected mode.
+ *
+ * This is a developer-facing API. Callers are responsible for ensuring that
+ * function pointers and arguments match the selected RunMode.
+**/
+
+
+/**
+ * @enum RunMode
+ * @brief Enumeration of supported execution modes.
+ *
+ * Each mode implies a specific function signature and argument interpretation.
+ * Supplying a mismatched function pointer for a given mode results in undefined
+ * behavior.
+ */
 enum RunMode
 {
-    EMOJI_MODE,
-    INCREASING_MODE,
-    JAPANESE_MODE,
-    MEME_MODE,
-    MIRROR_MODE,
-    MORSE_MODE,
-    NOREP_MODE,
-    NWN_MODE,
-    NWNWN_MODE,
-    NWNWNN_MODE,
-    PALINDROME_MODE,
-    RADIX_MODE,
-    REP_MODE,
-    ROMAN_MODE,
-    TALLY_MODE
+    EMOJI_MODE,        /**< Numeric string → emoji representation */
+    INCREASING_MODE,   /**< Next increasing number */
+    JAPANESE_MODE,     /**< Numeric string → Japanese numeral representation */
+    MEME_MODE,         /**< Meme-number incrementers (e.g. 69, 420, etc.) */
+    MIRROR_MODE,       /**< Mirror-number generation */
+    MORSE_MODE,        /**< Numeric string → Morse code */
+    NOREP_MODE,        /**< Next non-repeating-digit number */
+    NWN_MODE,          /**< Numbers-within-numbers mode */
+    NWNWN_MODE,        /**< Numbers-within-numbers-within-numbers mode */
+    NWNWNN_MODE,       /**< Numbers-within-numbers-with-n-numbers mode */
+    PALINDROME_MODE,   /**< Next palindrome number */
+    RADIX_MODE,        /**< Arbitrary radix increment (binary, decimal, octal or hexadecimal) */
+    REP_MODE,          /**< Next repeating-digit number */
+    ROMAN_MODE,        /**< Numeric string → Roman numeral representation */
+    TALLY_MODE         /**< Tally-mark formatting mode */
 };
 
-// enum ArgType
-// {
-//     ARG_INT,
-//     ARG_ULLONG,
-//     ARG_CHAR,
-//     ARG_CHAR_PTR,
-//     ARG_CHAR_DOUBLE_PTR,
-//     ARG_WCHAR_PTR
-// };
 
-// struct Arg
-// {
-//     enum ArgType type;
-//     void *arg_ptr;
-// };
-
+/**
+ * @struct Func_Call
+ * @brief Describes a callable transformation operation.
+ *
+ * A Func_Call fully describes how a value should be incremented, formatted,
+ * and dispatched. It contains:
+ *
+ *  - a RunMode selecting behavior
+ *  - a function pointer matching that mode
+ *  - an argument union holding the current value
+ *  - optional extra arguments
+ *
+ * Instances of this structure are passed by value into dispatcher() and
+ * runner(), and new heap-allocated instances are returned to represent
+ * updated state.
+ */
 struct Func_Call
 {
-    enum RunMode mode;          // Running mode enum to match function signature(s)
+    /** Running mode enum used to select function signatures */
+    enum RunMode mode;
 
+    /**
+     * @union func
+     * @brief Function pointer storage.
+     *
+     * Depending on the mode, exactly one of these is valid and must match
+     * the expected signature for that mode.
+     */
     union
     {
-        void *formatter;        // Function pointer to formatting function (for some modules)
-        void *incrementer;      // Function pointer to main incrementer function 
-    } 
-    func;                       // Union to store function pointers
+        void *formatter;    /**< Formatting / conversion function */
+        void *incrementer;  /**< Increment / next-value function */
+    }
+    func;
 
+    /**
+     * @union arg
+     * @brief Primary argument storage.
+     *
+     * Only one member is valid at a time, depending on the mode.
+     */
     union
     {
-        unsigned long long num_ullong;
-        long long num_llong;
-        char *num_char_ptr;
-        wchar_t *num_wchar_ptr;
-    } arg;                      // Union to store main starting argument
+        unsigned long long num_ullong; /**< Unsigned integer argument */
+        long long          num_llong;  /**< Signed integer argument */
+        char              *num_char_ptr;   /**< Heap-allocated UTF-8 string */
+        wchar_t           *num_wchar_ptr;  /**< Heap-allocated wide string */
+    }
+    arg;
 
-    char *extra_args;           // constant string pointer for enums (ints) or chars passed as extra args
+    /**
+     * @brief Optional extra arguments.
+     *
+     * Interpretation depends on the mode:
+     *  - radix values
+     *  - enum-like characters
+     *  - formatting flags
+     *
+     * This pointer is treated as read-only by the API.
+     */
+    char *extra_args;
 };
 
 
-// #define ARG(type_enum, value_ptr)                                   \
-//     (struct Arg){ type_enum, (void *)(value_ptr) }
+/**
+ * @brief Dispatches a single transformation step and copies the result to the clipboard.
+ *
+ * This function:
+ *  - selects behavior based on @p call.mode
+ *  - invokes the appropriate function pointer
+ *  - performs any required increment or formatting
+ *  - copies the result to the system clipboard
+ *
+ * On success, a new heap-allocated Func_Call representing the updated state
+ * is returned.
+ *
+ * @param call
+ *      Function-call descriptor specifying mode, function pointers, and arguments.
+ *
+ * @return
+ *      - Pointer to a newly allocated Func_Call on success
+ *      - NULL on failure (invalid arguments, allocation failure, or clipboard error)
+ *
+ * @pre
+ *      - @p call.mode is valid
+ *      - Function pointers in @p call.func match the selected mode
+ *      - Required arguments are non-NULL and well-formed
+ *
+ * @post
+ *      - Result is copied to the clipboard on success
+ *      - Returned Func_Call must be freed by the caller
+ *
+ * @warning
+ *      Passing an incompatible function pointer for a given mode results in
+ *      undefined behavior.
+ */
+struct Func_Call *dispatcher(struct Func_Call call);
 
-// #define ARG_AS(type, ptr) (*(type *)(ptr))
 
-// #define DISPATCH_ARG_ASSIGN(dst, arg)                               \
-//     do {                                                            \
-//         switch ((arg).type) {                                       \
-//             case ARG_INT:                                           \
-//                 (dst) = ARG_AS(int, (arg).arg_ptr);                 \
-//                 break;                                              \
-//             case ARG_ULLONG:                                        \
-//                 (dst) = ARG_AS(unsigned long long, (arg).arg_ptr);  \
-//                 break;                                              \
-//             case ARG_CHAR:                                          \
-//                 (dst) = ARG_AS(char, (arg).arg_ptr);                \
-//                 break;                                              \
-//             case ARG_CHAR_PTR:                                      \
-//                 (dst) = (char *)(arg).arg_ptr;                      \
-//                 break;                                              \                                          \
-//             case ARG_WCHAR_PTR:                                     \
-//                 (dst) = (wchar_t *)(arg).arg_ptr;                   \
-//                 break;                                              \
-//             case ARG_CHAR_DOUBLE_PTR:                               \
-//                 (dst) = (char **)(arg).arg_ptr;                     \
-//                 break;                                              \
-//             default:                                                \
-//                 fprintf(stderr, "Unsupported ArgType\n");           \
-//                 break;                                              \
-//         }                                                           \
-//     } while (0)
+/**
+ * @brief Runs an interactive transformation loop driven by keyboard input.
+ *
+ * The runner:
+ *  - initializes the Windows console for raw input
+ *  - dispatches an initial operation
+ *  - waits for user input:
+ *      - Tab → advance to next value(s)
+ *      - Esc → exit the run
+ *
+ * Each successful iteration copies the new value to the clipboard.
+ * The console mode is always restored before returning.
+ *
+ * @param payload
+ *      Initial Func_Call descriptor.
+ *
+ * @param run_type
+ *      Run selector:
+ *      - 'r' : normal run (single iteration per Tab)
+ *      - 's' : solo run (multiple iterations per Tab)
+ *
+ * @return
+ *      - true  if the run ended normally via user input
+ *      - false if execution aborted due to an internal failure
+ *
+ * @note
+ *      Windows-only. Uses the Win32 console input API.
+ */
+bool runner(struct Func_Call payload, char run_type);
 
 
 #endif /* RUNNER_H */
