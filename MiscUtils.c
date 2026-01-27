@@ -19,7 +19,10 @@
 wchar_t *utf8_to_wide(const char *utf8)
 {
     if (!utf8)
+    {
+        printf("Bad Input - NULL string.\n");
         return NULL;
+    }
 
     int len = MultiByteToWideChar(
         CP_UTF8,
@@ -31,11 +34,17 @@ wchar_t *utf8_to_wide(const char *utf8)
     );
 
     if (len == 0)
+    {
+        printf("Error - Could not process multibyte string.\n");
         return NULL;
+    }
 
     wchar_t *wide = malloc((size_t)len * sizeof(wchar_t));
     if (!wide)
+    {
+        printf("Error - malloc failure.\n");
         return NULL;
+    }
 
     if (!MultiByteToWideChar(
         CP_UTF8,
