@@ -20,12 +20,12 @@
  */
 enum Formatting
 {
-    BIG,        /**< Uses Discord "##" formatter on each non-header line */
-    COMPACT,    /**< No newline characters; space-separated output */
-    GIANT,      /**< Uses Discord "#" formatter on each non-header line */
-    IMPACT,     /**< Uses Discord "###" formatter on each non-header line */
-    TINY_TEXT,  /**< Uses Discord "-#" formatter on each non-header line */
-    DEFAULT     /**< Standard formatting with newlines */
+    BIG = (int)'b',        /**< Uses Discord "##" formatter on each non-header line */
+    COMPACT = (int)'c',    /**< No newline characters; space-separated output */
+    GIANT = (int)'g',      /**< Uses Discord "#" formatter on each non-header line */
+    IMPACT = (int)'i',     /**< Uses Discord "###" formatter on each non-header line */
+    TINY_TEXT = (int)'t',  /**< Uses Discord "-#" formatter on each non-header line */
+    DEFAULT = (int)'d'     /**< Standard formatting with newlines */
 };
 
 

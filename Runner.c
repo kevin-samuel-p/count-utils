@@ -195,9 +195,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case NWN_MODE:
-        case NWNWN_MODE:
-        case NWNWNN_MODE:
+        case NWNS_MODE:
         case RADIX_MODE:
         {
             if (

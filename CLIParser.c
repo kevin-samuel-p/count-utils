@@ -1355,14 +1355,197 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    /* -------- NON-REPEATING MODE -------- */
     else if (strcmp(argv[1], "norep") == 0)
-    {}
-    else if (strcmp(argv[1], "nwn") == 0)
-    {}
-    else if (strcmp(argv[1], "nwnwn") == 0)
-    {}
-    else if (strcmp(argv[1], "nwnwnn") == 0)
-    {}
+    {
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "check") == 0
+        ) {
+            option = 's';       // Check
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for non-repeating mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error - Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        if (!is_valid_number(n))
+        {
+            printf("Bad Input - Invalid number.\n");
+            free(n);
+            return 1;
+        }
+
+        s_n = strip_leading_zeroes(n);
+        if (!s_n)
+        {
+            free(n);
+            return 1;
+        }
+
+        unsigned long long *num = NULL;
+        string_to_number(s_n, &num);
+        if (!num)
+        {
+            free(s_n);
+            free(n);
+            return 1;
+        }
+
+        if (argc > 3)
+        {
+            printf("Warning - Extra arguments will be ignored...\n");
+        }
+
+        if (option == 'c')
+        {
+            if (is_repeating(*num))
+            {
+                printf("No, %llu is not a repeating number.\n", *num);
+            }
+            else
+            {
+                printf("Yes! %llu is a repeating number.\n", *num);
+            }
+        }
+        else
+        {
+            // Call runner
+            if (runner((struct Func_Call){
+                    .mode = NOREP_MODE,
+                    .func.incrementer = next_non_repeating_number,
+                    .arg.num_ullong = *num
+                }, option)
+            ) {
+                printf("\nEnding run...\n");
+            }
+            else
+            {
+                printf("\nCancelling run...\n");
+            }
+        }
+
+        free(num);
+    }
+
+    /* -------- NWN MODE -------- */
+    else if (strstr(argv[1], "nwn") == argv[1])
+    {
+        enum NWN_Mode nwn_mode;
+
+        if (strcmp(argv[1], "nwn") == 0)
+        {
+            nwn_mode = NWN;
+        }
+        else if (strcmp(argv[1], "nwnwn") == 0)
+        {
+            nwn_mode = NWNWN;
+        }
+        else if (strcmp(argv[1], "nwnwnn") == 0)
+        {
+            nwn_mode = NWNWNN;
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid use mode.\n"
+                "To learn more, please refer to the official documentation of this tool.\n",
+                argv[1]
+            );
+            return 1;
+        }
+
+        // Parse run option
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for %s mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2], argv[1]
+            );
+            return 1;
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error - Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        if (argc > 3)
+        {
+            printf("Warning - Extra arguments will be ignored...\n");
+        }
+
+        // Call runner
+        if (runner((struct Func_Call){
+                .mode = NWNS_MODE,
+                .func.incrementer = nwns,
+                .arg.num_char_ptr = n,
+                .extra_args = (char[]){(char)nwn_mode, '\0'}
+            }, option)
+        ) {
+            printf("\nEnding run...\n");
+        }
+        else
+        {
+            printf("\nCancelling run...\n");
+        }
+
+        s_n = NULL;     // For free safety
+    }
 
     /* -------- OCTAL MODE -------- */
     else if (strcmp(argv[1], "octal") == 0)
@@ -1602,7 +1785,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* -------- REP MODE -------- */
+    /* -------- REPEATING MODE -------- */
     else if (strcmp(argv[1], "rep") == 0)
     {
         if (
@@ -1661,6 +1844,15 @@ int main(int argc, char *argv[])
             return 1;
         }
 
+        unsigned long long *num = NULL;
+        string_to_number(s_n, &num);
+        if (!num)
+        {
+            free(s_n);
+            free(n);
+            return 1;
+        }
+
         if (argc > 3)
         {
             printf("Warning - Extra arguments will be ignored...\n");
@@ -1668,26 +1860,17 @@ int main(int argc, char *argv[])
 
         if (option == 'c')
         {
-            if (is_repeating(s_n))
+            if (is_repeating(*num))
             {
-                printf("Yes! %s is a repeating number.\n", s_n);
+                printf("Yes! %llu is a repeating number.\n", *num);
             }
             else
             {
-                printf("No, %s is not a repeating number.\n", s_n);
+                printf("No, %llu is not a repeating number.\n", *num);
             }
         }
         else
         {
-            unsigned long long *num = NULL;
-            string_to_number(s_n, &num);
-            if (!num)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
-
             // Call runner
             if (runner((struct Func_Call){
                     .mode = REP_MODE,
@@ -1701,14 +1884,327 @@ int main(int argc, char *argv[])
             {
                 printf("\nCancelling run...\n");
             }
+        }
 
-            free(num);
-        } 
+        free(num);
     }
+
+    /* -------- ROMAN NUMERALS MODE -------- */
     else if (strcmp(argv[1], "roman") == 0)
-    {}
+    {
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for Roman numeral mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2]
+            );
+            return 1;
+        }
+
+        // Parse optional parameters
+        if (option != 'c')
+        {
+            if (argc == 3 || strcmp(argv[3], "l") == 0)
+            {
+                param = 'l';        // Legal representation
+            }
+            else if (strcmp(argv[3], "i") == 0)
+            {
+                param = 'i';        // Idiomatic representation
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for Roman numeral runs.\n"
+                    "Please refer to the official documentation for the supported Roman numeral formats, "
+                    "or use the help option.\n",
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error - Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        // If not a valid number, assume input to be Roman number
+        if (is_valid_number(n))
+        {
+            s_n = strip_leading_zeroes(n);
+            if (!s_n)
+            {
+                free(n);
+                return 1;
+            }
+
+            i_w = NULL;
+        }
+        else
+        {
+            i_w = utf8_to_wide(n);
+            if (!i_w)
+            {
+                free(n);
+                return 1;
+            }
+
+            s_n = roman_to_number(i_w);
+            if (!s_n)
+            {
+                free(i_w);
+                free(n);
+                return 1;
+            }
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            if (i_w)
+            {
+                printf("\n%s\n", s_n);
+                if (copy_utf8_to_clipboard(s_n))
+                    printf("Copied value to clipboard!\n");
+
+                free(i_w);
+            }
+            else
+            {
+                // Use legal format by default
+                o_w = number_to_roman(s_n, 'l');
+                if (!o_w)
+                {
+                    free(s_n);
+                    free(n);
+                    return 1;
+                }
+
+                o_n = setlocale(LC_CTYPE, NULL);    // Saving current locale
+                setlocale(LC_CTYPE, "");
+
+                wprintf(L"\n%ls\n", o_w);
+
+                freopen(NULL, "w", stdout);
+                setlocale(LC_CTYPE, o_n);
+
+                if (copy_to_clipboard(o_w))
+                    printf("Copied value to clipboard!\n");
+
+                free(o_w);
+            }
+        }
+        else
+        {
+            if (argc > 4)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            // Call runner
+            if (runner((struct Func_Call){
+                    .mode = ROMAN_MODE,
+                    .func.formatter = number_to_roman,
+                    .arg.num_char_ptr = s_n,
+                    .extra_args = (char[]){(char)param, '\0'}
+                }, option)
+            ) {
+                printf("\nEnding run...\n");
+            }
+            else
+            {
+                printf("\nCancelling run...\n");
+            }
+        }
+    }
+
+    /* -------- TALLY MARKS MODE -------- */
     else if (strcmp(argv[1], "tally") == 0)
-    {}
+    {
+        if (
+            strcmp(argv[2], "r") == 0 ||
+            strcmp(argv[2], "run") == 0
+        ) {
+            option = 'r';       // Run
+        }
+        else if (
+            strcmp(argv[2], "s") == 0 ||
+            strcmp(argv[2], "solorun") == 0
+        ) {
+            option = 's';       // Solorun
+        }
+        else if (
+            strcmp(argv[2], "c") == 0 ||
+            strcmp(argv[2], "convert") == 0
+        ) {
+            option = 'c';       // Convert
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid option for tally marks mode.\n"
+                "Please refer to official documentation to understand the available options, "
+                "or use the help option.\n",
+                argv[2]
+            );
+            return 1;
+        }
+
+        // Parse optional parameter
+        if (option != 'c')
+        {
+            if (
+                argc == 3 ||
+                strcmp(argv[3], "d") == 0 ||
+                strcmp(argv[3], "default") == 0
+            ) {
+                param = 'd';    // Default format
+            }
+            else if (
+                strcmp(argv[3], "b") == 0 ||
+                strcmp(argv[3], "big") == 0
+            ) {
+                param = 'b';    // Big text
+            }
+            else if (
+                strcmp(argv[3], "c") == 0 ||
+                strcmp(argv[3], "compact") == 0
+            ) {
+                param = 'c';    // Compact text
+            }
+            else if (
+                strcmp(argv[3], "g") == 0 ||
+                strcmp(argv[3], "giant") == 0
+            ) {
+                param = 'g';    // Giant text
+            }
+            else if (
+                strcmp(argv[3], "i") == 0 ||
+                strcmp(argv[3], "impact") == 0
+            ) {
+                param = 'i';    // Impact text
+            } else if (
+                strcmp(argv[3], "t") == 0 ||
+                strcmp(argv[3], "tiny") == 0
+            ) {
+                param = 't';    // Tiny text
+            }
+            else
+            {
+                printf(
+                    "Invalid Syntax - %s is not a valid parameter for tally mark runs.\n"
+                    "Please refer to the official documentation for the supported tally mark formats, "
+                    "or use the help parameter.\n",
+                    argv[3]
+                );
+                return 1;
+            }
+        }
+
+        if (!await_user_input())
+        {
+            printf(
+                "Error - Could not open Notepad.exe.\n"
+                "Input parsing is not available at this time, please try again later.\n"
+            );
+            return 1;
+        }
+
+        n = read_temp_file_utf8();
+        if (!n)
+            return 1;
+
+        // If not a valid number, assume tally marks
+        if (is_valid_number)
+        {
+            s_n = strip_leading_zeroes(n);
+            o_n = tally(s_n, DEFAULT);   // Just in case
+        }
+        else
+        {
+            s_n = parse_tally_marks(n);
+            if (!s_n)
+            {
+                free(n);
+                return 1;
+            }
+
+            o_n = NULL;     // Use as a flag to convey state
+        }
+
+        if (option == 'c')
+        {
+            if (argc > 3)
+            {
+                printf("Warning - Extra arguments will be ignored...\n");
+            }
+
+            if (o_n)
+            {
+                printf("\n%s\n", o_n);
+                if (copy_utf8_to_clipboard(o_n))
+                    printf("Copied value to clipboard!\n");
+
+                free(o_n);
+            }
+            else
+            {
+                printf("\n%s\n", s_n);
+                if (copy_utf8_to_clipboard(s_n))
+                    printf("Copied value to clipboard!\n");
+            }
+        }
+        else
+        {
+            // Call runner
+            if (runner((struct Func_Call){
+                    .mode = TALLY_MODE,
+                    .func.formatter = tally,
+                    .arg.num_char_ptr = s_n,
+                    .extra_args = (char[]){param, '\0'}
+                }, option)
+            ) {
+                printf("\nEnding run...\n");
+            }
+            else
+            {
+                printf("\nCancelling run...\n");
+            }
+        }
+    }
     else
     {
         printf(

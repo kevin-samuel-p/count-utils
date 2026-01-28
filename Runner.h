@@ -34,9 +34,7 @@ enum RunMode
     MIRROR_MODE,       /**< Mirror-number generation */
     MORSE_MODE,        /**< Numeric string → Morse code */
     NOREP_MODE,        /**< Next non-repeating-digit number */
-    NWN_MODE,          /**< Numbers-within-numbers mode */
-    NWNWN_MODE,        /**< Numbers-within-numbers-within-numbers mode */
-    NWNWNN_MODE,       /**< Numbers-within-numbers-with-n-numbers mode */
+    NWNS_MODE,         /**< NWN, NWNWN, and NWNWNN modes */
     PALINDROME_MODE,   /**< Next palindrome number */
     RADIX_MODE,        /**< Arbitrary radix increment (binary, decimal, octal or hexadecimal) */
     REP_MODE,          /**< Next repeating-digit number */
