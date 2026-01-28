@@ -7,8 +7,8 @@
 #include <wchar.h>
 #include <windows.h>
 
-#include <ClipboardFunctions.h>
-#include <MiscUtils.h>
+#include "ClipboardFunctions.h"
+#include "MiscUtils.h"
 
 
 struct Func_Call *dispatcher(struct Func_Call call)
