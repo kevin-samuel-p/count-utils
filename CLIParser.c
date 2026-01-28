@@ -249,21 +249,22 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    char option, param;     // Used for parsing the CLI call
+    int exit_status = 1;   // Used for returning exit status (1 by default)
+    char option, param;    // Used for parsing the CLI call
 
     char 
-        *n,         // Pointer for number from user input
-        *s_n,       // Pointer for sanitized number (in case of input sanitization functions)
-        *o_n,       // Pointer for output number (can be reused)
-
-        *i,         // Pointer for general user input (for modules that take non-numerical strings as input)
-        *o          // Pointer for general user output (for modules that return non-numerical strings as output)
+        *n = NULL,         // Pointer for number from user input
+        *s_n = NULL,       // Pointer for sanitized number (in case of input sanitization functions)
+        *o_n = NULL        // Pointer for output number (can be reused)
     ;
 
     wchar_t 
-        *i_w,       // Pointer for wide input strings
-        *o_w        // Pointer for wide output strings
+        *i_w = NULL,       // Pointer for wide input strings
+        *o_w = NULL        // Pointer for wide output strings
     ;
+
+    unsigned long long
+        *num = NULL;       // Pointer for actual numeric values
 
     if (!create_temp_file())
     {
@@ -325,7 +326,7 @@ int main(int argc, char *argv[])
                     "or use the help option.\n", 
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
         else
@@ -336,7 +337,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n", 
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -345,19 +346,18 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         s_n = convert(n, BINARY, BINARY);   // Self-conversion to sanitize
         if (!s_n)
         {
             printf("Please enter a valid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         if (option == 'c')
@@ -383,17 +383,11 @@ int main(int argc, char *argv[])
             }
 
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            free(o_n);
         }
         else
         {
@@ -415,6 +409,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -472,7 +467,7 @@ int main(int argc, char *argv[])
                     "or use the help option.\n", 
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
         else
@@ -483,7 +478,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n", 
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -492,19 +487,18 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         s_n = convert(n, DECIMAL, DECIMAL);   // Self-conversion to sanitize
         if (!s_n)
         {
             printf("Please enter a valid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         if (option == 'c')
@@ -530,17 +524,11 @@ int main(int argc, char *argv[])
             }
 
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            free(o_n);
         }
         else
         {
@@ -562,6 +550,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -596,7 +585,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -605,26 +594,22 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -635,17 +620,11 @@ int main(int argc, char *argv[])
         {
             o_n = number_to_emoji(s_n);
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            free(o_n);
         }
         else
         {
@@ -661,6 +640,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -716,7 +696,7 @@ int main(int argc, char *argv[])
                     "or use the help option.\n", 
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
         else
@@ -727,7 +707,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -736,19 +716,18 @@ int main(int argc, char *argv[])
                 "Error: Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         s_n = convert(n, HEXADECIMAL, HEXADECIMAL);     // Self-conversion to sanitize
         if (!s_n)
         {
             printf("Please enter a valid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         if (option == 'c')
@@ -774,17 +753,11 @@ int main(int argc, char *argv[])
             }
 
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            free(o_n);
         }
         else
         {
@@ -806,6 +779,7 @@ int main(int argc, char *argv[])
             else 
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -839,7 +813,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -848,26 +822,22 @@ int main(int argc, char *argv[])
                 "Error: Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -899,6 +869,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -934,7 +905,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -943,22 +914,19 @@ int main(int argc, char *argv[])
                 "Error: Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         // If not numeric input, assume Japanese
         if (is_valid_number(n))
         {
             s_n = strip_leading_zeroes(n);
             if (!s_n)
-            {
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             i_w = NULL;
         }
@@ -966,18 +934,11 @@ int main(int argc, char *argv[])
         {
             i_w = utf8_to_wide(n);
             if (!i_w)
-            {
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             s_n = translate_from_japanese(i_w);
             if (!s_n)
-            {
-                free(i_w);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
         }
 
         if (argc > 3)
@@ -992,18 +953,12 @@ int main(int argc, char *argv[])
                 printf("\n%s\n", s_n);
                 if (copy_utf8_to_clipboard(s_n))
                     printf("Copied value to clipboard!\n");
-
-                free(i_w);
             }
             else 
             {
                 o_w = translate_to_japanese(s_n);
                 if (!o_w)
-                {
-                    free(s_n);
-                    free(n);
-                    return 1;
-                }
+                    goto Cleanup;
 
                 o_n = setlocale(LC_CTYPE, NULL);    // Saving current locale
                 setlocale(LC_CTYPE, "");
@@ -1015,8 +970,6 @@ int main(int argc, char *argv[])
 
                 if (copy_to_clipboard(o_w))
                     printf("Copied value to clipboard!\n");
-
-                free(o_w);
             }
         }
         else
@@ -1033,6 +986,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -1060,7 +1014,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         // Parse parameter
@@ -1084,7 +1038,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[3]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1093,26 +1047,22 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 4)
         {
@@ -1147,6 +1097,7 @@ int main(int argc, char *argv[])
         else 
         {
             printf("\nCancelling run...\n");
+            goto Cleanup;
         }
     }
 
@@ -1172,7 +1123,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         // Parse parameter
@@ -1196,7 +1147,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[3]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1205,26 +1156,22 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 4)
         {
@@ -1244,6 +1191,7 @@ int main(int argc, char *argv[])
         else
         {
             printf("\nCancelling run...\n");
+            goto Cleanup;
         }
     }
 
@@ -1275,7 +1223,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1284,12 +1232,12 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         // If not valid number, parse as Morse code input
         bool validity = is_valid_number(n);
@@ -1303,10 +1251,7 @@ int main(int argc, char *argv[])
         }
         
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -1325,18 +1270,11 @@ int main(int argc, char *argv[])
             }
 
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            if (validity)
-                free(o_n);
         }
         else
         {
@@ -1352,6 +1290,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -1385,7 +1324,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1394,35 +1333,26 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
-        unsigned long long *num = NULL;
         string_to_number(s_n, &num);
         if (!num)
-        {
-            free(s_n);
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -1454,10 +1384,9 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
-
-        free(num);
     }
 
     /* -------- NWN MODE -------- */
@@ -1484,7 +1413,7 @@ int main(int argc, char *argv[])
                 "To learn more, please refer to the official documentation of this tool.\n",
                 argv[1]
             );
-            return 1;
+            goto Cleanup;
         }
 
         // Parse run option
@@ -1508,7 +1437,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2], argv[1]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1517,12 +1446,12 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -1542,9 +1471,8 @@ int main(int argc, char *argv[])
         else
         {
             printf("\nCancelling run...\n");
+            goto Cleanup;
         }
-
-        s_n = NULL;     // For free safety
     }
 
     /* -------- OCTAL MODE -------- */
@@ -1598,7 +1526,7 @@ int main(int argc, char *argv[])
                     "or use the help option.\n", 
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
         else
@@ -1609,7 +1537,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n", 
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1618,19 +1546,18 @@ int main(int argc, char *argv[])
                 "Error: Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         s_n = convert(n, OCTAL, OCTAL);   // Self-conversion to sanitize
         if (!s_n)
         {
             printf("Please enter a valid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         if (option == 'c')
@@ -1656,17 +1583,11 @@ int main(int argc, char *argv[])
             }
 
             if (!o_n)
-            {
-                free(s_n);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             printf("\n%s\n", o_n);
             if (copy_utf8_to_clipboard(o_n))
                 printf("Copied value to clipboard!\n");
-
-            free(o_n);
         }
         else
         {
@@ -1688,6 +1609,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -1721,7 +1643,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1730,26 +1652,22 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -1781,6 +1699,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -1814,7 +1733,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         if (!await_user_input())
@@ -1823,35 +1742,26 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         if (!is_valid_number(n))
         {
             printf("Bad Input - Invalid number.\n");
-            free(n);
-            return 1;
+            goto Cleanup;
         }
 
         s_n = strip_leading_zeroes(n);
         if (!s_n)
-        {
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
-        unsigned long long *num = NULL;
         string_to_number(s_n, &num);
         if (!num)
-        {
-            free(s_n);
-            free(n);
-            return 1;
-        }
+            goto Cleanup;
 
         if (argc > 3)
         {
@@ -1883,10 +1793,9 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
-
-        free(num);
     }
 
     /* -------- ROMAN NUMERALS MODE -------- */
@@ -1918,7 +1827,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         // Parse optional parameters
@@ -1940,7 +1849,7 @@ int main(int argc, char *argv[])
                     "or use the help option.\n",
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
 
@@ -1950,22 +1859,19 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         // If not a valid number, assume input to be Roman number
         if (is_valid_number(n))
         {
             s_n = strip_leading_zeroes(n);
             if (!s_n)
-            {
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             i_w = NULL;
         }
@@ -1973,18 +1879,11 @@ int main(int argc, char *argv[])
         {
             i_w = utf8_to_wide(n);
             if (!i_w)
-            {
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             s_n = roman_to_number(i_w);
             if (!s_n)
-            {
-                free(i_w);
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
         }
 
         if (option == 'c')
@@ -1999,19 +1898,13 @@ int main(int argc, char *argv[])
                 printf("\n%s\n", s_n);
                 if (copy_utf8_to_clipboard(s_n))
                     printf("Copied value to clipboard!\n");
-
-                free(i_w);
             }
             else
             {
                 // Use legal format by default
                 o_w = number_to_roman(s_n, 'l');
                 if (!o_w)
-                {
-                    free(s_n);
-                    free(n);
-                    return 1;
-                }
+                    goto Cleanup;
 
                 o_n = setlocale(LC_CTYPE, NULL);    // Saving current locale
                 setlocale(LC_CTYPE, "");
@@ -2023,8 +1916,6 @@ int main(int argc, char *argv[])
 
                 if (copy_to_clipboard(o_w))
                     printf("Copied value to clipboard!\n");
-
-                free(o_w);
             }
         }
         else
@@ -2047,6 +1938,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -2080,7 +1972,7 @@ int main(int argc, char *argv[])
                 "or use the help option.\n",
                 argv[2]
             );
-            return 1;
+            goto Cleanup;
         }
 
         // Parse optional parameter
@@ -2130,7 +2022,7 @@ int main(int argc, char *argv[])
                     "or use the help parameter.\n",
                     argv[3]
                 );
-                return 1;
+                goto Cleanup;
             }
         }
 
@@ -2140,12 +2032,12 @@ int main(int argc, char *argv[])
                 "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
-            return 1;
+            goto Cleanup;
         }
 
         n = read_temp_file_utf8();
         if (!n)
-            return 1;
+            goto Cleanup;
 
         // If not a valid number, assume tally marks
         if (is_valid_number)
@@ -2157,10 +2049,7 @@ int main(int argc, char *argv[])
         {
             s_n = parse_tally_marks(n);
             if (!s_n)
-            {
-                free(n);
-                return 1;
-            }
+                goto Cleanup;
 
             o_n = NULL;     // Use as a flag to convey state
         }
@@ -2177,8 +2066,6 @@ int main(int argc, char *argv[])
                 printf("\n%s\n", o_n);
                 if (copy_utf8_to_clipboard(o_n))
                     printf("Copied value to clipboard!\n");
-
-                free(o_n);
             }
             else
             {
@@ -2202,6 +2089,7 @@ int main(int argc, char *argv[])
             else
             {
                 printf("\nCancelling run...\n");
+                goto Cleanup;
             }
         }
     }
@@ -2212,11 +2100,20 @@ int main(int argc, char *argv[])
             "To learn more, please refer to the official documentation of this tool.\n",
             argv[1]
         );
-        return 1;
+        goto Cleanup;
     }
 
-    free(s_n);
-    free(n);
+    --exit_status;      // Exit status 0 for success
 
-    return 0;
+    Cleanup:
+        free(n);
+        free(s_n);
+        free(o_n);
+        free(i_w);
+        free(o_w);
+        free(num);
+
+        delete_temp_file();
+
+    return exit_status;
 }
