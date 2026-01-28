@@ -1263,17 +1263,13 @@ int main(int argc, char *argv[])
             if (validity)
             {
                 o_n = translate_to_morse_code(s_n);
-            }
-            else
-            {
-                o_n = s_n;
+                if (!o_n)
+                    goto Cleanup;
             }
 
-            if (!o_n)
-                goto Cleanup;
-
-            printf("\n%s\n", o_n);
-            if (copy_utf8_to_clipboard(o_n))
+            char *string = (validity) ? o_n : s_n;      // Temp consolidation pointer
+            printf("\n%s\n", string);
+            if (copy_utf8_to_clipboard(string))
                 printf("Copied value to clipboard!\n");
         }
         else
