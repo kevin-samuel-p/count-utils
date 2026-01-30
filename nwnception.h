@@ -118,7 +118,7 @@ char *stringify_nwn(const long *arr, long arrSize);
  * @note
  *      The caller is responsible for freeing the returned string.
  */
-char *nwns(const char *numString, enum NWN_Mode mode);
+char *nwns(char *numString, enum NWN_Mode mode);
 
 
 #endif /* NWNCEPTION_H */

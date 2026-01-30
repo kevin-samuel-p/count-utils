@@ -23,7 +23,11 @@ bool copy_to_clipboard(const wchar_t *text)
     memcpy(mem, text, size);
     GlobalUnlock(hMem);
 
-    SetClipboardData(CF_UNICODETEXT, hMem);
+    if (!SetClipboardData(CF_UNICODETEXT, hMem)) {
+        GlobalFree(hMem);
+        CloseClipboard();
+        return false;
+    }
 
     CloseClipboard();
     return true;

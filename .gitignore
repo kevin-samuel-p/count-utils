@@ -21,6 +21,7 @@ bin/
 obj/
 debug/
 release/
+tests/
 
 # Editor-specific files (e.g., VS Code, Vim)
 .vscode/

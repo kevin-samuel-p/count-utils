@@ -422,6 +422,12 @@ bool runner(struct Func_Call payload, char run_type)
 
                     curr = next;
                 }
+
+                printf(
+                    "\nNext value copied to clipboard!\n"
+                    "Press Tab to copy next value, "
+                    "or press Esc to end the run.\n"
+                );
             }
         }
     }

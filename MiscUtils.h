@@ -70,6 +70,27 @@ void string_to_number(const char *number, unsigned long long **v);
 
 
 /**
+ * @brief Prints a wide-character string to the Windows console.
+ * 
+ * This function writes the given `wchar_t` string directly to the console using
+ * the Windows API `WriteConsoleW()`. It avoids issues with the C runtime
+ * and the current console code page, ensuring that Unicode characters (such as
+ * Japanese kanji) are displayed correctly.
+ * 
+ * @param text Pointer to a null-terminated wide-character string to be printed.
+ *             If NULL, the function does nothing.
+ * 
+ * @note The function writes a newline after the string.
+ * @note If `GetStdHandle(STD_OUTPUT_HANDLE)` fails, it falls back to `wprintf()`.
+ * 
+ * @example
+ * wchar_t *japanese = L"日本語";
+ * print_wide(japanese);
+ */
+void print_wide(const wchar_t *text);
+
+
+/**
  * @brief Checks whether a string represents a valid non-negative decimal number.
  *
  * This function verifies that the input string consists exclusively of
@@ -142,6 +163,25 @@ char *strip_leading_zeroes(const char *number);
  *      This function may reallocate the string.
  */
 void increment_numstring(char **number);
+
+
+/**
+ * @brief Removes an embedded carriage return character from a string.
+ *
+ * This helper function scans the given null-terminated string and
+ * truncates it at the first occurrence of a carriage return (`'\r'`).
+ * It is primarily used to sanitize input read from Windows-style
+ * text files (CRLF line endings) or copy-pasted content, where a
+ * trailing `'\r'` can cause string comparison and parsing failures.
+ *
+ * The function modifies the input string in place.
+ *
+ * @param s Pointer to a null-terminated character buffer to sanitize.
+ *
+ * @note Only the first carriage return is removed. Characters after
+ *       the `'\r'` are discarded.
+ */
+void strip_carriage_return(char *s);
 
 
 #endif /* MISCUTILS_H */

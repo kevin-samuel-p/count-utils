@@ -74,7 +74,7 @@ int parse_tally_marks(char *textWall)
             if (tolower(parseBuffer[0]) == 'k')
             {
                 chunk = strtok(NULL, delimiter);
-                delimiter[2] = '\0';    // Removing + from delimiter
+                delimiter[3] = '\0';    // Removing + from delimiter
                 break;
             }
 

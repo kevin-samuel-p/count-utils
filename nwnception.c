@@ -83,7 +83,7 @@ char *stringify_nwn(const long *arr, long arrSize)
 }
 
 
-char *nwns(const char *numString, enum NWN_Mode mode)
+char *nwns(char *numString, enum NWN_Mode mode)
 {
     char *endPtr, *token, *nextNumString;
     long *arr, arrPtr = 0, size, x;

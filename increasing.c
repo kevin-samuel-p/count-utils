@@ -7,7 +7,7 @@
 #include <ctype.h>
 
 
-bool has_increasing_digits(char *number)
+bool has_increasing_digits(const char *number)
 {
     // Use only verified input
     char prev = '\0';

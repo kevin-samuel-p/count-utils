@@ -63,6 +63,22 @@ wchar_t *utf8_to_wide(const char *utf8)
 }
 
 
+void print_wide(const wchar_t *text)
+{
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut != INVALID_HANDLE_VALUE)
+    {
+        DWORD written;
+        WriteConsoleW(hOut, text, (DWORD)wcslen(text), &written, NULL);
+        WriteConsoleW(hOut, L"\n", 1, &written, NULL);
+    }
+    else
+    {
+        wprintf(L"%ls\n", text); // fallback
+    }
+}
+
+
 void string_to_number(const char *number, unsigned long long **v)
 {
     // This utility's scope is only upto positive decimal numbers <= ULLONG_MAX
@@ -190,4 +206,18 @@ void increment_numstring(char **number)
     (*number)[0] = '1';
     (*number)[n] = '0';
     (*number)[n + 1] = '\0';
+}
+
+
+// Helper function to strip embedded carriage returns
+void strip_carriage_return(char *s)
+{
+    char *p = s;
+    while (*p)
+    {
+        if (*p == '\r')
+            *p = '\n';
+
+        p++;
+    }
 }

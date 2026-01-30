@@ -244,7 +244,8 @@ int main(int argc, char *argv[])
     {
         printf(
             "Invalid Syntax: %s <mode> <option> [option-parameters]\n\n"
-            "Please review documentation for more information on the command line syntax...\n"
+            "Please review documentation for more information on the command line syntax...\n",
+            argv[0]
         );
         return 1;
     }
@@ -295,6 +296,15 @@ int main(int argc, char *argv[])
             strcmp(argv[2], "convert") == 0
         ) {
             option = 'c';       // Convert
+
+            if (argc < 4)
+            {
+                printf(
+                    "Invalid Syntax - binary conversion requires four arguments.\n"
+                    "Please check official documentation for the correct syntax.\n"
+                );
+                goto Cleanup;
+            }
 
             // Parse parameter
             if (
@@ -436,6 +446,15 @@ int main(int argc, char *argv[])
             strcmp(argv[2], "convert") == 0
         ) {
             option = 'c';       // Convert
+
+            if (argc < 4)
+            {
+                printf(
+                    "Invalid Syntax - decimal conversion requires four arguments.\n"
+                    "Please check official documentation for the correct syntax.\n"
+                );
+                goto Cleanup;
+            }
 
             // Parse parameter
             if (
@@ -666,6 +685,15 @@ int main(int argc, char *argv[])
         ) {
             option = 'c';       // Convert
 
+            if (argc < 4)
+            {
+                printf(
+                    "Invalid Syntax - hexadecimal conversion requires four arguments.\n"
+                    "Please check official documentation for the correct syntax.\n"
+                );
+                goto Cleanup;
+            }
+
             // Parse parameter
             if (
                 strcmp(argv[3], "b") == 0 ||
@@ -846,7 +874,7 @@ int main(int argc, char *argv[])
 
         if (option == 'c')
         {
-            if (has_increasing_digits) 
+            if (has_increasing_digits(s_n)) 
             {
                 printf("Yes! %s has increasing digits!\n", s_n);
             }
@@ -927,11 +955,10 @@ int main(int argc, char *argv[])
             s_n = strip_leading_zeroes(n);
             if (!s_n)
                 goto Cleanup;
-
-            i_w = NULL;
         }
         else
         {
+            strip_carriage_return(n);
             i_w = utf8_to_wide(n);
             if (!i_w)
                 goto Cleanup;
@@ -960,16 +987,12 @@ int main(int argc, char *argv[])
                 if (!o_w)
                     goto Cleanup;
 
-                o_n = setlocale(LC_CTYPE, NULL);    // Saving current locale
-                setlocale(LC_CTYPE, "");
-
-                wprintf(L"\n%ls\n", o_w);
-                
-                freopen(NULL, "w", stdout);
-                setlocale(LC_CTYPE, o_n);
+                print_wide(o_w);
 
                 if (copy_to_clipboard(o_w))
                     printf("Copied value to clipboard!\n");
+
+                // o_n = NULL;     // Ensure free-safety
             }
         }
         else
@@ -1013,6 +1036,15 @@ int main(int argc, char *argv[])
                 "Please refer to official documentation to understand the available options, "
                 "or use the help option.\n",
                 argv[2]
+            );
+            goto Cleanup;
+        }
+
+        if (argc < 4)
+        {
+            printf(
+                "Invalid Syntax - meme runs requires four arguments.\n"
+                "Please check official documentation for the correct syntax.\n"
             );
             goto Cleanup;
         }
@@ -1247,6 +1279,7 @@ int main(int argc, char *argv[])
         }
         else 
         {
+            strip_carriage_return(n);
             s_n = translate_from_morse_code(n);
         }
         
@@ -1449,6 +1482,8 @@ int main(int argc, char *argv[])
         if (!n)
             goto Cleanup;
 
+        strip_carriage_return(n);
+
         if (argc > 3)
         {
             printf("Warning - Extra arguments will be ignored...\n");
@@ -1491,6 +1526,15 @@ int main(int argc, char *argv[])
             strcmp(argv[2], "convert") == 0
         ) {
             option = 'c';       // Convert
+
+            if (argc < 4)
+            {
+                printf(
+                    "Invalid Syntax - octal conversion requires four arguments.\n"
+                    "Please check official documentation for the correct syntax.\n"
+                );
+                goto Cleanup;
+            }
 
             // Parse parameter
             if (
@@ -1873,6 +1917,8 @@ int main(int argc, char *argv[])
         }
         else
         {
+            strip_carriage_return(n);
+
             i_w = utf8_to_wide(n);
             if (!i_w)
                 goto Cleanup;
@@ -1912,6 +1958,8 @@ int main(int argc, char *argv[])
 
                 if (copy_to_clipboard(o_w))
                     printf("Copied value to clipboard!\n");
+
+                o_n = NULL;     // Free safety
             }
         }
         else
@@ -2035,19 +2083,40 @@ int main(int argc, char *argv[])
         if (!n)
             goto Cleanup;
 
+        int val;
+
         // If not a valid number, assume tally marks
-        if (is_valid_number)
+        if (is_valid_number(n))
         {
             s_n = strip_leading_zeroes(n);
-            o_n = tally(s_n, DEFAULT);   // Just in case
-        }
-        else
-        {
-            s_n = parse_tally_marks(n);
             if (!s_n)
                 goto Cleanup;
 
-            o_n = NULL;     // Use as a flag to convey state
+            string_to_number(s_n, &num);
+            if (!num || *num > INT_MAX)
+                goto Cleanup;
+
+            val = *(int *)num;
+            o_n = tally(val, DEFAULT);
+            if (!o_n)
+                goto Cleanup;
+        }
+        else
+        {
+            strip_carriage_return(n);
+
+            s_n = malloc(16 * sizeof(char));
+            if (!s_n)
+            {
+                printf("Error - malloc failure.\n");
+                goto Cleanup;
+            }
+
+            val = parse_tally_marks(n);
+            if (val == -1)
+                goto Cleanup;
+
+            number_to_string(s_n, val, DECIMAL);
         }
 
         if (option == 'c')
@@ -2076,7 +2145,7 @@ int main(int argc, char *argv[])
             if (runner((struct Func_Call){
                     .mode = TALLY_MODE,
                     .func.formatter = tally,
-                    .arg.num_char_ptr = s_n,
+                    .arg.num_llong = val,
                     .extra_args = (char[]){param, '\0'}
                 }, option)
             ) {
