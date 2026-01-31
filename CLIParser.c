@@ -48,7 +48,7 @@
  *      |                |---------------+------------------------+-----------------------------------------------------------+
  *      |                |  solorun / s  |          NIL           | Initiates a solo counting run with decimal numbers.       |
  *      |                |---------------+------------------------+-----------------------------------------------------------+
- *      | decimal/normal |               |    b / bin / binary    | Converts an inputted decimal number to octal.             |
+ *      | decimal/normal |               |    b / bin / binary    | Converts an inputted decimal number to binary.            |
  *      |                |               |------------------------+-----------------------------------------------------------+
  *      |                |  convert / c  |  h / hex / hexadecimal | Converts an inputted decimal number to hexadecimal.       |
  *      |                |               |------------------------+-----------------------------------------------------------+
@@ -433,7 +433,12 @@ int main(int argc, char *argv[])
             strcmp(argv[2], "r")  == 0 || 
             strcmp(argv[2], "run") == 0
         ) {
-            option = 'r';       // Run
+            // option = 'r';       // Run
+            printf(
+                "Sorry, decimal/normal runs are disabled at this time.\n"
+                "Please refer to patch notes and stay tuned for more updates!\n"
+            );
+            goto Cleanup;
         }
         else if (
             strcmp(argv[2], "s") == 0 || 

@@ -266,6 +266,13 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         {
             if (japaneseNumber[i] == LARGE_UNITS[j])
             {
+                if (blockPtr == -1)
+                {
+                    printf("Bad Input - Invalid number.\n");
+                    free(number);
+                    return NULL;
+                }
+                
                 if (value != 0)
                 {
                     blockPtr = 3;
