@@ -111,6 +111,7 @@ char *next_69_number(const char *number)
             {
                 *++pre69 = '0';
             }
+            *pre69 = '\0';
             break;
         }
 
@@ -221,6 +222,7 @@ char *next_420_number(const char *number)
             {
                 *++pre420 = '0';
             }
+            *pre420 = '\0';
             break;
         }
 
