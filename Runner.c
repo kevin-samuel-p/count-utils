@@ -30,6 +30,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
         {
             if (!call.arg.num_char_ptr)
             {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -49,6 +50,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             payload->arg.num_char_ptr = malloc(n + 1);
             if (!payload->arg.num_char_ptr)
             {
+                printf("Error - malloc failure.\n");
                 free(payload);
                 return NULL;
             }
@@ -72,6 +74,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
         {
             if (!call.arg.num_char_ptr)
             {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -104,6 +107,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
         {
             if (!call.arg.num_char_ptr)
             {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -146,6 +150,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
                     call.extra_args[0] != 'n'
                 )
             ) {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -202,6 +207,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 !call.arg.num_char_ptr || 
                 !call.extra_args
             ) {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -259,6 +265,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 !call.arg.num_char_ptr || 
                 !call.extra_args
             ) {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
@@ -288,6 +295,8 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 return NULL;
             }
 
+            payload->extra_args = call.extra_args;
+
             res = (void *)form(
                 payload->arg.num_char_ptr, 
                 call.extra_args[0]
@@ -301,6 +310,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
                 !call.extra_args || 
                 call.arg.num_llong == INT_MAX
             ) {
+                printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }

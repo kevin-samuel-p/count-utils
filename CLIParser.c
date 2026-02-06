@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <wchar.h>
-#include <locale.h>
+// #include <locale.h>
 
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
@@ -1953,18 +1953,10 @@ int main(int argc, char *argv[])
                 if (!o_w)
                     goto Cleanup;
 
-                o_n = setlocale(LC_CTYPE, NULL);    // Saving current locale
-                setlocale(LC_CTYPE, "");
-
-                wprintf(L"\n%ls\n", o_w);
-
-                freopen(NULL, "w", stdout);
-                setlocale(LC_CTYPE, o_n);
+                print_wide(o_w);
 
                 if (copy_to_clipboard(o_w))
                     printf("Copied value to clipboard!\n");
-
-                o_n = NULL;     // Free safety
             }
         }
         else
