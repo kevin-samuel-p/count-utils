@@ -57,7 +57,7 @@ long long next_non_repeating_number(unsigned long long number)
     }
     
     unsigned long long rev = 0;      // Digit stack
-    int digitCount = 0;     // Stack length tracked using digit count
+    int digitCount = 0;              // Stack length tracked using digit count
 
     unsigned long long copy = number + 1;
     while (copy > 0)
@@ -87,11 +87,13 @@ long long backtrack(
     int currDigit = stack % 10;
     for (int offset = 0; offset + currDigit <= 9; offset++)
     {
-        unsigned long long trial;
+        long long trial;
         if ((set & (1 << (offset + currDigit))) == 0 && (
             (trial = backtrack(
                 number * 10 + offset + currDigit, 
-                (currDigit + offset == set) ? set : set | (1 << (offset + currDigit)), 
+                (currDigit + offset == 0 && set == 0) 
+                    ? set 
+                    : set | (1 << (offset + currDigit)), 
                 stack / 10, 
                 stackLen - 1
             )) != -1)

@@ -1348,7 +1348,7 @@ int main(int argc, char *argv[])
             strcmp(argv[2], "c") == 0 ||
             strcmp(argv[2], "check") == 0
         ) {
-            option = 's';       // Check
+            option = 'c';       // Check
         }
         else
         {
@@ -1397,11 +1397,11 @@ int main(int argc, char *argv[])
         {
             if (is_repeating(*num))
             {
-                printf("No, %llu is not a repeating number.\n", *num);
+                printf("No, %llu is a repeating number.\n", *num);
             }
             else
             {
-                printf("Yes! %llu is a repeating number.\n", *num);
+                printf("Yes! %llu is not a repeating number.\n", *num);
             }
         }
         else
