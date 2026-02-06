@@ -40,13 +40,13 @@ char *read_temp_file_utf8()
     FILE *fp = fopen(TEMP_FILE_NAME, "rb");
     if (!fp)
     {
-        printf("Error: Could not open input file");
+        printf("Error: Could not open input file.\n");
         return NULL;
     }
 
     if (fseek(fp, 0, SEEK_END) != 0)
     {
-        printf("Error: Failed to determine size of input file");
+        printf("Error: Failed to determine size of input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -54,7 +54,7 @@ char *read_temp_file_utf8()
     long size = ftell(fp);
     if (size < 0)
     {
-        printf("Error: Failed to determine size of input file");
+        printf("Error: Failed to determine size of input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -64,7 +64,7 @@ char *read_temp_file_utf8()
     char *buf = malloc((size_t)size + 1);
     if (!buf)
     {
-        printf("Error: Out of memory while reading input file");
+        printf("Error: Out of memory while reading input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -74,7 +74,7 @@ char *read_temp_file_utf8()
 
     if (read != (size_t)size)
     {
-        printf("Error: Failed to read input file completely");
+        printf("Error: Failed to read input file completely.\n");
         free(buf);
         return NULL;
     }

@@ -103,7 +103,7 @@ char *convert(const char *number, enum Radix convertFrom, enum Radix convertTo)
 
     if (errno == ERANGE)
     {
-        printf("Bad Input: Number too large.\n");
+        printf("Bad Input - Number too large.\n");
         return NULL;
     }
 

@@ -36,7 +36,7 @@ unsigned long long next_repeating_number(unsigned long long number)
 {
     if (number == ULLONG_MAX)
     {
-        printf("Bad Input - Maximum allowed number");
+        printf("Bad Input - Maximum allowed number.\n");
         return 0;
     }
 
@@ -52,7 +52,7 @@ long long next_non_repeating_number(unsigned long long number)
 {
     if (number >= 9876543210)
     {
-        printf("Bad Input: Maximum limit exceeded");
+        printf("Bad Input: Maximum limit exceeded.\n");
         return 1;
     }
     

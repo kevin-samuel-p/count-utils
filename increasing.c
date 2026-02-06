@@ -28,7 +28,7 @@ char *next_increasing_number(const char *number)
     char *buffer = malloc((n + 2) * sizeof(char));
     if (!buffer)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
     

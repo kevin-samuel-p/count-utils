@@ -32,7 +32,7 @@ char *next_69_number(const char *number)
     nextNumber = malloc((n + 2) * sizeof(char));
     if (!nextNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -142,7 +142,7 @@ char *next_420_number(const char *number)
     nextNumber = malloc((n + 2) * sizeof(char));
     if (!nextNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 

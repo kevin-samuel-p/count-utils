@@ -57,7 +57,7 @@ char *next_palindrome(const char *number)
     nextNumber = malloc((n + 3) * sizeof(char));
     if (!nextNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -131,14 +131,14 @@ char *next_mirror_number(char *number, char mode)
             // No stripping in mirrored mode due to ambiguity
             if (number[n - 1] == '0')
             {
-                printf("Bad Input - Ambiguous trailing zeroes in mirrored number");
+                printf("Bad Input - Ambiguous trailing zeroes in mirrored number.\n");
                 return NULL;
             }
 
             nextNumber = malloc((n + 2) * sizeof(char));
             if (!nextNumber)
             {
-                printf("Error - malloc failure");
+                printf("Error - malloc failure.\n");
                 return NULL;
             }
 
@@ -167,7 +167,7 @@ char *next_mirror_number(char *number, char mode)
             nextNumber = malloc((n - offset + 2) * sizeof(char));
             if (!nextNumber)
             {
-                printf("Error - malloc failure");
+                printf("Error - malloc failure.\n");
                 return NULL;
             }
 

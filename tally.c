@@ -38,9 +38,9 @@ int parse_tally_marks(char *textWall)
     {
         // User almost found a vulnerability! + is rogue input.
         printf(
-            "Bad Input - Invalid format\n\n"
+            "Bad Input - Invalid format.\n\n"
         
-            "{x(.5)}K + [tally marks]"
+            "{x(.5)}K + [tally marks]\n"
         );
         return -1;
     }
@@ -62,9 +62,9 @@ int parse_tally_marks(char *textWall)
             if (!chunk)
             {
                 printf(
-                    "Bad Input - Invalid format\n\n"
+                    "Bad Input - Invalid format.\n\n"
                 
-                    "{x(.5)}K + [tally marks]"
+                    "{x(.5)}K + [tally marks]\n"
                 );
                 return -1;
             }
@@ -80,9 +80,9 @@ int parse_tally_marks(char *textWall)
 
         default:
             printf(
-                "Bad Input - Invalid format\n\n"
+                "Bad Input - Invalid format.\n\n"
             
-                "{x(.5)}K + [tally marks]"
+                "{x(.5)}K + [tally marks]\n"
             );  
 
         return -1;
@@ -92,7 +92,7 @@ int parse_tally_marks(char *textWall)
     number = (int)(k * 1000 + 0.5f);
     if (number % 500 != 0)
     {
-        printf("Bad Input - %f is a bad marker", k); 
+        printf("Bad Input - %f is a bad marker.\n", k); 
         return -1;
     }
     
@@ -119,7 +119,7 @@ int parse_tally_marks(char *textWall)
         int chunkSize = strlen(chunk);
         if (chunkSize > 4)
         {
-            printf("Bad Input - %s is not a valid block", chunk);
+            printf("Bad Input - %s is not a valid block.\n", chunk);
             return -1;
         }
 
@@ -127,7 +127,7 @@ int parse_tally_marks(char *textWall)
         {
             if (chunk[i] != '|')
             {
-                printf("Bad Input - %s is not a valid block", chunk);
+                printf("Bad Input - %s is not a valid block.\n", chunk);
                 return -1;
             }
             ++number;
@@ -136,7 +136,7 @@ int parse_tally_marks(char *textWall)
         chunk = strtok(NULL, delimiter);
         if (chunk)
         {
-            printf("Bad Input - Invalid group arrangement");
+            printf("Bad Input - Invalid group arrangement.\n");
             return -1;
         }
 
@@ -151,7 +151,7 @@ char *tally(int number, enum Formatting formatting)
 {
     if (number <= 0)
     {
-        printf("Bad Input - Tally marks cannot represent non-positive numbers");
+        printf("Bad Input - Tally marks cannot represent non-positive numbers.\n");
         return NULL;
     }
     
@@ -161,7 +161,7 @@ char *tally(int number, enum Formatting formatting)
     slab = malloc(2000 * sizeof(char));
     if (!slab)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 

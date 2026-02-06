@@ -59,7 +59,7 @@ char *roman_to_number(const wchar_t *roman)
         break;
 
         default:
-            printf("Bad Input - Invalid Roman numeral");
+            printf("Bad Input - Invalid Roman numeral.\n");
             return NULL;
     }
 
@@ -72,7 +72,7 @@ char *roman_to_number(const wchar_t *roman)
     chunks = calloc(size, sizeof(int)); 
     if (!chunks)
     {
-        printf("Error - calloc failure");
+        printf("Error - calloc failure.\n");
         return NULL;
     }
     
@@ -88,7 +88,7 @@ char *roman_to_number(const wchar_t *roman)
 
             if (index < lastChunk)
             {
-                printf("Bad Input - Invalid Roman numeral");
+                printf("Bad Input - Invalid Roman numeral.\n");
                 free(chunks);
                 return NULL;
             }
@@ -103,7 +103,7 @@ char *roman_to_number(const wchar_t *roman)
                     }
                     else if (index == 0)
                     {
-                        printf("Bad Input - Invalid Roman numeral");
+                        printf("Bad Input - Invalid Roman numeral.\n");
                         free(chunks);
                         return NULL;
                     }
@@ -120,7 +120,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -138,7 +138,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -162,7 +162,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -181,7 +181,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -205,7 +205,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -224,7 +224,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -244,7 +244,7 @@ char *roman_to_number(const wchar_t *roman)
                         break;
 
                         default:
-                            printf("Bad Input - Invalid Roman numeral");
+                            printf("Bad Input - Invalid Roman numeral.\n");
                             free(chunks);
                             return NULL;
                     }
@@ -268,7 +268,7 @@ char *roman_to_number(const wchar_t *roman)
                 break;
 
                 default:
-                    printf("Bad Input - Invalid Roman numeral");
+                    printf("Bad Input - Invalid Roman numeral.\n");
                     free(chunks);
                     return NULL;
             }
@@ -278,7 +278,7 @@ char *roman_to_number(const wchar_t *roman)
     char *number = malloc((3*size + 2) * sizeof(char));
     if (!number)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         free(chunks);
         return NULL;
     }
@@ -301,7 +301,7 @@ wchar_t *number_to_roman(const char *number, char representation)
 {
     if (number[0] == '-')
     {
-        printf("Bad Input - Non-positive numbers not allowed");
+        printf("Bad Input - Non-positive numbers not allowed.\n");
         return NULL;
     }
 
@@ -310,7 +310,7 @@ wchar_t *number_to_roman(const char *number, char representation)
     wchar_t *roman = malloc(currSize * sizeof(wchar_t));   // Expand size dynamically
     if (!roman)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
     
@@ -345,7 +345,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                             wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                             if (!temp)
                             {
-                                printf("Error - realloc failure");
+                                printf("Error - realloc failure.\n");
                                 free(roman);
                                 return NULL;
                             }
@@ -360,7 +360,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
-                            printf("Error - realloc failure");
+                            printf("Error - realloc failure.\n");
                             free(roman);
                             return NULL;
                         }
@@ -382,7 +382,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
-                            printf("Error - realloc failure");
+                            printf("Error - realloc failure.\n");
                             free(roman);
                             return NULL;
                         }
@@ -397,7 +397,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                     if (!temp)
                     {
-                        printf("Error - realloc failure");
+                        printf("Error - realloc failure.\n");
                         free(roman);
                         return NULL;
                     }
@@ -419,7 +419,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                             wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                             if (!temp)
                             {
-                                printf("Error - realloc failure");
+                                printf("Error - realloc failure.\n");
                                 free(roman);
                                 return NULL;
                             }
@@ -434,7 +434,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
-                            printf("Error - realloc failure");
+                            printf("Error - realloc failure.\n");
                             free(roman);
                             return NULL;
                         }
@@ -452,7 +452,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                         wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                         if (!temp)
                         {
-                            printf("Error - realloc failure");
+                            printf("Error - realloc failure.\n");
                             free(roman);
                             return NULL;
                         }
@@ -467,7 +467,7 @@ wchar_t *number_to_roman(const char *number, char representation)
                     wchar_t *temp = realloc(roman, currSize * sizeof(wchar_t));
                     if (!temp)
                     {
-                        printf("Error - realloc failure");
+                        printf("Error - realloc failure.\n");
                         free(roman);
                         return NULL;
                     }
@@ -476,7 +476,7 @@ wchar_t *number_to_roman(const char *number, char representation)
             break;
 
             default:
-                printf("Bad Input - Invalid number");
+                printf("Bad Input - Invalid number.\n");
                 free(roman);
                 return NULL;
         }
@@ -485,7 +485,7 @@ wchar_t *number_to_roman(const char *number, char representation)
     // If number is zero, all iterations would have been skipped
     if (romanPtr == 0)
     {
-        printf("Bad Input - Non-positive numbers not allowed");
+        printf("Bad Input - Non-positive numbers not allowed.\n");
         free(roman);
         return NULL;
     }

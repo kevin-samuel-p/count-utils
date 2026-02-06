@@ -34,7 +34,7 @@ void increment_nwn(long **arr, long *arrSize, enum NWN_Mode mode)
             long *temp = realloc(*arr, (*arrSize + 1) * sizeof(long));
             if (!(*temp))
             {
-                printf("Error - realloc failure");
+                printf("Error - realloc failure.\n");
                 free(*arr);
                 return;
             }
@@ -56,7 +56,7 @@ char *stringify_nwn(const long *arr, long arrSize)
     char *numString = malloc(15 * (size_t)arrSize * sizeof(char));
     if (!numString)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure\n");
         return NULL;
     }
     numString[0] = '\0';
@@ -64,7 +64,7 @@ char *stringify_nwn(const long *arr, long arrSize)
     char *number = malloc(15 * sizeof(char));
     if (!number)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure\n");
         free(numString);
         return NULL;
     }
@@ -94,19 +94,19 @@ char *nwns(char *numString, enum NWN_Mode mode)
 
     if (*endPtr != '\0')
     {
-        printf("Bad Input - Non-numeral prtition in string");
+        printf("Bad Input - Non-numeral prtition in string.\n");
         return NULL;
     }
     
     if (x <= 0)
     {
-        printf("Bad Input - Non-positive numerals not allowed");
+        printf("Bad Input - Non-positive numerals not allowed.\n");
         return NULL;
     }
     
     if (errno == ERANGE || x == LONG_MAX)
     {
-        printf("Bad Input - Numeral too large");
+        printf("Bad Input - Numeral too large.\n");
         return NULL;
     }
 
@@ -123,7 +123,7 @@ char *nwns(char *numString, enum NWN_Mode mode)
     arr = malloc(size * sizeof(long));
     if (!arr)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure\n");
         return NULL;
     }
 
@@ -135,28 +135,28 @@ char *nwns(char *numString, enum NWN_Mode mode)
 
         if (*endPtr != '\0')
         {
-            printf("Bad Input - Non-numeral partition in string");
+            printf("Bad Input - Non-numeral partition in string.\n");
             free(arr);
             return NULL;
         }
         
         if (arr[arrPtr] <= 0)
         {
-            printf("Bad Input - Non-positive numerals not allowed");
+            printf("Bad Input - Non-positive numerals not allowed.\n");
             free(arr);
             return NULL;
         }
         
         if (errno == ERANGE || arr[arrPtr] == LONG_MAX)
         {
-            printf("Bad Input - Numeral too large");
+            printf("Bad Input - Numeral too large.\n");
             free(arr);
             return NULL;
         }
         
         if (arr[arrPtr] > arr[arrPtr - 1])
         {
-            printf("Bad Input - Numeral partitions are not in non-increasing order");
+            printf("Bad Input - Numeral partitions are not in non-increasing order.\n");
             free(arr);
             return NULL;
         }
@@ -166,14 +166,14 @@ char *nwns(char *numString, enum NWN_Mode mode)
 
     if (arrPtr != size)
     {
-        printf("Bad Input - Too few partitions for %ld numerals", size);
+        printf("Bad Input - Too few partitions for %ld numerals.\n", size);
         free(arr);
         return NULL;
     }
 
     if (token != NULL)
     {
-        printf("Bad Input - Too many partitions for %ld numerals", size);
+        printf("Bad Input - Too many partitions for %ld numerals.\n", size);
         free(arr);
         return NULL;
     }

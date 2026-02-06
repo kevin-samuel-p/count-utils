@@ -35,7 +35,7 @@ char *translate_to_morse_code(const char *number)
     char *morseNumber = malloc(6 * n * sizeof(char));
     if (!morseNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -44,7 +44,7 @@ char *translate_to_morse_code(const char *number)
     {
         if (!isdigit(number[i]))
         {
-            printf("Bad Input - Invalid number");
+            printf("Bad Input - Invalid number.\n");
             free(morseNumber);
             return NULL;
         }
@@ -72,7 +72,7 @@ char *translate_from_morse_code(char *morseNumber)
     char *number = malloc(n/4 * sizeof(char));
     if (!number)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -82,7 +82,7 @@ char *translate_from_morse_code(char *morseNumber)
     {
         if (strlen(digit) != 5)
         {
-            printf("Bad Input - Illegal morse code");
+            printf("Bad Input - Illegal morse code.\n");
             free(number);
             return NULL;
         }
@@ -99,7 +99,7 @@ char *translate_from_morse_code(char *morseNumber)
                     break;
                 else
                 {
-                    printf("Bad Input - Illegal morse code");
+                    printf("Bad Input - Illegal morse code.\n");
                     free(number);
                     return NULL;
                 }
@@ -109,7 +109,7 @@ char *translate_from_morse_code(char *morseNumber)
             {
                 if (digit[j] != '-')
                 {
-                    printf("Bad Input - Illegal morse code");
+                    printf("Bad Input - Illegal morse code.\n");
                     free(number);
                     return NULL;
                 }
@@ -129,7 +129,7 @@ char *translate_from_morse_code(char *morseNumber)
                     break;
                 else
                 {
-                    printf("Bad Input - Illegal morse code");
+                    printf("Bad Input - Illegal morse code.\n");
                     free(number);
                     return NULL;
                 }
@@ -139,7 +139,7 @@ char *translate_from_morse_code(char *morseNumber)
             {
                 if (digit[j] != '.')
                 {
-                    printf("Bad Input - Illegal morse code");
+                    printf("Bad Input - Illegal morse code.\n");
                     free(number);
                     return NULL;
                 }
@@ -149,7 +149,7 @@ char *translate_from_morse_code(char *morseNumber)
         }
         else
         {
-            printf("Bad Input - Illegal morse code");
+            printf("Bad Input - Illegal morse code.\n");
             free(number);
             return NULL;
         }

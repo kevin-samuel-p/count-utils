@@ -22,7 +22,7 @@ char *number_to_emoji(const char *number)
 {
     if (number[0] == '-')
     {
-        printf("Bad Input - Negative numbers not allowed");
+        printf("Bad Input - Negative numbers not allowed.\n");
         return NULL;
     }
 
@@ -31,7 +31,7 @@ char *number_to_emoji(const char *number)
     char *res = malloc((7*n + 1) * sizeof(char));
     if (!res)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
     res[0] = '\0';
@@ -41,7 +41,7 @@ char *number_to_emoji(const char *number)
         // Catch invalid inputs
         if (!isdigit((unsigned char)number[i]))
         {
-            printf("Bad Input - Invalid number");
+            printf("Bad Input - Invalid number.\n");
             free(res);
             return NULL;
         }

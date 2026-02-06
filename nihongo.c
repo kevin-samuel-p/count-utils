@@ -58,14 +58,14 @@ wchar_t *translate_to_japanese(const char *number)
     int n = strlen(number);
     if (n > 50)
     {
-        printf("Bad Input - Number too large");
+        printf("Bad Input - Number too large.\n");
         return NULL;
     }
 
     wchar_t *japaneseNumber = malloc((2*n + 1) * sizeof(wchar_t));
     if (!japaneseNumber)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
     int japaneseNumberLen = 0;
@@ -81,7 +81,7 @@ wchar_t *translate_to_japanese(const char *number)
     wchar_t *chunk = malloc(12 * sizeof(wchar_t));
     if (!chunk)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         free(japaneseNumber);
         return NULL;
     }
@@ -112,7 +112,7 @@ wchar_t *translate_to_japanese(const char *number)
                 break;
 
                 default:
-                    printf("Bad Input - Invalid number 1.\n");
+                    printf("Bad Input - Invalid number.\n");
                     free(chunk);
                     free(japaneseNumber);
                 return NULL;
@@ -143,7 +143,7 @@ wchar_t *translate_to_japanese(const char *number)
     {
         if (!isdigit(number[n%4 - j]))
         {
-            printf("Bad Input - Invalid number 2.\n");
+            printf("Bad Input - Invalid number.\n");
             free(chunk);
             free(japaneseNumber);
             return NULL;
@@ -201,7 +201,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         number = malloc(2 * sizeof(char));
         if (!number)
         {
-            printf("Error - malloc failure");
+            printf("Error - malloc failure.\n");
             return NULL;
         }
 
@@ -218,7 +218,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
     number = malloc(53 * sizeof(char));
     if (!number)
     {
-        printf("Error - malloc failure");
+        printf("Error - malloc failure.\n");
         return NULL;
     }
 
@@ -242,7 +242,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
                 // If it wasn't, then a larger value succeeds a unit value -- invalid sequence
                 if (value != 0)
                 {
-                    printf("Bad Input - Invalid number 3.\n");
+                    printf("Bad Input - Invalid number.\n");
                     free(number);
                     return NULL;
                 }
@@ -261,7 +261,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
                 // For bad sequences involving wrong order, check blockPtr position
                 if (blockPtr >= 2 - j)
                 {
-                    printf("Bad Input - Invalid number 4.\n");
+                    printf("Bad Input - Invalid number.\n");
                     free(number);
                     return NULL;
                 }
@@ -287,7 +287,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
             {
                 if (blockPtr == -1 && value == 0)
                 {
-                    printf("Bad Input - Invalid number 5.\n");
+                    printf("Bad Input - Invalid number.\n");
                     free(number);
                     return NULL;
                 }
@@ -316,18 +316,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         // If no operation has been done then there is no valid match for the given character
         if (!op)
         {
-            printf("Bad Input - Invalid number 6.\n");
-
-            for (int a = 0; a < n; a++) 
-            {
-                printf("%d ", (wint_t)japaneseNumber[a]);
-            }
-            printf("\n");
-            printf("%s\n", number);
-
-            printf("DIGITS[1] = U+%04X\n", (unsigned)DIGITS[2]);
-            printf("INPUT     = U+%04X\n", (unsigned)japaneseNumber[i]);
-            
+            printf("Bad Input - Invalid number.\n");
             free(number);
             return NULL;
         }

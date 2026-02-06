@@ -94,13 +94,13 @@ void string_to_number(const char *number, unsigned long long **v)
 
     if (number[0] == '-')
     {
-        printf("Bad Input: Negative numbers not allowed.\n");
+        printf("Bad Input - Negative numbers not allowed.\n");
         return;
     }
 
     if (number[0] == '\0')
     {
-        printf("Bad Input: Empty string.\n");
+        printf("Bad Input - Empty string.\n");
         return;
     }
 
@@ -108,20 +108,20 @@ void string_to_number(const char *number, unsigned long long **v)
 
     if (*endChar != '\0')
     {
-        printf("Bad Input: Invalid number.\n");
+        printf("Bad Input - Invalid number.\n");
         return;
     }
 
     if (errno == ERANGE)
     {
-        printf("Bad Input: Number too large.\n");
+        printf("Bad Input - Number too large.\n");
         return;
     }
 
     *v = malloc(sizeof(unsigned long long));
     if (!(*v))
     {
-        printf("Error: malloc failed.\n");
+        printf("Error - malloc failure.\n");
         return;
     }
 
@@ -198,7 +198,7 @@ void increment_numstring(char **number)
     char *temp = realloc(*number, n + 2);
     if (!temp)
     {
-        printf("Error - realloc failed");
+        printf("Error - realloc failure.\n");
         free(*number);
         return;
     }

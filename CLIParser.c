@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <wchar.h>
-// #include <locale.h>
 
 #include "ClipboardFunctions.h"
 #include "Inputter.h"
@@ -270,7 +269,7 @@ int main(int argc, char *argv[])
     if (!create_temp_file())
     {
         printf(
-            "Error: Could not create input file.\n"
+            "Error - Could not create input file.\n"
             "Please make sure you are running this tool as an administrator.\n"
         );
         return 1;
@@ -746,7 +745,7 @@ int main(int argc, char *argv[])
         if (!await_user_input())
         {
             printf(
-                "Error: Could not open Notepad.exe.\n"
+                "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
             goto Cleanup;
@@ -852,7 +851,7 @@ int main(int argc, char *argv[])
         if (!await_user_input())
         {
             printf(
-                "Error: Could not open Notepad.exe.\n"
+                "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
             goto Cleanup;
@@ -944,7 +943,7 @@ int main(int argc, char *argv[])
         if (!await_user_input())
         {
             printf(
-                "Error: Could not open Notepad.exe.\n"
+                "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
             goto Cleanup;
@@ -1588,7 +1587,7 @@ int main(int argc, char *argv[])
         if (!await_user_input())
         {
             printf(
-                "Error: Could not open Notepad.exe.\n"
+                "Error - Could not open Notepad.exe.\n"
                 "Input parsing is not available at this time, please try again later.\n"
             );
             goto Cleanup;
