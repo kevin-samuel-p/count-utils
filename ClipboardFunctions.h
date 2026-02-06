@@ -46,4 +46,31 @@ bool copy_to_clipboard(const wchar_t *text);
 bool copy_utf8_to_clipboard(const char *text);
 
 
+/**
+ * @brief Reads Unicode text from the Windows clipboard without modifying it.
+ *
+ * This function opens the system clipboard in read-only mode, retrieves
+ * text stored in the CF_UNICODETEXT format, and returns a heap-allocated
+ * copy of that text.
+ *
+ * The returned string is owned by the caller and must be released using
+ * free(). The clipboard contents themselves are never altered.
+ *
+ * @return wchar_t*
+ *         Pointer to a null-terminated wide-character string containing
+ *         the clipboard text, or NULL if the clipboard does not contain
+ *         Unicode text or an error occurs.
+ *
+ * @note The returned pointer remains valid after the clipboard is closed
+ *       because the data is copied into caller-owned memory.
+ *
+ * @warning The caller is responsible for freeing the returned buffer.
+ *
+ * @see OpenClipboard
+ * @see GetClipboardData
+ * @see CF_UNICODETEXT
+ */
+wchar_t *read_clipboard(void);
+
+
 #endif /* CLIPBOARDFUNCTIONS_H */

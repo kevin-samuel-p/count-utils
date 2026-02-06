@@ -360,6 +360,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
 bool runner(struct Func_Call payload, char run_type)
 {
     struct Func_Call *curr, *next;
+    wchar_t *result;
     int iters = ('s' - run_type) + 1;
     bool ok = true;     // Return value
 
@@ -380,8 +381,15 @@ bool runner(struct Func_Call payload, char run_type)
         goto cleanup;
     }
 
+    result = read_clipboard();
+    if (result)
+    {
+        print_wide(result);
+        free(result);
+    }
+
     printf(
-        "\nNext value copied to clipboard!\n"
+        "Next value copied to clipboard!\n"
         "Press Tab to copy next value, "
         "or press Esc to end the run.\n"
     );
@@ -433,8 +441,17 @@ bool runner(struct Func_Call payload, char run_type)
                     curr = next;
                 }
 
+                printf("\n");
+
+                result = read_clipboard();
+                if (result)
+                {
+                    print_wide(result);
+                    free(result);
+                }
+
                 printf(
-                    "\nNext value copied to clipboard!\n"
+                    "Next value copied to clipboard!\n"
                     "Press Tab to copy next value, "
                     "or press Esc to end the run.\n"
                 );
@@ -442,7 +459,7 @@ bool runner(struct Func_Call payload, char run_type)
         }
     }
 
-    cleanup:
-        SetConsoleMode(hIn, mode);
-        return ok;
+cleanup:
+    SetConsoleMode(hIn, mode);
+    return ok;
 }

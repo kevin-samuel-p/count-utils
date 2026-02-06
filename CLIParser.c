@@ -2166,15 +2166,15 @@ int main(int argc, char *argv[])
 
     --exit_status;      // Exit status 0 for success
 
-    Cleanup:
-        free(n);
-        free(s_n);
-        free(o_n);
-        free(i_w);
-        free(o_w);
-        free(num);
+Cleanup:
+    free(n);
+    free(s_n);
+    free(o_n);
+    free(i_w);
+    free(o_w);
+    free(num);
 
-        delete_temp_file();
+    delete_temp_file();
 
     return exit_status;
 }

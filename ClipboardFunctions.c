@@ -51,3 +51,35 @@ bool copy_utf8_to_clipboard(const char *text)
 
     return result;
 }
+
+
+wchar_t *read_clipboard()
+{
+    wchar_t *result = NULL;
+
+    if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
+        return NULL;
+
+    if (!OpenClipboard(NULL))
+        return NULL;
+
+    HANDLE hData = GetClipboardData(CF_UNICODETEXT);
+    if (!hData)
+        goto cleanup;
+
+    wchar_t *wtext = (wchar_t *)GlobalLock(hData);
+    if (!wtext)
+        goto cleanup;
+
+    size_t len = wcslen(wtext) + 1;
+
+    result = malloc(len * sizeof(wchar_t));
+    if (result)
+        memcpy(result, wtext, len * sizeof(wchar_t));
+
+    GlobalUnlock(hData);
+
+cleanup:
+    CloseClipboard();
+    return result;
+}
