@@ -206,9 +206,9 @@ char *next_420_number(const char *number)
     // Dealing with portion preceding "420" in the number
     pre420 = nextNumber + n - 4;
     
-    if (*pre420 == '4')
+    if (*pre420 == '3')
     {
-        strcpy(pre420 + 1, "200");
+        strcpy(pre420, "4200");
         return nextNumber;
     }
 
