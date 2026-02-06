@@ -178,8 +178,7 @@ void increment_numstring(char **number);
  *
  * @param s Pointer to a null-terminated character buffer to sanitize.
  *
- * @note Only the first carriage return is removed. Characters after
- *       the `'\r'` are discarded.
+ * @note All `'\r'` characters are replaced with `'\n'` characters.
  */
 void strip_carriage_return(char *s);
 

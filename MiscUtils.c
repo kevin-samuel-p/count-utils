@@ -48,13 +48,13 @@ wchar_t *utf8_to_wide(const char *utf8)
 
     if (!MultiByteToWideChar(
         CP_UTF8,
-        0,
+        MB_ERR_INVALID_CHARS,
         utf8,
         -1,
         wide,
         len
     )) {
-        printf("Bad Input - Input contains malformed UTF-8 sequences");
+        printf("Bad Input - Input contains malformed UTF-8 sequences.\n");
         free(wide);
         return NULL;
     }

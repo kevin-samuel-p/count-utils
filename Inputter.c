@@ -81,6 +81,22 @@ char *read_temp_file_utf8()
 
     buf[size] = '\0';
 
+    /* ---- UTF-8 BOM detection ---- */
+    if (size >= 3)
+    {
+        unsigned char b0 = (unsigned char)buf[0];
+        unsigned char b1 = (unsigned char)buf[1];
+        unsigned char b2 = (unsigned char)buf[2];
+
+        if (b0 == 0xEF && b1 == 0xBB && b2 == 0xBF)
+        {
+            // Skip BOM
+            memmove(buf, buf + 3, size - 2);
+            size -= 3;
+            buf[size] = '\0';
+        }
+    }
+
     /* ---- UTF-16 BOM detection ---- */
     if (size >= 2)
     {

@@ -17,20 +17,39 @@
 
 const wchar_t DIGITS[10] = 
 {
-    L'零', L'一', L'二', L'三', L'四',      // 0, 1, 2, 3, 4
-    L'五', L'六', L'七', L'八', L'九'       // 5, 6, 7, 8, 9
+    L'\u96F6',  // 零 = 0
+    L'\u4E00',  // 一 = 1
+    L'\u4E8C',  // 二 = 2
+    L'\u4E09',  // 三 = 3
+    L'\u56DB',  // 四 = 4
+    L'\u4E94',  // 五 = 5
+    L'\u516D',  // 六 = 6
+    L'\u4E03',  // 七 = 7
+    L'\u516B',  // 八 = 8
+    L'\u4E5D'   // 九 = 9
 };
 
 const wchar_t SMALL_UNITS[3] = 
 {
-    L'十', L'百', L'千'                     // 10, 100, 1000
+    L'\u5341',  // 十 = 10
+    L'\u767e',  // 百 = 100
+    L'\u5343'   // 千 = 1000
 };
 
 const wchar_t LARGE_UNITS[12] = 
 {
-    L'万', L'億', L'兆', L'京',             // 10^4, 10^8, 10^12, 10^16
-    L'垓', L'秭', L'穣', L'溝',             // 10^20, 10^24, 10^28, 10^32
-    L'澗', L'正', L'載', L'極'              // 10^36, 10^40, 10^42, 10^48
+    L'\u4e07',  // 万 = 10^4
+    L'\u5104',  // 億 = 10^8
+    L'\u5146',  // 兆 = 10^12
+    L'\u4eac',  // 京 = 10^16
+    L'\u5793',  // 垓 = 10^20
+    L'\u79ed',  // 秭 = 10^24
+    L'\u7a63',  // 穣 = 10^28
+    L'\u6e9d',  // 溝 = 10^32
+    L'\u6f97',  // 澗 = 10^36
+    L'\u6b63',  // 正 = 10^40
+    L'\u8f09',  // 載 = 10^44
+    L'\u6975'   // 極 = 10^48
 };
 
 
@@ -93,7 +112,7 @@ wchar_t *translate_to_japanese(const char *number)
                 break;
 
                 default:
-                    printf("Bad Input - Invalid number");
+                    printf("Bad Input - Invalid number 1.\n");
                     free(chunk);
                     free(japaneseNumber);
                 return NULL;
@@ -124,7 +143,7 @@ wchar_t *translate_to_japanese(const char *number)
     {
         if (!isdigit(number[n%4 - j]))
         {
-            printf("Bad Input - Invalid number");
+            printf("Bad Input - Invalid number 2.\n");
             free(chunk);
             free(japaneseNumber);
             return NULL;
@@ -223,7 +242,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
                 // If it wasn't, then a larger value succeeds a unit value -- invalid sequence
                 if (value != 0)
                 {
-                    printf("Bad Input - Invalid number");
+                    printf("Bad Input - Invalid number 3.\n");
                     free(number);
                     return NULL;
                 }
@@ -242,7 +261,7 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
                 // For bad sequences involving wrong order, check blockPtr position
                 if (blockPtr >= 2 - j)
                 {
-                    printf("Bad Input - Invalid number");
+                    printf("Bad Input - Invalid number 4.\n");
                     free(number);
                     return NULL;
                 }
@@ -266,9 +285,9 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         {
             if (japaneseNumber[i] == LARGE_UNITS[j])
             {
-                if (blockPtr == -1)
+                if (blockPtr == -1 && value == 0)
                 {
-                    printf("Bad Input - Invalid number.\n");
+                    printf("Bad Input - Invalid number 5.\n");
                     free(number);
                     return NULL;
                 }
@@ -297,7 +316,18 @@ char *translate_from_japanese(const wchar_t *japaneseNumber)
         // If no operation has been done then there is no valid match for the given character
         if (!op)
         {
-            printf("Bad Input - Invalid number");
+            printf("Bad Input - Invalid number 6.\n");
+
+            for (int a = 0; a < n; a++) 
+            {
+                printf("%d ", (wint_t)japaneseNumber[a]);
+            }
+            printf("\n");
+            printf("%s\n", number);
+
+            printf("DIGITS[1] = U+%04X\n", (unsigned)DIGITS[2]);
+            printf("INPUT     = U+%04X\n", (unsigned)japaneseNumber[i]);
+            
             free(number);
             return NULL;
         }
