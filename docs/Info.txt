@@ -1,0 +1,13 @@
+COUNTING ASSISTANT
+A tool to help counting forums.
+
+!!!!! DISCLAIMER !!!!!
+THIS PACKAGE DOES NOT DELIVER A SET OF EXPLOITS TO BE USED ON ANY COUNTING BOT.
+COMPLIANCE TO COUNTING BOT RULES IS ON THE ONUS OF THE USER.
+THE USER BEARS RESPONSIBILITY FOR THE RAMIFICATIONS OF MISUSING THIS TOOL.
+THIS TOOL'S INTENDED USE IS ONLY LIMITED TO UNOFFICIAL COUNTING FORUMS.
+
+Official GitHub link: https://github.com/kevin-samuel-p/counting-utils/
+
+For queries, contact sadgeis12@Discord
+PS; PRs and Suggestions accepted for novel counting channels.

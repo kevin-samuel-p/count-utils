@@ -179,17 +179,22 @@
  *      |                |               |                        | (clustering groups of thousand by a single combining      |
  *      |                |               |                        | overline).                                                |
  *      |                |---------------+------------------------+-----------------------------------------------------------+
- *      |      roman     |               |                        | Initiates a solo counting run with Roman Numerals using   |
+ *      |                |               |                        | Initiates a solo counting run with Roman Numerals using   |
  *      |                |               |     i / idiomatic      | their idiomatic representations (inclusion of M as a      |
  *      |                |               |                        | recurring numeral in each chunk).                         |
- *      |                |  solorun / s  |------------------------+-----------------------------------------------------------+
+ *      |      roman     |  solorun / s  |------------------------+-----------------------------------------------------------+
  *      |                |               |                        | Initiates a solo counting run with Roman Numerals using   |
  *      |                |               |        l / legal       | their legal semantically correct standard representations |
  *      |                |               |                        | (clustering groups of thousand by a single combining      |
  *      |                |               |                        | overline).                                                |
  *      |                |---------------+------------------------+-----------------------------------------------------------+
- *      |                |  convert / c  |          NIL           | Converts an inputted Roman number to its numerical value, |
- *      |                |               |                        | and an inputted number to its Roman numeral equivalent.   |
+ *      |                |               |                        | Converts an inputted Roman number to its numerical value, |
+ *      |                |               |      i / idiomatic     | and an inputted number to its Roman numeral equivalent    |
+ *      |                |               |                        | using the idiomatic representation.                       |
+ *      |                |  convert / c  |------------------------+-----------------------------------------------------------+
+ *      |                |               |                        | Converts an inputted Roman number to its numerical value, |
+ *      |                |               |        l / legal       | and an inputted number to its Roman numeral equivalent    |
+ *      |                |               |                        | using the legal semantically correct standard format.     |
  *      +----------------+---------------+------------------------+-----------------------------------------------------------+
  *      |                |               |         b / big        | Initiates a counting run using tally marks with big text  |
  *      |                |               |                        | formatting.                                               |
@@ -1875,27 +1880,30 @@ int main(int argc, char *argv[])
         }
 
         // Parse optional parameters
-        if (option != 'c')
-        {
-            if (argc == 3 || strcmp(argv[3], "l") == 0)
-            {
-                param = 'l';        // Legal representation
-            }
-            else if (strcmp(argv[3], "i") == 0)
-            {
-                param = 'i';        // Idiomatic representation
-            }
-            else
-            {
-                printf(
-                    "Invalid Syntax - %s is not a valid parameter for Roman numeral runs.\n"
-                    "Please refer to the official documentation for the supported Roman numeral formats, "
-                    "or use the help option.\n",
-                    argv[3]
-                );
-                goto Cleanup;
-            }
+        if (
+            argc == 3 || 
+            strcmp(argv[3], "l") == 0 || 
+            strcmp(argv[3], "legal") == 0
+        ) {
+            param = 'l';        // Legal representation
         }
+        else if (
+            strcmp(argv[3], "i") == 0 || 
+            strcmp(argv[3], "idiomatic") == 0
+        ) {
+            param = 'i';        // Idiomatic representation
+        }
+        else
+        {
+            printf(
+                "Invalid Syntax - %s is not a valid parameter for Roman numeral runs.\n"
+                "Please refer to the official documentation for the supported Roman numeral formats, "
+                "or use the help option.\n",
+                argv[3]
+            );
+            goto Cleanup;
+        }
+        
 
         if (!await_user_input())
         {
@@ -1932,13 +1940,13 @@ int main(int argc, char *argv[])
                 goto Cleanup;
         }
 
+        if (argc > 4)
+        {
+            printf("Warning - Extra arguments will be ignored...\n");
+        }
+
         if (option == 'c')
         {
-            if (argc > 3)
-            {
-                printf("Warning - Extra arguments will be ignored...\n");
-            }
-
             if (i_w)
             {
                 printf("\n%s\n", s_n);
@@ -1947,8 +1955,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                // Use legal format by default
-                o_w = number_to_roman(s_n, 'l');
+                o_w = number_to_roman(s_n, param);
                 if (!o_w)
                     goto Cleanup;
 
@@ -1960,11 +1967,6 @@ int main(int argc, char *argv[])
         }
         else
         {
-            if (argc > 4)
-            {
-                printf("Warning - Extra arguments will be ignored...\n");
-            }
-
             // Call runner
             if (runner((struct Func_Call){
                     .mode = ROMAN_MODE,

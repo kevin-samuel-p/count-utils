@@ -9,8 +9,7 @@
  * 
  *      Double tilde blocks used for formatting strikethrough text on Discord.
  *      Pipes | used to represent tallies.
- *      Optional -# string as a tiny text formatter will be seen, must be ignored while parsing.
- *      Same goes for even rarer # big text formatter.
+ *      Optional text formatter strings like #, -#, ##, ###, etc. will be seen, must be ignored while parsing.
 **/
 
 #include <stdio.h>

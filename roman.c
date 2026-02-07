@@ -503,7 +503,8 @@ wchar_t *number_to_roman(const char *number, char representation)
     // Final touchups: default is legal representation
     if (representation == 'i')  // Idiomatic representation replacing I̅ with M
     {
-        wchar_t *replacer = wcsstr(roman, L"I̅");
+        wchar_t thousand[] = { L'I', L'\u0305', L'\0' };
+        wchar_t *replacer = wcsstr(roman, thousand);
         while (replacer)
         {
             *replacer = L'M';
@@ -512,7 +513,7 @@ wchar_t *number_to_roman(const char *number, char representation)
             memmove(replacer + 1, replacer + 2, tailLen * sizeof(wchar_t));
             
             --romanPtr;
-            replacer = wcsstr(roman, L"I̅");
+            replacer = wcsstr(roman, thousand);
         }
 
         roman[romanPtr] = L'\0';
