@@ -1,0 +1,35 @@
+Meme Counting Mode
+
+This mode supports meme numbers such as "69 numbers" and "420 numbers".
+This mode will never extend support to "67 numbers" or anything pertaining to the six-seven meme.
+
+Syntax:
+    counter meme <option> <meme_number>
+
+Options:
+    run / r
+        Starts a counting run using meme numbers, generating alternating values based on the meme number selected.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive meme numbers, depending on the meme number selected.
+
+Usage:
+    counter meme run <meme_number>
+    counter meme r <meme_number>
+
+    counter meme solorun <meme_number>
+    counter meme s <meme_number>
+
+Meme Numbers:
+    69 - Numbers containing "69"
+        Example: counter meme r 69    (Initiates 69 run)
+
+    420 - Numbers containing "420"
+        Example: counter meme r 420   (Initiates 420 run)
+
+    69420 - Numbers containing "69" or "420"
+	Example: counter meme r 69420 (Initiates 69/420 run)
+
+Notes:
+    Input for all functions should be a non-negative number.
+    Meme-number is not an optional argument and MUST be included.

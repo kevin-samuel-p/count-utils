@@ -2,67 +2,30 @@ Syntax of the Command Line Interface Tool:
 
 counter [mode] [option] [arguments]
 
-A counting mode is a specific counting system used in a specific counting channel.
+A counting mode is a specific counting system used in a counting channel.
 Several counting modes are currently supported by the bot. These are listed below.
 
-+-------------------+--------------------------------------------------------------------------------------+
-|   COUNTING MODE   |                                       DESCRIPTION                                    |
-+-------------------+--------------------------------------------------------------------------------------+
-|       binary      | Corresponds to binary (base 2) numbers and the respective binary counting channel.   |
-|                   | Also supports conversion to other bases (decimal, hexadecimal, octal).               |
-+-------------------+--------------------------------------------------------------------------------------+
-|       decimal     | Corresponds to normal numbers. Some features may be deprecated for compliance.       |
-|       normal      | Also supports conversion to other bases (binary, hexadecimal, octal).                |
-+-------------------+--------------------------------------------------------------------------------------+
-|       emoji       | Corresponds to emojified numbers and the respective emoji number channel.            |
-+-------------------+--------------------------------------------------------------------------------------+
-|    hexadecimal    | Corresponds to hexadecimal (base 16) numbers and the respective hexadecimal counting |
-|                   | channel. Also supports conversion to other bases (binary, decimal, octal).           |
-+-------------------+--------------------------------------------------------------------------------------+
-|     increasing    | Corresponds to the increasing numbers channel, which supports counting with only     |
-|                   | numbers that have digits arranged in non-decreasing order from left to right.        |
-+-------------------+--------------------------------------------------------------------------------------+
-|      japanese     | Corresponds to the Japanese counting channel, which supports translation between     |
-|                   | Hindu-Arabic numerals (standard numbers) and Japanese Kanji numerals.                |
-+-------------------+--------------------------------------------------------------------------------------+
-|       octal       | Corresponds to octal (base 8) numbers and the respective octal counting channel.     |
-|                   | Also supports conversion to other bases (binary, decimal, hexadecimal).              |
-+-------------------+--------------------------------------------------------------------------------------+
-|        meme       | Corresponds to counting channels involving memes like "69 numbers", "420 numbers",   |
-|                   | "69/420 numbers" with the exception to six-seven memes. [CITATION REQUIRED]          |
-+-------------------+--------------------------------------------------------------------------------------+
-|       mirror      | Corresponds to the mirrored numbers forum, which requires the order of digits to be  |
-|                   | reversed in every number.                                                            |
-+-------------------+--------------------------------------------------------------------------------------+
-|       morse       | Corresponds to the Morse code channel, which supports translation of numbers to      |
-|                   | Morse code and the deciphering of Morse code to numbers for user convenience.        |
-+-------------------+--------------------------------------------------------------------------------------+
-|       norep       | Corresponds to the non-repeating numbers channel, which supports only numbers that   |
-|                   | do not have recurring digits.                                                        |
-+-------------------+--------------------------------------------------------------------------------------+
-|        nwn        | Corresponds to the Numbers Within Numbers (NWN) channel, in which numbers are        |
-|                   | encapsulated at two levels.                                                          |
-+-------------------+--------------------------------------------------------------------------------------+
-|       nwnwn       | Corresponds to the Numbers Within Numbers Within Numbers (NWNWN) channel, featuring  |
-|                   | three levels of encapsulation, in contrast to classic NWN.                           |
-+-------------------+--------------------------------------------------------------------------------------+
-|       nwnwnn      | Corresponds to the Numbers Within Numbers With N Numbers (NWNWNN) channel, featuring |
-|                   | a variable degree of encapsulation based on the value held by the outermost layer.   |
-+-------------------+--------------------------------------------------------------------------------------+
-|     palindrome    | Corresponds to the palindrome counting channel, which supports only palindromic      |
-|                   | numbers in ascending order.                                                          |
-+-------------------+--------------------------------------------------------------------------------------+
-|         rep       | Corresponds to the repeating numbers channel, which supports only numbers that have  |
-|                   | recurring digits.                                                                    |
-+-------------------+--------------------------------------------------------------------------------------+
-|       roman       | Corresponds to the Roman numbers forum, which supports conversion of numbers to      |
-|                   | 
-morse             :
-norep
-nwn
-nwnwn
-nwnwnn
-palindrome
-rep
-roman
-tally
+• binary
+• decimal / normal
+• emoji
+• hexadecimal
+• increasing
+• japanese
+• octal
+• meme
+• mirror
+• morse
+• norep
+• nwn
+• nwnwn
+• nwnwnn
+• palindrome
+• rep
+• roman
+• tally
+
+To learn more about a specific counting mode and to see the available options or arguments for that mode, type:
+
+counter help [mode]
+
+Please note that the command line syntax is case-sensitive, and all commands follow lowercase.

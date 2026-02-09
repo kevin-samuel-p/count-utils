@@ -1,0 +1,38 @@
+Decimal Counting Mode
+
+This mode supports *counting and decimal number conversion.
+
+Syntax:
+    counter decimal <option> [argument]
+    counter normal <option> [argument]
+
+Note(*):
+    Decimal mode runs have been deprecated as a feature due to violation of counting bot rules.
+
+Options:
+    solorun / s
+        Starts a solo counting run by generating consecutive decimal numbers.
+
+    convert / c
+        Converts a decimal number to another base.
+
+Usage:
+    counter decimal solorun
+    counter decimal s
+
+    counter decimal convert <base>
+    counter decimal c <base>
+
+Supported Bases:
+    binary / bin / b
+        Example: counter decimal c d (decimal -> binary)
+
+    hexadecimal / hex / h
+        Example: counter decimal c h (decimal -> hexadecimal)
+
+    octal / oct / o
+        Example: counter decimal c o (decimal -> octal)
+
+Notes:
+    solorun does not take additional arguments.
+    Input for all functions should be a decimal number less than 2^64.

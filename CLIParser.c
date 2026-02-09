@@ -1167,6 +1167,15 @@ int main(int argc, char *argv[])
             goto Cleanup;
         }
 
+        if (argc < 4)
+        {
+            printf(
+                "Invalid Syntax - mirror runs requires four arguments.\n"
+                "Please check official documentation for the correct syntax.\n"
+            );
+            goto Cleanup;
+        }
+
         // Parse parameter
         if (
             strcmp(argv[3], "m") == 0 ||

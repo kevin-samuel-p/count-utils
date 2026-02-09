@@ -1,0 +1,34 @@
+Japanese Counting Mode
+
+This mode supports Japanese numerals, counting Japanese numbers, and translation to/from Hindu-Arabic numbers.
+
+Syntax:
+    counter japanese <option>
+
+Options:
+    run / r
+        Starts a counting run using Japanese numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive Japanese numbers.
+
+    convert / c (or) translate / t
+        Translates user-inputted number to Japanese number, and user-inputted Japanese number to Hindu-Arabic numeral.
+
+Usage:
+    counter japanese run
+    counter japanese r
+
+    counter japanese solorun
+    counter japanese s
+
+    counter japanese convert
+    counter japanese c
+
+    counter japanese translate
+    counter japanese t
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should either be a non-negative number or a Japanese number following proper Kanji rules.
+    Inputted number should have a value under 10^50.

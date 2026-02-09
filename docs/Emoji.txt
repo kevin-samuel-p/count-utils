@@ -1,0 +1,33 @@
+Emoji Counting Mode
+
+This mode supports emoji number counting and emojification of numbers.
+
+Syntax:
+    counter emoji <option>
+
+Options:
+    run / r
+        Starts a counting run using emoji numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive emoji numbers.
+
+    convert / c (or) emojify / e
+        Converts user-inputted number to emojis.
+
+Usage:
+    counter emoji run
+    counter emoji r
+
+    counter emoji solorun
+    counter emoji s
+
+    counter emoji convert
+    counter emoji c
+
+    counter emoji emojify
+    counter emoji e
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a non-negative number.

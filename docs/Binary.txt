@@ -1,0 +1,40 @@
+Binary Counting Mode
+
+This mode supports binary counting and binary number conversion.
+
+Syntax:
+    counter binary <option> [argument]
+
+Options:
+    run / r
+        Starts a counting run using binary numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive binary numbers.
+
+    convert / c
+        Converts a binary number to another base.
+
+Usage:
+    counter binary run
+    counter binary r
+
+    counter binary solorun
+    counter binary s
+
+    counter binary convert <base>
+    counter binary c <base>
+
+Supported Bases:
+    decimal / dec / d
+        Example: counter binary c d  (binary -> decimal)
+
+    hexadecimal / hex / h
+        Example: counter binary c h  (binary -> hexadecimal)
+
+    octal / oct / o
+        Example: counter binary c o  (binary -> octal)
+
+Notes:
+    run and solorun do not take additional arguments.
+    Input for all functions should be a binary number less than 65 digits long.

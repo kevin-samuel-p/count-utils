@@ -1,0 +1,40 @@
+Hexadecimal Counting Mode
+
+This mode supports hexadecimal counting and hexadecimal number conversion.
+
+Syntax:
+    counter hexadecimal <option> [argument]
+
+Options:
+    run / r
+        Starts a counting run using hexadecimal numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive hexadecimal numbers.
+
+    convert / c
+        Converts a hexadecimal number to another base.
+
+Usage:
+    counter hexadecimal run
+    counter hexadecimal r
+
+    counter hexadecimal solorun
+    counter hexadecimal s
+
+    counter hexadecimal convert <base>
+    counter hexadecimal c <base>
+
+Supported Bases:
+    binary / bin / b
+        Example: counter hexadecimal c b (hexadecimal -> binary)
+
+    decimal / dec / d
+        Example: counter hexadecimal c d (hexadecimal -> decimal)
+
+    octal / oct / o
+        Example: counter hexadecimal c o (hexadecimal -> octal)
+
+Notes:
+    run and solorun do not take additional arguments.
+    Input for all functions should be a hexadecimal number with less than 17 digits.

@@ -1,0 +1,29 @@
+Mirror Counting Mode
+
+This mode supports mirror counting, in which every number is reversed before it is written.
+
+Syntax:
+    counter mirror <option> <input_mode>
+
+Options:
+    run / r
+        Starts a counting run using mirror numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive mirror numbers.
+
+Usage:
+    counter mirror run <input_mode>
+    counter mirror r <input_mode>
+
+    counter mirror solorun <input_mode>
+    counter mirror s <input_mode>
+
+Input Modes:
+    mirror / m
+        Signifies that the inputted number is a mirrored (reversed) number.
+            Example: counter mirror r m  (Inputted number is a mirrored number)
+   
+    normal / n
+        Signifies that the inputted number is a normal number that is not mirrored/reversed.
+            Example: counter mirror r n  (Inputted number is NOT a mirrored number)
