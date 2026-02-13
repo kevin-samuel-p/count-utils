@@ -196,7 +196,15 @@ char *next_420_number(const char *number)
     {
         if (strcmp(nextNumber + n - 3, "420") < 0)
         {
-            strcpy(nextNumber + n - 3, "420");
+            if (nextNumber[n - 4] == '4' && strcmp(nextNumber + n - 3, "200") < 0)
+            {
+                strcpy(nextNumber + n - 3, "200");
+            }
+            else
+            {
+                strcpy(nextNumber + n - 3, "420");
+            }
+
             return nextNumber;
         }
 

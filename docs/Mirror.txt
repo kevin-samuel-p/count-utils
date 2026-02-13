@@ -27,3 +27,8 @@ Input Modes:
     normal / n
         Signifies that the inputted number is a normal number that is not mirrored/reversed.
             Example: counter mirror r n  (Inputted number is NOT a mirrored number)
+
+Note:
+    input_mode is not an optional argument and MUST be included.
+    Input for all functions should be a non-negative number.
+    For mirrored input, trailing zeroes (0 at the end of the number) is not allowed as it presents ambiguity and cannot provide a clear correct result.

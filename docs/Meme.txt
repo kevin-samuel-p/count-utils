@@ -32,4 +32,4 @@ Meme Numbers:
 
 Notes:
     Input for all functions should be a non-negative number.
-    Meme-number is not an optional argument and MUST be included.
+    meme_number is not an optional argument and MUST be included.

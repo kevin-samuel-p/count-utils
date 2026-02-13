@@ -1,0 +1,31 @@
+Non-Repeating Numbers Counting Mode
+
+This mode supports counting numbers with no recurring/repeating digits.
+
+Syntax:
+    counter norep <option>
+
+Options:
+    run / r
+        Starts a counting run using non-repeating numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive non-repeating numbers.
+
+    check / c
+        Checks whether a user-inputted number is non-repeating; i.e., the number has no recurring digits.
+
+Usage:
+    counter norep run
+    counter norep r
+
+    counter norep solorun
+    counter norep s
+
+    counter norep check
+    counter norep c
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a non-negative number less than or equal to 9876543210.
+    Leading zeroes (0s at the start) in the input number do not count and will be stripped.

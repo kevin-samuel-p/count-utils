@@ -1,0 +1,31 @@
+Repeating Numbers Counting Mode
+
+This mode supports counting numbers with recurring/repeating digits.
+
+Syntax:
+    counter rep <option>
+
+Options:
+    run / r
+        Starts a counting run using repeating numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive repeating numbers.
+
+    check / c
+        Checks whether a user-inputted number is repeating; i.e., the number has at least one recurring/repeating digit.
+
+Usage:
+    counter rep run
+    counter rep r
+
+    counter rep solorun
+    counter rep s
+
+    counter rep check
+    counter rep c
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a non-negative number less than or equal to 2^64-1.
+    Leading zeroes (0s at the start) in the input number do not count and will be stripped.

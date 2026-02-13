@@ -1,0 +1,33 @@
+Palindrome Counting Mode
+
+This mode supports palindrome number counting, in which every number is a palindromic number.
+A palindrome is a number that is the same after being reversed.
+
+Syntax:
+    counter palindrome <option>
+
+Options:
+    run / r
+        Starts a counting run using palindromic numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive palindromic numbers.
+
+    check / c
+        Checks whether a user-inputted number is a palindrome.
+
+Usage:
+    counter palindrome run
+    counter palindrome r
+
+    counter palindrome solorun
+    counter palindrome s
+
+    counter palindrome check
+    counter palindrome c
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a non-negative number.
+    Single-digit numbers do not count as palindromes.
+    Leading zeroes (0s at the start of the number) are stripped and do not count as part of the palindrome.

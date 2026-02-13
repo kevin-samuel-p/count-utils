@@ -1,0 +1,58 @@
+Numbers-Within-Numbers-Within-Numbers (NWNWN) Counting Mode
+
+This mode supports numbers-within-numbers-within-numbers.
+NWNWN is a recursive extension to NWN. An NWNWN number has three levels and is written as 
+    A.B.C
+where
+    A is the outer number,
+    B is the middle number, and
+    C is the inner number.
+
+Each level behaves like an NWN counter relative to the level above it.
+
+To see the base rules for NWN, type
+    counter help nwn
+
+Rules:
+    All numerals must be positive integers.
+    Each numeral may never exceed the numeral to its left (A >= B >= C).
+    Counting proceeds from right to left.
+    Increment the rightmost numeral (C) while C < B.
+    When C >= B, reset C to 1 and increment B.
+    When B >= A, reset B and C to 1 and increment A.
+
+Example Sequence:
+    1.1.1   // C == B == A → increment A, reset B and C
+    2.1.1
+    2.2.1
+    2.2.2   // C == B == A → increment A, reset B and C
+    3.1.1
+    3.2.1
+    3.2.2
+    3.3.1
+    3.3.2
+    3.3.3   // C == B == A → increment A, reset B and C
+    4.1.1
+    ...
+
+
+Syntax:
+    counter nwnwn <option>
+
+Options:
+    run / r
+        Starts a counting run using NWNWN numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive NWNWN numbers.
+
+Usage:
+    counter nwnwn run
+    counter nwnwn r
+
+    counter nwnwn solorun
+    counter nwnwn s
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a valid NWNWN number in the format A.B.C with no spaces.

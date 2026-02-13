@@ -1,0 +1,49 @@
+Numbers-Within-Numbers (NWN) Counting Mode
+
+This mode supports numbers-within-numbers.
+
+NWN is a two-level counting format written as 
+    A.B 
+where 
+    A is the outer counter, and
+    B is the inner counter.
+
+The inner counter (B) runs from 1 to the outer counter (A), then resets when the outer counter gets incremented.
+
+Rules:
+    Both numbers must be positive integers.
+    The inner number should not exceed the outer number.
+    Increment the inner number (B) while B < A.
+    When B = A, increment the outer number (A) and reset B to 1.
+
+Example Sequence:
+    1.1   // B == A → increment A, reset B
+    2.1   // B < A → increment B
+    2.2   // B == A → increment A, reset B
+    3.1
+    3.2
+    3.3   // B == A → increment A, reset B
+    4.1
+    ...
+
+
+Syntax:
+    counter nwn <option>
+
+Options:
+    run / r
+        Starts a counting run using NWN numbers, generating alternating values.
+
+    solorun / s
+        Starts a solo counting run by generating consecutive NWN numbers.
+
+Usage:
+    counter nwn run
+    counter nwn r
+
+    counter nwn solorun
+    counter nwn s
+
+Notes:
+    No additional arguments are taken.
+    Input for all functions should be a valid NWN number in the format A.B with no spaces.
