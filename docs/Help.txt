@@ -1,27 +1,28 @@
 COUNTER.EXE
 
 USAGE:
-  counter <mode> <option> [parameters]
+    counter <mode> <option> [parameters]
 
 MODES:
-  binary        Binary numbers and conversions
-  decimal       Decimal numbers and conversions
-  hexadecimal   Hexadecimal numbers and conversions
-  octal         Octal numbers and conversions
-  roman         Roman numerals
-  emoji         Emojified numbers
-  morse         Morse code numbers
-  tally         Tally mark counting
-  palindrome    Palindromic numbers
-  increasing    Non-decreasing digit numbers
-  norep         Numbers without repeating digits
-  rep           Numbers with repeating digits
-  mirror        Mirrored numbers
-  japanese      Japanese numerals
-  meme          69 / 420 themed counting
-  nwn           Numbers within numbers
-  nwnwn         Numbers within numbers within numbers
-  nwnwnn        Numbers within numbers with N numbers
+    binary        Binary numbers and conversions
+    decimal       Decimal numbers and conversions
+    hexadecimal   Hexadecimal numbers and conversions
+    octal         Octal numbers and conversions
+    roman         Roman numerals
+    emoji         Emojified numbers
+    morse         Morse code numbers
+    tally         Tally mark counting
+    palindrome    Palindromic numbers
+    increasing    Non-decreasing digit numbers
+    norep         Numbers without repeating digits
+    rep           Numbers with repeating digits
+    mirror        Mirrored numbers
+    japanese      Japanese numerals
+    meme          69 / 420 themed counting
+    nwn           Numbers within numbers
+    nwnwn         Numbers within numbers within numbers
+    nwnwnn        Numbers within numbers with N numbers
 
 Run:
-  counter help <mode>   for detailed help
+    counter help
+    counter help <mode>   for detailed help
