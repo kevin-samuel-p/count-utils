@@ -1,21 +1,30 @@
-Increasing Numbers Mode
+NAME
+    increasing
 
-This mode supports numbers with digits in non-decreasing order.
+DESCRIPTION
+    Work with numbers whose digits are in non-decreasing order.
+    A number is considered increasing if each digit is greater than
+    or equal to the digit before it.
 
-Syntax;
+USAGE
     counter increasing <option>
 
-Options:
-    run / r
-        Starts a counting run using emoji numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a counting run using numbers with digits
+        in non-decreasing order.
+        Generates alternating valid values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive emoji numbers.
+    solorun (s)
+        Start a solo counting run using numbers with digits
+        in non-decreasing order.
+        Generates consecutive valid values.
 
-    check / c
-        Checks whether the given number has digits in non-decreasing order.
+    check (c)
+        Check whether the input number has digits
+        in non-decreasing order.
 
-Usage:
+EXAMPLES
     counter increasing run
     counter increasing r
 
@@ -25,6 +34,6 @@ Usage:
     counter increasing check
     counter increasing c
 
-Notes:
-    No additional arguments are taken.
-    Input for all functions should be a non-negative number.
+NOTES
+    - No additional parameters are required.
+    - Input must be a non-negative number.

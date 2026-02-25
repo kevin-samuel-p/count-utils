@@ -1,0 +1,63 @@
+NAME
+    tally
+
+DESCRIPTION
+    Work with tally marks.
+    Supports counting using tally mark representations
+    and conversion to and from numeric values.
+
+USAGE
+    counter tally <option> <format>
+
+OPTIONS
+    run (r)
+        Start a counting run using tally marks.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using tally marks.
+        Generates consecutive values.
+
+    convert (c)
+        Convert a number to its tally mark representation
+        (using strikethrough formatting where appropriate),
+        or evaluate tally marks to determine their numeric value.
+
+FORMATS
+    default (d)
+        Uses default formatting (maximum 50 tallies per line).
+        Default format if parameter is not explicitly specified.
+
+    compact (c)
+        Uses compact formatting (removes newline characters).
+
+    big (b)
+        Uses large text formatting for tallies.
+
+    giant (g)
+        Uses giant text formatting for tallies.
+
+    impact (i)
+        Uses impact formatting (slightly enlarged and bold text).
+
+    tiny (t)
+        Uses tiny text formatting.
+
+EXAMPLES
+    counter tally run
+    counter tally r d
+    counter tally run big
+    counter tally r b
+
+    counter tally solorun compact
+    counter tally s c
+
+    counter tally convert
+    counter tally c
+
+NOTES
+    - If format is not specified for run or solorun, default format (d) is used.
+    - convert does not require a format parameter.
+    - Input must be a non-negative number or a valid tally mark sequence.
+    - Tally mark grouping follows standard 5-mark convention
+      (four vertical marks with a strikethrough for the fifth).

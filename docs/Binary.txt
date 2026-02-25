@@ -1,40 +1,46 @@
-Binary Counting Mode
+NAME
+    binary
 
-This mode supports binary counting and binary number conversion.
+DESCRIPTION
+    Work with binary numbers (base 2).
+    Supports binary counting runs and base conversion.
 
-Syntax:
-    counter binary <option> [argument]
+USAGE
+    counter binary <option> [parameters]
 
-Options:
-    run / r
-        Starts a counting run using binary numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a standard binary counting run.
+        Generates alternating binary values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive binary numbers.
+    solorun (s)
+        Start a solo binary counting run.
+        Generates consecutive binary values.
 
-    convert / c
-        Converts a binary number to another base.
+    convert (c) <target>
+        Convert a binary number to another base.
 
-Usage:
+CONVERSION TARGETS
+    decimal (d, dec)
+        Convert binary to decimal.
+
+    hexadecimal (h, hex)
+        Convert binary to hexadecimal.
+
+    octal (o, oct)
+        Convert binary to octal.
+
+EXAMPLES
     counter binary run
     counter binary r
 
     counter binary solorun
     counter binary s
 
-    counter binary convert <base>
-    counter binary c <base>
+    counter binary convert decimal
+    counter binary c d
 
-Supported Bases:
-    decimal / dec / d
-        Example: counter binary c d  (binary -> decimal)
-
-    hexadecimal / hex / h
-        Example: counter binary c h  (binary -> hexadecimal)
-
-    octal / oct / o
-        Example: counter binary c o  (binary -> octal)
-
-Notes:
-    run and solorun do not take additional arguments.
-    Input for all functions should be a binary number less than 65 digits long.
+NOTES
+    - run and solorun do not accept additional parameters.
+    - Input must be a binary number.
+    - Maximum supported length is 65 digits.

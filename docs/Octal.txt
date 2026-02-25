@@ -1,40 +1,51 @@
-Octal Counting Mode
+NAME
+    octal
 
-This mode supports octal counting and octal number conversion.
+DESCRIPTION
+    Work with octal numbers.
+    Supports counting runs and conversion between octal and other bases.
 
-Syntax:
+USAGE
     counter octal <option> [argument]
 
-Options:
-    run / r
-        Starts a counting run using octal numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a counting run using octal numbers.
+        Generates alternating values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive octal numbers.
+    solorun (s)
+        Start a solo counting run using octal numbers.
+        Generates consecutive values.
 
-    convert / c
-        Converts an octal number to another base.
+    convert (c)
+        Convert an octal number to another base.
 
-Usage:
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert octal to binary.
+
+    decimal (d, dec)
+        Convert octal to decimal.
+
+    hexadecimal (h, hex)
+        Convert octal to hexadecimal.
+        
+EXAMPLES
     counter octal run
     counter octal r
 
     counter octal solorun
     counter octal s
 
-    counter octal convert <base>
-    counter octal c <base>
+    counter octal convert binary
+    counter octal c b
 
-Supported Bases:
-    binary / bin / b
-        Example: counter octal c b (octal -> binary)
+    counter octal convert decimal
+    counter octal c d
 
-    decimal / dec / d
-        Example: counter octal c d (octal -> decimal)
+    counter octal convert hexadecimal
+    counter octal c h
 
-    hexadecimal / hex / h
-        Example: counter octal c h (octal -> hexadecimal)
-
-Notes:
-    run and solorun do not take additional arguments.
-    Input for all functions should be an octal number less than 2000000000000000000000. (21 zeroes)
+NOTES
+    - run and solorun do not take additional arguments.
+    - Input must be a valid octal number less than 2000000000000000000000 (21 digits).

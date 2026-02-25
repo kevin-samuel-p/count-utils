@@ -1,21 +1,28 @@
-Morse Code Counting Mode
+NAME
+    morse
 
-This mode supports Morse code numbers and translation to/from Hindu-Arabic numbers.
+DESCRIPTION
+    Work with Morse code numbers.
+    Supports counting runs using Morse code and translation
+    to and from Hindu-Arabic numerals.
 
-Syntax:
+USAGE
     counter morse <option>
 
-Options:
-    run / r
-        Starts a counting run using Morse code numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a counting run using Morse code numbers.
+        Generates alternating values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive Morse code numbers.
+    solorun (s)
+        Start a solo counting run using Morse code numbers.
+        Generates consecutive values.
 
-    convert / c
-        Translates user-inputted number to Morse code, and user-inputted Morse code to Hindu-Arabic numeral.
+    convert (c)
+        Convert a numeric input into Morse code.
+        Convert Morse code input into a Hindu-Arabic number.
 
-Usage:
+EXAMPLES
     counter morse run
     counter morse r
 
@@ -25,6 +32,6 @@ Usage:
     counter morse convert
     counter morse c
 
-Notes:
-    No additional arguments are taken.
-    Input for all functions should either be a non-negative number or a Morse code number following proper Morse code rules.
+NOTES
+    - No additional parameters are required.
+    - Input must be either a non-negative number or a valid Morse code number.

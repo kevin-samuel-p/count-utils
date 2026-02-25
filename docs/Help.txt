@@ -1,31 +1,27 @@
-Syntax of the Command Line Interface Tool:
+COUNTER.EXE
 
-counter [mode] [option] [arguments]
+USAGE:
+  counter <mode> <option> [parameters]
 
-A counting mode is a specific counting system used in a counting channel.
-Several counting modes are currently supported by the bot. These are listed below.
+MODES:
+  binary        Binary numbers and conversions
+  decimal       Decimal numbers and conversions
+  hexadecimal   Hexadecimal numbers and conversions
+  octal         Octal numbers and conversions
+  roman         Roman numerals
+  emoji         Emojified numbers
+  morse         Morse code numbers
+  tally         Tally mark counting
+  palindrome    Palindromic numbers
+  increasing    Non-decreasing digit numbers
+  norep         Numbers without repeating digits
+  rep           Numbers with repeating digits
+  mirror        Mirrored numbers
+  japanese      Japanese numerals
+  meme          69 / 420 themed counting
+  nwn           Numbers within numbers
+  nwnwn         Numbers within numbers within numbers
+  nwnwnn        Numbers within numbers with N numbers
 
-• binary
-• decimal / normal
-• emoji
-• hexadecimal
-• increasing
-• japanese
-• octal
-• meme
-• mirror
-• morse
-• norep
-• nwn
-• nwnwn
-• nwnwnn
-• palindrome
-• rep
-• roman
-• tally
-
-To learn more about a specific counting mode and to see the available options or arguments for that mode, type:
-
-counter help [mode]
-
-Please note that the command line syntax is case-sensitive, and all commands follow lowercase.
+Run:
+  counter help <mode>   for detailed help

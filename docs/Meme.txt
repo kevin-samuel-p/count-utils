@@ -1,35 +1,45 @@
-Meme Counting Mode
+NAME
+    meme
 
-This mode supports meme numbers such as "69 numbers" and "420 numbers".
-This mode will never extend support to "67 numbers" or anything pertaining to the six-seven meme.
+DESCRIPTION
+    Work with meme numbers such as "69" and "420".
+    Supports counting runs using numbers that contain specific meme digits.
 
-Syntax:
+USAGE
     counter meme <option> <meme_number>
 
-Options:
-    run / r
-        Starts a counting run using meme numbers, generating alternating values based on the meme number selected.
+OPTIONS
+    run (r)
+        Start a counting run using the selected meme number.
+        Generates alternating values based on the meme number.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive meme numbers, depending on the meme number selected.
+    solorun (s)
+        Start a solo counting run using the selected meme number.
+        Generates consecutive values based on the meme number.
 
-Usage:
-    counter meme run <meme_number>
-    counter meme r <meme_number>
+MEME NUMBERS
+    69
+        Numbers containing "69".
+        Example: counter meme r 69
 
-    counter meme solorun <meme_number>
-    counter meme s <meme_number>
+    420
+        Numbers containing "420".
+        Example: counter meme r 420
 
-Meme Numbers:
-    69 - Numbers containing "69"
-        Example: counter meme r 69    (Initiates 69 run)
+    69420
+        Numbers containing "69" or "420".
+        Example: counter meme r 69420
 
-    420 - Numbers containing "420"
-        Example: counter meme r 420   (Initiates 420 run)
+EXAMPLES
+    counter meme run 69
+    counter meme r 69
 
-    69420 - Numbers containing "69" or "420"
-	Example: counter meme r 69420 (Initiates 69/420 run)
+    counter meme solorun 420
+    counter meme s 420
 
-Notes:
-    Input for all functions should be a non-negative number.
-    meme_number is not an optional argument and MUST be included.
+    counter meme run 69420
+    counter meme r 69420
+
+NOTES
+    - Input must be a non-negative number.
+    - The <meme_number> argument is required for all options.

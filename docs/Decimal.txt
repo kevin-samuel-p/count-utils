@@ -1,38 +1,45 @@
-Decimal Counting Mode
+NAME
+    decimal (alias: normal)
 
-This mode supports *counting and decimal number conversion.
+DESCRIPTION
+    Work with decimal numbers (base 10).
+    Supports decimal number conversion and limited counting functionality.
 
-Syntax:
-    counter decimal <option> [argument]
-    counter normal <option> [argument]
+    NOTE:
+        Standard decimal run mode has been deprecated due to
+        violation of counting bot rules.
 
-Note(*):
-    Decimal mode runs have been deprecated as a feature due to violation of counting bot rules.
+USAGE
+    counter decimal <option> [parameters]
+    counter normal  <option> [parameters]
 
-Options:
-    solorun / s
-        Starts a solo counting run by generating consecutive decimal numbers.
+OPTIONS
+    solorun (s)
+        Start a solo counting run.
+        Generates consecutive decimal numbers.
 
-    convert / c
-        Converts a decimal number to another base.
+    convert (c) <target>
+        Convert a decimal number to another base.
 
-Usage:
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert decimal to binary.
+
+    hexadecimal (h, hex)
+        Convert decimal to hexadecimal.
+
+    octal (o, oct)
+        Convert decimal to octal.
+
+EXAMPLES
     counter decimal solorun
     counter decimal s
 
-    counter decimal convert <base>
-    counter decimal c <base>
+    counter decimal convert binary
+    counter decimal c b
 
-Supported Bases:
-    binary / bin / b
-        Example: counter decimal c d (decimal -> binary)
-
-    hexadecimal / hex / h
-        Example: counter decimal c h (decimal -> hexadecimal)
-
-    octal / oct / o
-        Example: counter decimal c o (decimal -> octal)
-
-Notes:
-    solorun does not take additional arguments.
-    Input for all functions should be a decimal number less than 2^64.
+NOTES
+    - The run option is deprecated and unavailable.
+    - solorun does not accept additional parameters.
+    - Input must be a valid unsigned decimal number.
+    - Maximum supported value is less than 2^64.

@@ -1,34 +1,39 @@
-Mirror Counting Mode
+NAME
+    mirror
 
-This mode supports mirror counting, in which every number is reversed before it is written.
+DESCRIPTION
+    Work with mirrored numbers.
+    Supports counting runs where numbers are reversed before processing.
 
-Syntax:
+USAGE
     counter mirror <option> <input_mode>
 
-Options:
-    run / r
-        Starts a counting run using mirror numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a counting run using mirrored numbers.
+        Generates alternating values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive mirror numbers.
+    solorun (s)
+        Start a solo counting run using mirrored numbers.
+        Generates consecutive values.
 
-Usage:
-    counter mirror run <input_mode>
-    counter mirror r <input_mode>
+INPUT MODES
+    mirror (m)
+        Indicates that the input number is mirrored (reversed).
+        Example: counter mirror r m
 
-    counter mirror solorun <input_mode>
-    counter mirror s <input_mode>
+    normal (n)
+        Indicates that the input number is normal (not mirrored).
+        Example: counter mirror r n
 
-Input Modes:
-    mirror / m
-        Signifies that the inputted number is a mirrored (reversed) number.
-            Example: counter mirror r m  (Inputted number is a mirrored number)
-   
-    normal / n
-        Signifies that the inputted number is a normal number that is not mirrored/reversed.
-            Example: counter mirror r n  (Inputted number is NOT a mirrored number)
+EXAMPLES
+    counter mirror run mirror
+    counter mirror r m
 
-Note:
-    input_mode is not an optional argument and MUST be included.
-    Input for all functions should be a non-negative number.
-    For mirrored input, trailing zeroes (0 at the end of the number) is not allowed as it presents ambiguity and cannot provide a clear correct result.
+    counter mirror solorun normal
+    counter mirror s n
+
+NOTES
+    - The <input_mode> argument is required for all options.
+    - Input must be a non-negative number.
+    - Mirrored input cannot have trailing zeroes, as this causes ambiguity.

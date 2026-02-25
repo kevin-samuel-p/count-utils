@@ -1,64 +1,69 @@
-Numbers-Within-Numbers With N Numbers (NWNWNN) Counting Mode
+NAME
+    nwnwnn
 
-This mode supports numbers-within-numbers with N numbers, an advanced, dynamic, recursive extension of NWN where the depth of the number is dependent on its first numeral.
+DESCRIPTION
+    Work with Numbers-Within-Numbers With N Numbers (NWNWNN).
+    NWNWNN is an advanced recursive extension of NWN where the depth
+    of the number is determined by its first numeral.
 
-An NWNWNN number consists of
-    A1.A2.A3.A4....Ak
-where
-    A1 is the outermost numeral,
-    k = A1 (the number contains exactly A1 numerals), and
-    each numeral should be less than or equal to the numeral before it.
+    An NWNWNN number is written as:
+        A1.A2.A3.A4....Ak
+    where:
+        - A1 is the outermost numeral
+        - k = A1 (the number contains exactly A1 numerals)
+        - Each numeral must be less than or equal to the numeral before it
 
-For all valid NWNWNN numbers,
-    A1 >= A2 >= A3 >= A4 >= ... >= Ak
-and k = A1.
+    For all valid NWNWNN numbers:
+        A1 >= A2 >= A3 >= ... >= Ak
 
-To see the base rules for NWN, type
-    counter help nwn
+    For base rules, see:
+        counter help nwn
 
-To see docs for NWNWN, type
-    counter help nwnwn
+    For NWNWN rules, see:
+        counter help nwnwn
 
-Rules:
-    All numerals must be positive integers.
-    The number must contains exactly A1 numerals.
-    Each numeral may never exceed the numeral on its left.
-    Incrementing proceeds from right to left.
-    Increment the rightmost numeral that is less than its left neighbor.
-    Reset all numerals following it to 1.
-    If all numerals are equal, increment the first numeral, increase the depth by 1, and reset all other numerals to 1.
+RULES
+    - All numerals must be positive integers.
+    - The number must contain exactly A1 numerals.
+    - Each numeral cannot exceed the numeral to its left.
+    - Counting proceeds from right to left:
+        - Increment the rightmost numeral that is less than its left neighbor.
+        - Reset all numerals following it to 1.
+        - If all numerals are equal, increment A1, increase depth by 1, and reset all other numerals to 1.
 
-Example Sequence:
+EXAMPLE SEQUENCE
     1           // depth = 1
     2.1         // depth = 2
-    2.2         // all equal → increment A₁, increase depth
+    2.2         // all equal → increment A1, increase depth
     3.1.1
     3.2.1
     3.2.2
     3.3.1
     3.3.2
-    3.3.3       // all equal → increment A₁, increase depth
+    3.3.3       // all equal → increment A1, increase depth
     4.1.1.1
     ...
 
-Syntax:
+USAGE
     counter nwnwnn <option>
 
-Options:
-    run / r
-        Starts a counting run using NWNWNN numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a counting run using NWNWNN numbers.
+        Generates alternating values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive NWNWNN numbers.
+    solorun (s)
+        Start a solo counting run using NWNWNN numbers.
+        Generates consecutive values.
 
-Usage:
+EXAMPLES
     counter nwnwnn run
     counter nwnwnn r
 
     counter nwnwnn solorun
     counter nwnwnn s
 
-Notes:
-    No additional arguments are taken.
-    Input for all functions should be a valid NWNWNN number in the format A1.A2.A3.A4...Ak with no spaces.
-    The number of numerals is always equal to the first numeral.
+NOTES
+    - No additional parameters are required.
+    - Input must be a valid NWNWNN number in the format A1.A2.A3.A4...Ak with no spaces.
+    - The number of numerals is always equal to the first numeral (A1).

@@ -1,40 +1,46 @@
-Hexadecimal Counting Mode
+NAME
+    hexadecimal
 
-This mode supports hexadecimal counting and hexadecimal number conversion.
+DESCRIPTION
+    Work with hexadecimal numbers (base 16).
+    Supports hexadecimal counting runs and base conversion.
 
-Syntax:
-    counter hexadecimal <option> [argument]
+USAGE
+    counter hexadecimal <option> [parameters]
 
-Options:
-    run / r
-        Starts a counting run using hexadecimal numbers, generating alternating values.
+OPTIONS
+    run (r)
+        Start a standard hexadecimal counting run.
+        Generates alternating hexadecimal values.
 
-    solorun / s
-        Starts a solo counting run by generating consecutive hexadecimal numbers.
+    solorun (s)
+        Start a solo hexadecimal counting run.
+        Generates consecutive hexadecimal values.
 
-    convert / c
-        Converts a hexadecimal number to another base.
+    convert (c) <target>
+        Convert a hexadecimal number to another base.
 
-Usage:
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert hexadecimal to binary.
+
+    decimal (d, dec)
+        Convert hexadecimal to decimal.
+
+    octal (o, oct)
+        Convert hexadecimal to octal.
+
+EXAMPLES
     counter hexadecimal run
     counter hexadecimal r
 
     counter hexadecimal solorun
     counter hexadecimal s
 
-    counter hexadecimal convert <base>
-    counter hexadecimal c <base>
+    counter hexadecimal convert binary
+    counter hexadecimal c b
 
-Supported Bases:
-    binary / bin / b
-        Example: counter hexadecimal c b (hexadecimal -> binary)
-
-    decimal / dec / d
-        Example: counter hexadecimal c d (hexadecimal -> decimal)
-
-    octal / oct / o
-        Example: counter hexadecimal c o (hexadecimal -> octal)
-
-Notes:
-    run and solorun do not take additional arguments.
-    Input for all functions should be a hexadecimal number with less than 17 digits.
+NOTES
+    - run and solorun do not accept additional parameters.
+    - Input must be a valid hexadecimal number.
+    - Maximum supported length is 16 digits (less than 17 digits).
