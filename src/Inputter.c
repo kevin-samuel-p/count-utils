@@ -2,9 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <windows.h>
-
 
 const char TEMP_FILE_NAME[] = 
     "Enter the number here, "
@@ -12,28 +9,59 @@ const char TEMP_FILE_NAME[] =
     "and close the file..txt"
 ;
 
-
-bool create_temp_file() 
+int create_temp_file() 
 {
     FILE *fp = fopen(TEMP_FILE_NAME, "w");
-    if (!fp) return false;
+    if (!fp) return 0;
 
     fclose(fp);
-    return true;
+    return 1;
 }
 
-
-bool await_user_input() 
+int await_user_input() 
 {
     char cmd[256];
-    snprintf(
-        cmd, sizeof(cmd), 
-        "notepad \"%s\"", 
-        TEMP_FILE_NAME
-    );
+
+    // Check for $EDITOR environment variable (Linux/macOS)
+    const char *editor = getenv("EDITOR");
+    if (!editor)
+    {
+        #ifdef _WIN32
+            // Windows-specific default editor
+            snprintf(
+                cmd, sizeof(cmd), 
+                "notepad \"%s\"", 
+                TEMP_FILE_NAME
+            );
+        #elif __APPLE__
+            // macOS default editor
+            snprintf(
+                cmd, sizeof(cmd),
+                "open -t \"%s\"",
+                TEMP_FILE_NAME
+            );
+        #else
+            // Linux default editor
+            sprintf(
+                cmd, sizeof(cmd),
+                "xdg-open \"%s\"",
+                TEMP_FILE_NAME
+            );
+        #endif
+    }
+    else
+    {
+        // User-preferred editor
+        snprintf(
+            cmd, sizeof(cmd),
+            "%s \"%s\"",
+            editor,
+            TEMP_FILE_NAME
+        );
+    }
+
     return system(cmd) == 0;
 }
-
 
 char *read_temp_file_utf8()
 {
@@ -120,7 +148,7 @@ char *read_temp_file_utf8()
 }
 
 
-bool delete_temp_file()
+int delete_temp_file()
 {
     return remove(TEMP_FILE_NAME) == 0;
 }

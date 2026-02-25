@@ -62,7 +62,6 @@ wchar_t *utf8_to_wide(const char *utf8)
     return wide;
 }
 
-
 void print_wide(const wchar_t *text)
 {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -77,7 +76,6 @@ void print_wide(const wchar_t *text)
         wprintf(L"%ls\n", text); // fallback
     }
 }
-
 
 void string_to_number(const char *number, unsigned long long **v)
 {
@@ -128,7 +126,6 @@ void string_to_number(const char *number, unsigned long long **v)
     **v = value;
 }
 
-
 bool is_valid_number(const char *number)
 {
     if (!number) return false;
@@ -139,7 +136,6 @@ bool is_valid_number(const char *number)
 
     return true;
 }
-
 
 char *strip_leading_zeroes(const char *number)
 {
@@ -183,7 +179,6 @@ char *strip_leading_zeroes(const char *number)
     return strippedNumber;
 }
 
-
 void increment_numstring(char **number)
 {
     int n = strlen(*number);
@@ -207,7 +202,6 @@ void increment_numstring(char **number)
     (*number)[n] = '0';
     (*number)[n + 1] = '\0';
 }
-
 
 // Helper function to strip embedded carriage returns
 void strip_carriage_return(char *s)
