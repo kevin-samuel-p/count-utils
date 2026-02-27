@@ -81,14 +81,4 @@ char *read_temp_file_utf8(void);
 bool delete_temp_file(void);
 
 
-/**
- * @brief Verifies numerical input and removes leading zeroes.
- * 
- * @return
- *  - Pointer to a heap-allocated string on success
- *  - NULL pointer for non-numerical input or if stripping function failed
- */
-char *sanitize(char *);
-
-
 #endif /* INPUTTER_H */

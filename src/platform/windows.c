@@ -148,4 +148,60 @@ cleanup:
     return result;
 }
 
+
+static HANDLE hIn;
+static DWORD original_mode;
+
+void enable_raw_mode()
+{
+    hIn = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hIn, &original_mode);
+
+    SetConsoleMode(hIn,
+        original_mode &
+        ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT)
+    );
+}
+
+void restore_mode()
+{
+    SetConsoleMode(hIn, original_mode);
+}
+
+int read_key()
+{
+    INPUT_RECORD ir;
+    DWORD eventsRead;
+
+    while (true)
+    {
+        ReadConsoleInput(hIn, &ir, 1, &eventsRead);
+        if (ir.EventType != KEY_EVENT)
+            continue;
+
+        KEY_EVENT_RECORD key = ir.Event.KeyEvent;
+        if (!key.bKeyDown)
+            continue;
+
+        switch(key.wVirtualKeyCode)
+        {
+            case VK_ESCAPE:
+                return KEY_ESC;
+
+            case VK_TAB:
+                DWORD mods = key.dwControlKeyState;
+                if (((mods & (
+                    LEFT_ALT_PRESSED |
+                    RIGHT_ALT_PRESSED |
+                    LEFT_CTRL_PRESSED |
+                    RIGHT_CTRL_PRESSED |
+                    SHIFT_PRESSED)) == 0)
+                ) { return KEY_TAB; }
+
+            default:
+                return KEY_OTHER;
+        }
+    }
+}
+
 #endif

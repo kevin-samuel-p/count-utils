@@ -9,6 +9,9 @@
 #include <wchar.h>
 #include <locale.h>
 
+#include <termios.h>
+#include <unistd.h>
+
 
 wchar_t *utf8_to_wide(const char *utf8)
 {
@@ -177,6 +180,44 @@ wchar_t *read_clipboard()
     free(utf8_result);
 
     return wide;
+}
+
+
+static struct termios original_termios;
+
+void enable_raw_mode()
+{
+    struct termios raw;
+
+    tcgetattr(STDIN_FILENO, &original_termios);
+    raw = original_termios;
+
+    raw.c_lflag &= ~(ICANON | ECHO);
+    raw.c_cc[VMIN] = 1;
+    raw.c_cc[VTIME] = 0;
+
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+}
+
+void restore_mode()
+{
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &original_termios);
+}
+
+int read_key()
+{
+    unsigned char c;
+
+    if (read(STDIN_FILENO, &c, 1) <= 0)
+        return KEY_OTHER;
+
+    if (c == 27)    // ESC
+        return KEY_ESC;
+
+    if (c == '\t')  // TAB
+        return KEY_TAB;
+
+    return KEY_OTHER;
 }
 
 #endif

@@ -9,7 +9,12 @@
     #define EDITOR_CMD "xdg-open \"%s\""
 #endif
 
-/* Functions go here */
+enum
+{
+    KEY_OTHER = 0,
+    KEY_TAB,
+    KEY_ESC
+};
 
 wchar_t *utf8_to_wide(const char *utf8);
 
@@ -19,6 +24,12 @@ bool copy_to_clipboard(const wchar_t *text);
 
 bool copy_utf8_to_clipboard(const char *text);
 
-wchar_t *read_clipboard();
+wchar_t *read_clipboard(void);
+
+void enable_raw_mode(void);
+
+void restore_mode(void);
+
+int read_key(void);
 
 #endif /* PLATFORM_H */

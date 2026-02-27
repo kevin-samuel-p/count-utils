@@ -177,3 +177,16 @@ void strip_string(char **v)
     if (temp)
         *v = temp;
 }
+
+bool sanitize(char **number)
+{
+    strip_carriage_return(*number);
+    strip_string(number);
+
+    if (!is_valid_number(*number)) 
+        return false;
+
+    strip_leading_zeroes(number);
+
+    return true;
+}

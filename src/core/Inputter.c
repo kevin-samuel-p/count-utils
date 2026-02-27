@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "MiscUtils.h";
 #include "platform.h";
 
 const char TEMP_FILE_NAME[] = 
@@ -132,11 +131,4 @@ char *read_temp_file_utf8()
 bool delete_temp_file()
 {
     return remove(TEMP_FILE_NAME) == 0;
-}
-
-char *sanitize(char *number)
-{
-    if (!is_valid_number(number)) return NULL;
-    strip_carriage_return(number);
-    strip_leading_zeroes(number);
 }

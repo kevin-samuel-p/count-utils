@@ -369,14 +369,7 @@ bool runner(struct Func_Call payload, char run_type)
     int iters = ('s' - run_type) + 1;
     bool ok = true;     // Return value
 
-    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-    INPUT_RECORD ir;
-    DWORD eventsRead;
-
-    // Optional: disable line buffering & echo
-    DWORD mode;
-    GetConsoleMode(hIn, &mode);
-    SetConsoleMode(hIn, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
+    enable_raw_mode();
 
     // Run mode enum only needed for context
     curr = dispatcher(payload);
@@ -401,70 +394,50 @@ bool runner(struct Func_Call payload, char run_type)
 
     while (true) 
     {
-        ReadConsoleInput(hIn, &ir, 1, &eventsRead);
-
-        if (ir.EventType != KEY_EVENT)
-            continue;
-
-        KEY_EVENT_RECORD key = ir.Event.KeyEvent;
-
-        // Only care about key-down events
-        if (!key.bKeyDown)
-            continue;
+        int key = read_key();
 
         // Abort on Esc
-        if (key.wVirtualKeyCode == VK_ESCAPE) 
+        if (key == KEY_ESC) 
         {
             free(curr);
             goto cleanup;
         }
 
         // Detect standalone Tab
-        if (key.wVirtualKeyCode == VK_TAB) 
+        if (key == KEY_TAB) 
         {
-            DWORD mods = key.dwControlKeyState;
-
-            if (((mods & (
-                    LEFT_ALT_PRESSED | 
-                    RIGHT_ALT_PRESSED |
-                    LEFT_CTRL_PRESSED | 
-                    RIGHT_CTRL_PRESSED |
-                    SHIFT_PRESSED)
-                ) == 0)
-            ) {
-                for (int i = 0; i < iters; i++)
+            for (int i = 0; i < iters; i++)
+            {
+                next = dispatcher(*curr);
+                free(curr);
+                
+                if (!next)
                 {
-                    next = dispatcher(*curr);
-                    free(curr);
-                    
-                    if (!next)
-                    {
-                        ok = false;
-                        goto cleanup;
-                    }
-
-                    curr = next;
+                    ok = false;
+                    goto cleanup;
                 }
 
-                printf("\n");
-
-                result = read_clipboard();
-                if (result)
-                {
-                    print_wide(result);
-                    free(result);
-                }
-
-                printf(
-                    "Next value copied to clipboard!\n"
-                    "Press Tab to copy next value, "
-                    "or press Esc to end the run.\n"
-                );
+                curr = next;
             }
+
+            printf("\n");
+
+            result = read_clipboard();
+            if (result)
+            {
+                print_wide(result);
+                free(result);
+            }
+
+            printf(
+                "Next value copied to clipboard!\n"
+                "Press Tab to copy next value, "
+                "or press Esc to end the run.\n"
+            );
         }
     }
 
 cleanup:
-    SetConsoleMode(hIn, mode);
+    restore_mode();
     return ok;
 }
