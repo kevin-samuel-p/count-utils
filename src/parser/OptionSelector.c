@@ -27,7 +27,8 @@ char is_custom_option(const char *option, enum CountMode mode)
     switch(mode)
     {
         case MODE_EMOJI:
-            if (strcmp(option, "e") == 0 || 
+            if (
+                strcmp(option, "e") == 0 || 
                 strcmp(option, "emojify") == 0
             ) {
                 ++ok;
@@ -35,7 +36,8 @@ char is_custom_option(const char *option, enum CountMode mode)
             }
         
         case MODE_JAPANESE:
-            if (strcmp(option, "t") == 0 ||
+            if (
+                strcmp(option, "t") == 0 ||
                 strcmp(option, "translate") == 0
             ) {
                 ++ok;

@@ -17,10 +17,8 @@
  * characters using the provided helper.
  *
  * @note
- *  - This implementation is Windows-specific.
- *  - Notepad is used as the editor for user input.
  *  - UTF-16 encoded files are explicitly rejected.
- */
+**/
 
 
 /**
@@ -81,6 +79,16 @@ char *read_temp_file_utf8(void);
  *  - false if the file could not be deleted
  */
 bool delete_temp_file(void);
+
+
+/**
+ * @brief Verifies numerical input and removes leading zeroes.
+ * 
+ * @return
+ *  - Pointer to a heap-allocated string on success
+ *  - NULL pointer for non-numerical input or if stripping function failed
+ */
+char *sanitize(char *);
 
 
 #endif /* INPUTTER_H */

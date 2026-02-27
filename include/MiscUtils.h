@@ -20,30 +20,6 @@
 
 
 /**
- * @brief Converts a UTF-8 encoded string to a wide-character string.
- *
- * This function converts a null-terminated UTF-8 string into a newly
- * allocated wide-character string (`wchar_t *`) using the Windows
- * `MultiByteToWideChar` API.
- *
- * @param utf8
- *  Pointer to a null-terminated UTF-8 encoded string.
- *
- * @return
- *  - Pointer to a newly allocated wide-character string on success.
- *  - NULL on failure, including:
- *      - Invalid UTF-8 sequences
- *      - Memory allocation failure
- *      - Conversion errors
- *
- * @note
- *  - The returned string is heap-allocated and must be freed by the caller.
- *  - If `utf8` is NULL, the function returns NULL immediately.
- */
-wchar_t *utf8_to_wide(const char *utf8);
-
-
-/**
  * @brief Parses a positive decimal string into an unsigned long long.
  *
  * This function attempts to parse a null-terminated decimal string
@@ -67,27 +43,6 @@ wchar_t *utf8_to_wide(const char *utf8);
  *  - The caller is responsible for freeing the allocated memory on success.
  */
 void string_to_number(const char *number, unsigned long long **v);
-
-
-/**
- * @brief Prints a wide-character string to the Windows console.
- * 
- * This function writes the given `wchar_t` string directly to the console using
- * the Windows API `WriteConsoleW()`. It avoids issues with the C runtime
- * and the current console code page, ensuring that Unicode characters (such as
- * Japanese kanji) are displayed correctly.
- * 
- * @param text Pointer to a null-terminated wide-character string to be printed.
- *             If NULL, the function does nothing.
- * 
- * @note The function writes a newline after the string.
- * @note If `GetStdHandle(STD_OUTPUT_HANDLE)` fails, it falls back to `wprintf()`.
- * 
- * @example
- * wchar_t *japanese = L"日本語";
- * print_wide(japanese);
- */
-void print_wide(const wchar_t *text);
 
 
 /**
@@ -143,7 +98,7 @@ bool is_valid_number(const char *number);
  * @warning
  *  - This function assumes the input has already been validated.
  */
-char *strip_leading_zeroes(const char *number);
+void strip_leading_zeroes(char **number);
 
 
 /**
@@ -169,7 +124,7 @@ void increment_numstring(char **number);
  * @brief Removes an embedded carriage return character from a string.
  *
  * This helper function scans the given null-terminated string and
- * truncates it at the first occurrence of a carriage return (`'\r'`).
+ * replaces carriage returns (`'\r'`) with newline characters (`'\n'`).
  * It is primarily used to sanitize input read from Windows-style
  * text files (CRLF line endings) or copy-pasted content, where a
  * trailing `'\r'` can cause string comparison and parsing failures.
@@ -181,6 +136,26 @@ void increment_numstring(char **number);
  * @note All `'\r'` characters are replaced with `'\n'` characters.
  */
 void strip_carriage_return(char *s);
+
+
+/**
+ * @brief Removes padding (whitespaces and newlines) from the left and right of a string.
+ * 
+ * This helper functions scans the given null-terminated string 
+ * from both the start and the end for a contiguous block of padding
+ * characters (`" \\n"`) and removes this padding. It is primarily used
+ * to sanitize input read from text files, where a trailing/leading 
+ * whitespace or newline inadvertently inserted by the user might lead
+ * to a true negative during parsing.
+ * 
+ * The function modifies the input string pointer's value, and might
+ * attempt to reallocate the memory block.
+ * 
+ * @param v 
+ *      Pointer to a pointer to a null-terminated character buffer
+ *      to sanitize.
+ */
+void strip_string(char **v);
 
 
 #endif /* MISCUTILS_H */

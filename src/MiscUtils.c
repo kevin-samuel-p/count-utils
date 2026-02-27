@@ -12,70 +12,9 @@
 #include <string.h>
 #include <wchar.h>
 #include <ctype.h>
-#include <windows.h>
 #include <errno.h>
 
 
-wchar_t *utf8_to_wide(const char *utf8)
-{
-    if (!utf8)
-    {
-        printf("Bad Input - NULL string.\n");
-        return NULL;
-    }
-
-    int len = MultiByteToWideChar(
-        CP_UTF8,
-        MB_ERR_INVALID_CHARS,
-        utf8,
-        -1,
-        NULL, 
-        0
-    );
-
-    if (len == 0)
-    {
-        printf("Error - Could not process multibyte string.\n");
-        return NULL;
-    }
-
-    wchar_t *wide = malloc((size_t)len * sizeof(wchar_t));
-    if (!wide)
-    {
-        printf("Error - malloc failure.\n");
-        return NULL;
-    }
-
-    if (!MultiByteToWideChar(
-        CP_UTF8,
-        MB_ERR_INVALID_CHARS,
-        utf8,
-        -1,
-        wide,
-        len
-    )) {
-        printf("Bad Input - Input contains malformed UTF-8 sequences.\n");
-        free(wide);
-        return NULL;
-    }
-
-    return wide;
-}
-
-void print_wide(const wchar_t *text)
-{
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hOut != INVALID_HANDLE_VALUE)
-    {
-        DWORD written;
-        WriteConsoleW(hOut, text, (DWORD)wcslen(text), &written, NULL);
-        WriteConsoleW(hOut, L"\n", 1, &written, NULL);
-    }
-    else
-    {
-        wprintf(L"%ls\n", text); // fallback
-    }
-}
 
 void string_to_number(const char *number, unsigned long long **v)
 {
@@ -137,46 +76,35 @@ bool is_valid_number(const char *number)
     return true;
 }
 
-char *strip_leading_zeroes(const char *number)
+void strip_leading_zeroes(char **number)
 {
     // Only works for valid numbers
-    if (!number)
+    if (!number || !*number)
     {
-        printf("Bad Input - NULL ptr");
-        return NULL;
+        printf("Bad Input - NULL ptr.\n");
+        return;
     }
 
-    int n = strlen(number);
-    char *strippedNumber;
+    char *num = *number;
+    int n = strlen(num);
 
     int offset;
     for (
         offset = 0; 
-        offset < n - 1 && *(number + offset) == '0'; 
+        offset < n - 1 && *(num + offset) == '0'; 
         offset++
     );
 
-    strippedNumber = malloc((n - offset + 1) * sizeof(char));
-    if (!strippedNumber)
-    {
-        printf("Error - malloc failure.\n");
-        return NULL;
-    }
+    memmove(
+        num, 
+        num + offset, 
+        n + 1 - offset
+    );
 
-    for (int i = offset; i < n; i++)
-    {
-        if (!isdigit((unsigned char)number[i]))
-        {
-            printf("Bad Input - Invalid number.\n");
-            free(strippedNumber);
-            return NULL;
-        }
-
-        strippedNumber[i - offset] = number[i];
-    }
-    strippedNumber[n - offset] = '\0';
-    
-    return strippedNumber;
+    // Try realloc to save memory
+    char *tmp = realloc(num, n + 1 - offset);
+    if (tmp)
+        *number = tmp;
 }
 
 void increment_numstring(char **number)
@@ -214,4 +142,38 @@ void strip_carriage_return(char *s)
 
         p++;
     }
+}
+
+void strip_string(char **v)
+{
+    char *s = *v;
+    const char PADDING[] = " \n";
+
+    // Remove newline characters and whitespace at the beginning and end of the string
+    int n = strlen(s);
+    int i;
+
+    // lstrip
+    for (
+        i = 0; 
+        i < n && strchr(PADDING, s[i]); 
+        i++
+    );
+    memmove(s, s + i, n - i + 1);
+
+    // Adjust new length
+    n -= i;
+
+    // rstrip
+    for (
+        i = n - 1;
+        i >= 0 && strchr(PADDING, s[i]);
+        i--
+    );
+    s[i + 1] = '\0';
+
+    // Attempt realloc
+    char *temp = realloc(s, i + 2);
+    if (temp)
+        *v = temp;
 }

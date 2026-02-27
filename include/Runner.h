@@ -18,32 +18,6 @@
 
 
 /**
- * @enum RunMode
- * @brief Enumeration of supported execution modes.
- *
- * Each mode implies a specific function signature and argument interpretation.
- * Supplying a mismatched function pointer for a given mode results in undefined
- * behavior.
- */
-enum RunMode
-{
-    EMOJI_MODE,        /**< Numeric string → emoji representation */
-    INCREASING_MODE,   /**< Next increasing number */
-    JAPANESE_MODE,     /**< Numeric string → Japanese numeral representation */
-    MEME_MODE,         /**< Meme-number incrementers (e.g. 69, 420, etc.) */
-    MIRROR_MODE,       /**< Mirror-number generation */
-    MORSE_MODE,        /**< Numeric string → Morse code */
-    NOREP_MODE,        /**< Next non-repeating-digit number */
-    NWNS_MODE,         /**< NWN, NWNWN, and NWNWNN modes */
-    PALINDROME_MODE,   /**< Next palindrome number */
-    RADIX_MODE,        /**< Arbitrary radix increment (binary, decimal, octal or hexadecimal) */
-    REP_MODE,          /**< Next repeating-digit number */
-    ROMAN_MODE,        /**< Numeric string → Roman numeral representation */
-    TALLY_MODE         /**< Tally-mark formatting mode */
-};
-
-
-/**
  * @struct Func_Call
  * @brief Describes a callable transformation operation.
  *

@@ -5,9 +5,9 @@
 #include <stddef.h>
 #include <limits.h>
 #include <wchar.h>
-#include <windows.h>
 
-#include "ClipboardFunctions.h"
+#include "platform.h";
+#include "ModeSelector.h";
 #include "MiscUtils.h"
 
 
@@ -25,8 +25,8 @@ struct Func_Call *dispatcher(struct Func_Call call)
 
     switch (call.mode)
     {
-        case EMOJI_MODE:
-        case MORSE_MODE:
+        case MODE_EMOJI:
+        case MODE_MORSE:
         {
             if (!call.arg.num_char_ptr)
             {
@@ -68,9 +68,9 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case MEME_MODE:
-        case INCREASING_MODE:
-        case PALINDROME_MODE:
+        case MODE_MEME:
+        case MODE_INCREASING:
+        case MODE_PALINDROME:
         {
             if (!call.arg.num_char_ptr)
             {
@@ -103,7 +103,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case JAPANESE_MODE:
+        case MODE_JAPANESE:
         {
             if (!call.arg.num_char_ptr)
             {
@@ -141,7 +141,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case MIRROR_MODE:
+        case MODE_MIRROR:
         {
             if (
                 !call.arg.num_char_ptr || 
@@ -179,7 +179,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case NOREP_MODE:
+        case MODE_NOREP:
         {
             // Signature matches next_non_repeating_number()
             long long (*incr)(unsigned long long) = call.func.incrementer;
@@ -200,8 +200,13 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case NWNS_MODE:
-        case RADIX_MODE:
+        case MODE_NWN:
+        case MODE_NWNWN:
+        case MODE_NWNWNN:
+        case MODE_BINARY:
+        case MODE_DECIMAL:
+        case MODE_HEXADECIMAL:
+        case MODE_OCTAL:
         {
             if (
                 !call.arg.num_char_ptr || 
@@ -238,7 +243,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
         
-        case REP_MODE:
+        case MODE_REP:
         {
             // Match signature to next_repeating_number()
             unsigned long long (*incr)(unsigned long long) = call.func.incrementer;
@@ -259,7 +264,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case ROMAN_MODE:
+        case MODE_ROMAN:
         {
             if (
                 !call.arg.num_char_ptr || 
@@ -304,7 +309,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case TALLY_MODE:
+        case MODE_TALLY:
         {
             if (
                 !call.extra_args || 
@@ -338,7 +343,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
 
     if ((
         // Copying to clipboard failed
-        (call.mode == JAPANESE_MODE || call.mode == ROMAN_MODE) ? 
+        (call.mode == MODE_JAPANESE || call.mode == MODE_ROMAN) ? 
             !copy_to_clipboard((wchar_t *)res) : 
             !copy_utf8_to_clipboard((char *)res)
         )

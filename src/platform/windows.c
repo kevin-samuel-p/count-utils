@@ -1,9 +1,75 @@
-#include "ClipboardFunctions.h"
+#ifdef _WIN32
+
+#include <windows.h>
+#include "platform.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <windows.h>
+#include <string.h>
+#include <wchar.h>
 
+
+wchar_t *utf8_to_wide(const char *utf8)
+{
+    if (!utf8)
+    {
+        printf("Bad Input - NULL string.\n");
+        return NULL;
+    }
+
+    int len = MultiByteToWideChar(
+        CP_UTF8,
+        MB_ERR_INVALID_CHARS,
+        utf8,
+        -1,
+        NULL, 
+        0
+    );
+
+    if (len == 0)
+    {
+        printf("Error - Could not process multibyte string.\n");
+        return NULL;
+    }
+
+    wchar_t *wide = malloc((size_t)len * sizeof(wchar_t));
+    if (!wide)
+    {
+        printf("Error - malloc failure.\n");
+        return NULL;
+    }
+
+    if (!MultiByteToWideChar(
+        CP_UTF8,
+        MB_ERR_INVALID_CHARS,
+        utf8,
+        -1,
+        wide,
+        len
+    )) {
+        printf("Bad Input - Input contains malformed UTF-8 sequences.\n");
+        free(wide);
+        return NULL;
+    }
+
+    return wide;
+}
+
+void print_wide(const wchar_t *text)
+{
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut != INVALID_HANDLE_VALUE)
+    {
+        DWORD written;
+        WriteConsoleW(hOut, text, (DWORD)wcslen(text), &written, NULL);
+        WriteConsoleW(hOut, L"\n", 1, &written, NULL);
+    }
+    else
+    {
+        wprintf(L"%ls\n", text); // fallback
+    }
+}
 
 bool copy_to_clipboard(const wchar_t *text) 
 {
@@ -33,7 +99,6 @@ bool copy_to_clipboard(const wchar_t *text)
     return true;
 }
 
-
 bool copy_utf8_to_clipboard(const char *text) 
 {
     int wcharCount = MultiByteToWideChar(CP_UTF8, 0, text, -1, NULL, 0);
@@ -51,7 +116,6 @@ bool copy_utf8_to_clipboard(const char *text)
 
     return result;
 }
-
 
 wchar_t *read_clipboard()
 {
@@ -83,3 +147,5 @@ cleanup:
     CloseClipboard();
     return result;
 }
+
+#endif
