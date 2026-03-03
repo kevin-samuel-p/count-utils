@@ -9,7 +9,7 @@ DESCRIPTION
 
     The inner counter (B) runs from 1 to A, then resets when
     the outer counter (A) increments.
-
+=
 RULES
     - Both A and B must be positive integers.
     - The inner number (B) cannot exceed the outer number (A).
@@ -25,7 +25,7 @@ EXAMPLE SEQUENCE
     3.3   // B == A → increment A, reset B
     4.1
     ...
-
+=
 USAGE
     counter nwn <option>
 
@@ -37,14 +37,15 @@ OPTIONS
     solorun (s)
         Start a solo counting run using NWN numbers.
         Generates consecutive values.
-
+=
 EXAMPLES
     counter nwn run
     counter nwn r
 
     counter nwn solorun
     counter nwn s
-
+=
 NOTES
     - No additional parameters are required.
     - Input must be a valid NWN number in the format A.B with no spaces.
+=

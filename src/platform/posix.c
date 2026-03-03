@@ -11,6 +11,7 @@
 
 #include <termios.h>
 #include <unistd.h>
+#include <limits.h>
 
 
 wchar_t *utf8_to_wide(const char *utf8)

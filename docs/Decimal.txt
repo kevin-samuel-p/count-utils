@@ -8,10 +8,10 @@ DESCRIPTION
     NOTE:
         Standard decimal run mode has been deprecated due to
         violation of counting bot rules.
-
+=
 USAGE
-    counter decimal <option> [parameters]
-    counter normal  <option> [parameters]
+    counter decimal <option> [target]
+    counter normal  <option> [target]
 
 OPTIONS
     solorun (s)
@@ -20,7 +20,7 @@ OPTIONS
 
     convert (c) <target>
         Convert a decimal number to another base.
-
+=
 CONVERSION TARGETS
     binary (b, bin)
         Convert decimal to binary.
@@ -30,16 +30,17 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert decimal to octal.
-
+=
 EXAMPLES
     counter decimal solorun
     counter decimal s
 
     counter decimal convert binary
     counter decimal c b
-
+=
 NOTES
     - The run option is deprecated and unavailable.
     - solorun does not accept additional parameters.
     - Input must be a valid unsigned decimal number.
     - Maximum supported value is less than 2^64.
+=

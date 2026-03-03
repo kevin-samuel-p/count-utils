@@ -5,7 +5,7 @@ DESCRIPTION
     Work with numbers whose digits are in non-decreasing order.
     A number is considered increasing if each digit is greater than
     or equal to the digit before it.
-
+=
 USAGE
     counter increasing <option>
 
@@ -23,7 +23,7 @@ OPTIONS
     check (c)
         Check whether the input number has digits
         in non-decreasing order.
-
+=
 EXAMPLES
     counter increasing run
     counter increasing r
@@ -33,7 +33,8 @@ EXAMPLES
 
     counter increasing check
     counter increasing c
-
+=
 NOTES
     - No additional parameters are required.
     - Input must be a non-negative number.
+=

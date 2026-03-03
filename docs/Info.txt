@@ -11,3 +11,7 @@ Official GitHub link: https://github.com/kevin-samuel-p/counting-utils/
 
 For queries, contact sadgeis12@Discord
 PS; PRs and Suggestions accepted for novel counting channels.
+
+For general help, type the command
+    counter help
+=

@@ -9,6 +9,8 @@
 #include <string.h>
 #include <wchar.h>
 
+static HANDLE hIn;
+static DWORD original_mode;
 
 wchar_t *utf8_to_wide(const char *utf8)
 {
@@ -147,10 +149,6 @@ cleanup:
     CloseClipboard();
     return result;
 }
-
-
-static HANDLE hIn;
-static DWORD original_mode;
 
 void enable_raw_mode()
 {

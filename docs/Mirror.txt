@@ -4,7 +4,7 @@ NAME
 DESCRIPTION
     Work with mirrored numbers.
     Supports counting runs where numbers are reversed before processing.
-
+=
 USAGE
     counter mirror <option> <input_mode>
 
@@ -16,7 +16,7 @@ OPTIONS
     solorun (s)
         Start a solo counting run using mirrored numbers.
         Generates consecutive values.
-
+=
 INPUT MODES
     mirror (m)
         Indicates that the input number is mirrored (reversed).
@@ -25,15 +25,16 @@ INPUT MODES
     normal (n)
         Indicates that the input number is normal (not mirrored).
         Example: counter mirror r n
-
+=
 EXAMPLES
     counter mirror run mirror
     counter mirror r m
 
     counter mirror solorun normal
     counter mirror s n
-
+=
 NOTES
     - The <input_mode> argument is required for all options.
     - Input must be a non-negative number.
     - Mirrored input cannot have trailing zeroes, as this causes ambiguity.
+=

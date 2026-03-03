@@ -12,7 +12,7 @@ DESCRIPTION
     Each level behaves like an NWN counter relative to the level above it.
     For base NWN rules, see:
         counter help nwn
-
+=
 RULES
     - All numerals must be positive integers.
     - Each numeral cannot exceed the numeral to its left (A >= B >= C).
@@ -34,7 +34,7 @@ EXAMPLE SEQUENCE
     3.3.3   // C == B == A → increment A, reset B and C
     4.1.1
     ...
-
+=
 USAGE
     counter nwnwn <option>
 
@@ -46,14 +46,15 @@ OPTIONS
     solorun (s)
         Start a solo counting run using NWNWN numbers.
         Generates consecutive values.
-
+=
 EXAMPLES
     counter nwnwn run
     counter nwnwn r
 
     counter nwnwn solorun
     counter nwnwn s
-
+=
 NOTES
     - No additional parameters are required.
     - Input must be a valid NWNWN number in the format A.B.C with no spaces.
+=

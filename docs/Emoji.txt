@@ -4,7 +4,7 @@ NAME
 DESCRIPTION
     Work with emoji-formatted numbers.
     Supports emoji counting runs and conversion of numbers into emoji form.
-
+=
 USAGE
     counter emoji <option>
 
@@ -23,7 +23,7 @@ OPTIONS
     emojify (e)
         Alias for convert.
         Convert a numeric input into its emoji representation.
-
+=
 EXAMPLES
     counter emoji run
     counter emoji r
@@ -36,7 +36,8 @@ EXAMPLES
 
     counter emoji emojify
     counter emoji e
-
+=
 NOTES
     - No additional parameters are required.
     - Input must be a non-negative number.
+=

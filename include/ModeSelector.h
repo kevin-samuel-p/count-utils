@@ -19,6 +19,7 @@ extern "C" {
  */
 enum CountMode
 {
+    MODE_HELP = 1,     /**< Help mode */
     MODE_BINARY,       /**< Binary counting mode */
     MODE_DECIMAL,      /**< Decimal counting mode */
     MODE_EMOJI,        /**< Emoji counting mode */

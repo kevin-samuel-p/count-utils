@@ -1,3 +1,5 @@
+#include "CustomActions.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <limits.h>
@@ -39,9 +41,10 @@ void conversion_output_w(const wchar_t *string)
 
 // -------- ACTION FUNCTIONS --------
 
-bool convert_base(const char *number, enum CountingMode mode, enum Radix convertTo)
+bool convert_base(const char *number, enum CountingMode mode, char target)
 {
     enum Radix convertFrom;
+    enum Radix convertTo;
 
     switch(mode)
     {
@@ -59,6 +62,25 @@ bool convert_base(const char *number, enum CountingMode mode, enum Radix convert
 
         case MODE_OCTAL:
             convertFrom = OCTAL;
+        break;
+    }
+
+    switch(target)
+    {
+        case 'b':
+            convertTo = BINARY;
+        break;
+
+        case 'd':
+            convertTo = DECIMAL;
+        break;
+
+        case 'h':
+            convertTo = HEXADECIMAL;
+        break;
+
+        case 'o':
+            convertTo = OCTAL;
         break;
     }
 

@@ -5,7 +5,7 @@ DESCRIPTION
     Work with palindromic numbers.
     Supports counting runs where numbers are palindromes.
     A palindrome is a number that reads the same forward and backwards.
-
+=
 USAGE
     counter palindrome <option>
 
@@ -20,7 +20,7 @@ OPTIONS
 
     check (c)
         Checks whether a user-inputted number is a palindrome.
-
+=
 EXAMPLES
     counter palindrome run
     counter palindrome r
@@ -30,9 +30,10 @@ EXAMPLES
 
     counter palindrome check
     counter palindrome c
-
+=
 NOTES
     - No additional arguments are taken.
     - Input must be a non-negative number.
     - Single-digit numbers do not count as palindromes.
     - Leading zeroes (0s at the start of the number) are stripped and do not count.
+=

@@ -4,9 +4,9 @@ NAME
 DESCRIPTION
     Work with octal numbers.
     Supports counting runs and conversion between octal and other bases.
-
+=
 USAGE
-    counter octal <option> [argument]
+    counter octal <option> [target]
 
 OPTIONS
     run (r)
@@ -19,7 +19,7 @@ OPTIONS
 
     convert (c)
         Convert an octal number to another base.
-
+=
 CONVERSION TARGETS
     binary (b, bin)
         Convert octal to binary.
@@ -29,7 +29,7 @@ CONVERSION TARGETS
 
     hexadecimal (h, hex)
         Convert octal to hexadecimal.
-        
+=       
 EXAMPLES
     counter octal run
     counter octal r
@@ -45,7 +45,8 @@ EXAMPLES
 
     counter octal convert hexadecimal
     counter octal c h
-
+=
 NOTES
     - run and solorun do not take additional arguments.
     - Input must be a valid octal number less than 2000000000000000000000 (21 digits).
+=

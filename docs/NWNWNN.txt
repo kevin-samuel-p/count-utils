@@ -21,7 +21,7 @@ DESCRIPTION
 
     For NWNWN rules, see:
         counter help nwnwn
-
+=
 RULES
     - All numerals must be positive integers.
     - The number must contain exactly A1 numerals.
@@ -43,7 +43,7 @@ EXAMPLE SEQUENCE
     3.3.3       // all equal → increment A1, increase depth
     4.1.1.1
     ...
-
+=
 USAGE
     counter nwnwnn <option>
 
@@ -55,15 +55,16 @@ OPTIONS
     solorun (s)
         Start a solo counting run using NWNWNN numbers.
         Generates consecutive values.
-
+=
 EXAMPLES
     counter nwnwnn run
     counter nwnwnn r
 
     counter nwnwnn solorun
     counter nwnwnn s
-
+=
 NOTES
     - No additional parameters are required.
     - Input must be a valid NWNWNN number in the format A1.A2.A3.A4...Ak with no spaces.
     - The number of numerals is always equal to the first numeral (A1).
+=

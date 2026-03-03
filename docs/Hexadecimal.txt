@@ -4,9 +4,9 @@ NAME
 DESCRIPTION
     Work with hexadecimal numbers (base 16).
     Supports hexadecimal counting runs and base conversion.
-
+=
 USAGE
-    counter hexadecimal <option> [parameters]
+    counter hexadecimal <option> [target]
 
 OPTIONS
     run (r)
@@ -19,7 +19,7 @@ OPTIONS
 
     convert (c) <target>
         Convert a hexadecimal number to another base.
-
+=
 CONVERSION TARGETS
     binary (b, bin)
         Convert hexadecimal to binary.
@@ -29,7 +29,7 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert hexadecimal to octal.
-
+=
 EXAMPLES
     counter hexadecimal run
     counter hexadecimal r
@@ -39,8 +39,9 @@ EXAMPLES
 
     counter hexadecimal convert binary
     counter hexadecimal c b
-
+=
 NOTES
     - run and solorun do not accept additional parameters.
     - Input must be a valid hexadecimal number.
     - Maximum supported length is 16 digits (less than 17 digits).
+=

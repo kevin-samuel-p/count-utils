@@ -26,3 +26,4 @@ MODES:
 Run:
     counter help
     counter help <mode>   for detailed help
+=

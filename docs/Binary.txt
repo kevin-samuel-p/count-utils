@@ -4,9 +4,9 @@ NAME
 DESCRIPTION
     Work with binary numbers (base 2).
     Supports binary counting runs and base conversion.
-
+=
 USAGE
-    counter binary <option> [parameters]
+    counter binary <option> [target]
 
 OPTIONS
     run (r)
@@ -19,7 +19,7 @@ OPTIONS
 
     convert (c) <target>
         Convert a binary number to another base.
-
+=
 CONVERSION TARGETS
     decimal (d, dec)
         Convert binary to decimal.
@@ -29,7 +29,7 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert binary to octal.
-
+=
 EXAMPLES
     counter binary run
     counter binary r
@@ -39,8 +39,9 @@ EXAMPLES
 
     counter binary convert decimal
     counter binary c d
-
+=
 NOTES
     - run and solorun do not accept additional parameters.
     - Input must be a binary number.
     - Maximum supported length is 65 digits.
+=
