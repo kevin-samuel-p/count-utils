@@ -26,16 +26,16 @@ enum CountMode
     MODE_HEXADECIMAL,  /**< Hexadecimal counting mode */
     MODE_INCREASING,   /**< Increasing numbers counting mode */
     MODE_JAPANESE,     /**< Japanese numerals counting mode */
-    MODE_MIRROR,       /**< Mirror numbers counting mode */
     MODE_MEME,         /**< Meme numbers (69, 420) counting mode */
+    MODE_MIRROR,       /**< Mirror numbers counting mode */
     MODE_MORSE,        /**< Morse code counting mode */
+    MODE_NOREP,        /**< Non-repeating numbers counting mode */
     MODE_NWN,          /**< Numbers-Within-Numbers counting mode */
     MODE_NWNWN,        /**< Numbers-Within-Numbers-Within-Numbers mode */
     MODE_NWNWNN,       /**< Numbers-Within-Numbers With N Numbers mode */
     MODE_OCTAL,        /**< Octal counting mode */
     MODE_PALINDROME,   /**< Palindrome counting mode */
     MODE_REP,          /**< Repeating numbers counting mode */
-    MODE_NOREP,        /**< Non-repeating numbers counting mode */
     MODE_ROMAN,        /**< Roman numerals counting mode */
     MODE_TALLY         /**< Tally marks counting mode */
 };

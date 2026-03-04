@@ -2,6 +2,10 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <limits.h>
+
+#include "platform.h"
 
 #include "emoji.h"
 #include "increasing.h"
@@ -15,6 +19,7 @@
 #include "roman.h"
 #include "tally.h"
 
+#include "MiscUtils.h"
 #include "ModeSelector.h"
 #include "Runner.h"
 
@@ -83,9 +88,28 @@ bool run_increasing(const char *starting_number, char run_option)
     );
 }
 
-bool run_japanese(const char *starting_number, char run_option)
+bool run_japanese(const char *string, char run_option, bool isNumber)
 {
-    return runner(
+    char *starting_number;
+
+    if (!isNumber)
+    {
+        wchar_t *input = utf8_to_wide(string);
+        if (!input)
+            return false;
+
+        starting_number = translate_from_japanese(input);
+        free(input);
+    }
+    else
+    {
+        starting_number = strdup(string);
+    }
+
+    if (!starting_number)
+        return false;
+
+    bool return_value = runner(
         (struct Func_Call)
         {
             .mode = MODE_JAPANESE,
@@ -94,6 +118,9 @@ bool run_japanese(const char *starting_number, char run_option)
         },
         run_option
     );
+
+    free(starting_number);
+    return return_value;
 }
 
 bool run_69(const char *starting_number, char run_option) 
@@ -152,9 +179,19 @@ bool run_mirror(
     );
 }
 
-bool run_morse(const char *starting_number, char run_option)
+bool run_morse(const char *string, char run_option, bool isNumber)
 {
-    return runner(
+    char *starting_number;
+
+    if (!isNumber)
+        starting_number = translate_from_morse_code(starting_number);
+    else
+        starting_number = strdup(string);
+    
+    if (!starting_number)
+        return false;
+
+    bool return_value = runner(
         (struct Func_Call)
         {
             .mode = MODE_MORSE,
@@ -163,6 +200,9 @@ bool run_morse(const char *starting_number, char run_option)
         },
         run_option
     );
+
+    free(starting_number);
+    return return_value;
 }
 
 bool run_norep(
@@ -183,7 +223,7 @@ bool run_norep(
 bool run_nwns(
     const char *starting_number, 
     char run_option, 
-    enum CountingMode mode
+    enum CountMode mode
 ) {
     enum NWN_Mode nwn_mode;
     
@@ -241,11 +281,31 @@ bool run_rep(unsigned long long starting_number, char run_option)
 }
 
 bool run_roman(
-    const char *starting_number, 
+    const char *string, 
     char run_option, 
-    char representation
+    char representation,
+    bool isNumber
 ) {
-    return runner(
+    char *starting_number;
+
+    if (!isNumber)
+    {
+        wchar_t *input = utf8_to_wide(string);
+        if (!input)
+            return false;
+
+        starting_number = roman_to_number(input);
+        free(input);
+    }
+    else
+    {
+        starting_number = strdup(string);
+    }
+
+    if (!starting_number)
+        return false;
+
+    bool return_value = runner(
         (struct Func_Call)
         {
             .mode = MODE_ROMAN,
@@ -255,21 +315,56 @@ bool run_roman(
         },
         run_option
     );
+
+    free(starting_number);
+    return return_value;
 }
 
 bool run_tally(
-    long long starting_number,
+    const char *string,
     char run_option,
-    char formatting
+    char formatting,
+    bool isNumber
 ) {
-    return runner(
+    long long *starting_number;
+
+    if (!isNumber)
+    {
+        starting_number = malloc(sizeof(long long));
+        if (!starting_number)
+            return false;
+
+        *starting_number = parse_tally_marks(string);
+        if (*starting_number == -1)
+        {
+            free(starting_number);
+            return false;
+        }
+    }
+    else
+    {
+        string_to_number(string, &starting_number);
+        if (!starting_number)
+            return false;
+
+        if (*starting_number >= INT_MAX || *starting_number <= 0)
+        {
+            free(starting_number);
+            return false;
+        }
+    }
+
+    bool return_value = runner(
         (struct Func_Call)
         {
             .mode = MODE_TALLY,
             .func.formatter = tally,
-            .arg.num_llong = starting_number,
+            .arg.num_llong = *starting_number,
             .extra_args = (char[]){formatting, '\0'}
         },
         run_option
     );
+
+    free(starting_number);
+    return return_value;
 }

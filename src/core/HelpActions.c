@@ -24,16 +24,16 @@ map[] =
     { MODE_HEXADECIMAL, "/docs/Hexadecimal.txt" },
     { MODE_INCREASING, "/docs/Increasing.txt" },
     { MODE_JAPANESE, "/docs/Japanese.txt" },
-    { MODE_MIRROR, "/docs/Mirror.txt" },
     { MODE_MEME, "/docs/Meme.txt" },
+    { MODE_MIRROR, "/docs/Mirror.txt" },
     { MODE_MORSE, "/docs/Morse.txt" },
+    { MODE_NOREP, "/docs/Norep.txt" },
     { MODE_NWN, "/docs/NWN.txt" },
     { MODE_NWNWN, "/docs/NWNWN.txt" },
     { MODE_NWNWNN, "/docs/NWNWNN.txt" },
     { MODE_OCTAL, "/docs/Octal.txt" },
     { MODE_PALINDROME, "/docs/Palindrome.txt" },
     { MODE_REP, "/docs/Rep.txt" },
-    { MODE_NOREP, "/docs/Norep.txt" },
     { MODE_ROMAN, "/docs/Roman.txt" },
     { MODE_TALLY, "/docs/Tally.txt" }
 };

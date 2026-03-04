@@ -19,6 +19,8 @@ Command mode_table[] =
     { "hexadecimal", MODE_HEXADECIMAL },
     { "increasing", MODE_INCREASING },
     { "japanese", MODE_JAPANESE },
+    { "meme", MODE_MEME },
+    { "mirror", MODE_MIRROR },
     { "morse", MODE_MORSE },
     { "norep", MODE_NOREP },
     { "normal", MODE_DECIMAL },
