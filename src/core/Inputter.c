@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "platform.h";
+#include "platform.h"
 
 const char TEMP_FILE_NAME[] = 
     "Enter the number here, "
@@ -12,9 +12,14 @@ const char TEMP_FILE_NAME[] =
     "and close the file..txt"
 ;
 
+char path[FILENAME_MAX] = {0};
+
 bool create_temp_file() 
 {
-    FILE *fp = fopen(TEMP_FILE_NAME, "w");
+    if (!get_temp_file_path(path, sizeof(path), TEMP_FILE_NAME))
+        return false;
+    
+    FILE *fp = fopen(path, "w");
     if (!fp) return false;
 
     fclose(fp);
@@ -32,13 +37,13 @@ bool await_user_input()
         snprintf(
             cmd, sizeof(cmd),
             EDITOR_CMD,
-            TEMP_FILE_NAME
+            path
         );
     else
         snprintf(
             cmd, sizeof(cmd),
             "%s \"%s\"",
-            editor, TEMP_FILE_NAME
+            editor, path
         );
 
     return system(cmd) == 0;
@@ -46,16 +51,16 @@ bool await_user_input()
 
 char *read_temp_file_utf8()
 {
-    FILE *fp = fopen(TEMP_FILE_NAME, "rb");
+    FILE *fp = fopen(path, "rb");
     if (!fp)
     {
-        printf("Error: Could not open input file.\n");
+        printf("Error - Could not open input file.\n");
         return NULL;
     }
 
     if (fseek(fp, 0, SEEK_END) != 0)
     {
-        printf("Error: Failed to determine size of input file.\n");
+        printf("Error - Failed to determine size of input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -63,7 +68,7 @@ char *read_temp_file_utf8()
     long size = ftell(fp);
     if (size < 0)
     {
-        printf("Error: Failed to determine size of input file.\n");
+        printf("Error - Failed to determine size of input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -73,7 +78,7 @@ char *read_temp_file_utf8()
     char *buf = malloc((size_t)size + 1);
     if (!buf)
     {
-        printf("Error: Out of memory while reading input file.\n");
+        printf("Error - Out of memory while reading input file.\n");
         fclose(fp);
         return NULL;
     }
@@ -83,7 +88,7 @@ char *read_temp_file_utf8()
 
     if (read != (size_t)size)
     {
-        printf("Error: Failed to read input file completely.\n");
+        printf("Error - Failed to read input file completely.\n");
         free(buf);
         return NULL;
     }
@@ -100,7 +105,7 @@ char *read_temp_file_utf8()
         if (b0 == 0xEF && b1 == 0xBB && b2 == 0xBF)
         {
             // Skip BOM
-            memmove(buf, buf + 3, size - 2);
+            memmove(buf, buf + 3, size - 3);
             size -= 3;
             buf[size] = '\0';
         }
@@ -130,5 +135,5 @@ char *read_temp_file_utf8()
 
 bool delete_temp_file()
 {
-    return remove(TEMP_FILE_NAME) == 0;
+    return remove(path) == 0;
 }

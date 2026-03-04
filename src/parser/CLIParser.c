@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "platform.h"
-
 #include "ModeSelector.h"
 #include "OptionSelector.h"
 
@@ -167,8 +165,7 @@ int main(int argc, char *argv[])
         case MODE_NOREP:
             if (!sanitize(&input)) goto Done;
             string_to_number(input, &val);
-            if (!val)
-                goto Done;
+            if (!val) goto Done;
 
             if (option == 'c') check_norep(*val);
             if (option != 'c' && !run_norep(*val, option)) goto Done;
@@ -177,8 +174,7 @@ int main(int argc, char *argv[])
         case MODE_NWN:
         case MODE_NWNWN:
         case MODE_NWNWNN:
-            if (!run_nwns(input, option, mode)) 
-                goto Done;
+            if (!run_nwns(input, option, mode)) goto Done;
         break;
 
         case MODE_PALINDROME:
@@ -190,8 +186,7 @@ int main(int argc, char *argv[])
         case MODE_REP:
             if (!sanitize(&input)) goto Done;
             string_to_number(input, &val);
-            if (!val)
-                goto Done;
+            if (!val) goto Done;
 
             if (option == 'c') check_rep(*val);
             if (option != 'c' && !run_rep(*val, option)) goto Done;

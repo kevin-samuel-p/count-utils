@@ -202,4 +202,32 @@ int read_key()
     }
 }
 
+bool get_executable_dir(char *buffer, size_t size)
+{
+    DWORD len = GetModuleFileNameA(NULL, buffer, (DWORD)size);
+    if (len == 0 || len >= size)
+        return false;
+
+    for (int i = len - 1; i >= 0; i--)
+    {
+        if (buffer[i] == '\\')
+        {
+            buffer[i] = '\0';
+            break;
+        }
+    }
+
+    return true;
+}
+
+bool get_temp_file_path(char *buffer, size_t size, const char *filename)
+{
+    DWORD len = GetTempPathA((DWORD)size, buffer);
+    if (len == 0 || len >= size)
+        return false;
+
+    strncat(buffer, filename, size - strlen(buffer) - 1);
+    return true;
+}
+
 #endif

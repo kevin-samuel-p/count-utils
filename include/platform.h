@@ -1,6 +1,9 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include <stdbool.h>
+#include <wchar.h>
+
 #ifdef _WIN32
     #define EDITOR_CMD "notepad \"%s\""
 #elif defined(__APPLE__)
@@ -31,5 +34,9 @@ void enable_raw_mode(void);
 void restore_mode(void);
 
 int read_key(void);
+
+bool get_executable_dir(char *buffer, size_t size);
+
+bool get_temp_file_path(char *buffer, size_t size, const char *filename);
 
 #endif /* PLATFORM_H */

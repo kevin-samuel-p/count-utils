@@ -16,46 +16,58 @@ struct DocMapper
 }
 map[] =
 {
-    { 0, "/docs/Info.txt" },
-    { MODE_HELP, "/docs/Help.txt" },
-    { MODE_BINARY, "/docs/Binary.txt" },
-    { MODE_DECIMAL, "/docs/Decimal.txt" },
-    { MODE_EMOJI, "/docs/Emoji.txt" },
-    { MODE_HEXADECIMAL, "/docs/Hexadecimal.txt" },
-    { MODE_INCREASING, "/docs/Increasing.txt" },
-    { MODE_JAPANESE, "/docs/Japanese.txt" },
-    { MODE_MEME, "/docs/Meme.txt" },
-    { MODE_MIRROR, "/docs/Mirror.txt" },
-    { MODE_MORSE, "/docs/Morse.txt" },
-    { MODE_NOREP, "/docs/Norep.txt" },
-    { MODE_NWN, "/docs/NWN.txt" },
-    { MODE_NWNWN, "/docs/NWNWN.txt" },
-    { MODE_NWNWNN, "/docs/NWNWNN.txt" },
-    { MODE_OCTAL, "/docs/Octal.txt" },
-    { MODE_PALINDROME, "/docs/Palindrome.txt" },
-    { MODE_REP, "/docs/Rep.txt" },
-    { MODE_ROMAN, "/docs/Roman.txt" },
-    { MODE_TALLY, "/docs/Tally.txt" }
+    { 0, "docs/Info.txt" },
+    { MODE_HELP, "docs/Help.txt" },
+    { MODE_BINARY, "docs/Binary.txt" },
+    { MODE_DECIMAL, "docs/Decimal.txt" },
+    { MODE_EMOJI, "docs/Emoji.txt" },
+    { MODE_HEXADECIMAL, "docs/Hexadecimal.txt" },
+    { MODE_INCREASING, "docs/Increasing.txt" },
+    { MODE_JAPANESE, "docs/Japanese.txt" },
+    { MODE_MEME, "docs/Meme.txt" },
+    { MODE_MIRROR, "docs/Mirror.txt" },
+    { MODE_MORSE, "docs/Morse.txt" },
+    { MODE_NOREP, "docs/Norep.txt" },
+    { MODE_NWN, "docs/NWN.txt" },
+    { MODE_NWNWN, "docs/NWNWN.txt" },
+    { MODE_NWNWNN, "docs/NWNWNN.txt" },
+    { MODE_OCTAL, "docs/Octal.txt" },
+    { MODE_PALINDROME, "docs/Palindrome.txt" },
+    { MODE_REP, "docs/Rep.txt" },
+    { MODE_ROMAN, "docs/Roman.txt" },
+    { MODE_TALLY, "docs/Tally.txt" }
 };
 
 bool read_docs(enum CountMode mode)
 {
-    // Set up environment variable with installer to project root to access docs
-    const char *root = getenv("COUNTER_ROOT");
+    char exe_path[FILENAME_MAX];
+    char exe_dir[FILENAME_MAX];
+    char filepath[FILENAME_MAX];
+    
+    if (!get_executable_dir(exe_path, sizeof(exe_path)))
+    {
+        printf("Error - Cannot resolve executable location.\n");
+        return false;
+    }
 
     char buffer[256];
     char chunk[2048];
 
     int n = 0;
 
-    const char filepath[FILENAME_MAX];
+#ifdef _WIN32
     snprintf(
-        filepath, 
-        sizeof(filepath), 
-        "%s%s", 
-        root, 
+        filepath, sizeof(filepath), 
+        "%s\\%s", 
+        exe_path, map[mode].docpath
+    );
+#else
+    snprintf(
+        filepath, sizeof(filepath), 
+        "/usr/local/share/counter/%s", 
         map[mode].docpath
     );
+#endif
 
     FILE *fp = fopen(filepath, "r");
 
@@ -100,6 +112,9 @@ bool read_docs(enum CountMode mode)
             "%s", buffer
         );
     }
+
+    if (n > 0)
+        printf("%s", chunk);
 
     fclose(fp);
 

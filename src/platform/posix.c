@@ -13,6 +13,10 @@
 #include <unistd.h>
 #include <limits.h>
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 
 wchar_t *utf8_to_wide(const char *utf8)
 {
@@ -219,6 +223,53 @@ int read_key()
         return KEY_TAB;
 
     return KEY_OTHER;
+}
+
+bool get_executable_dir(char *buffer, size_t size)
+{
+    size_t len;
+
+#ifdef __linux__
+    ssize_t r = readlink("/proc/self/exe", buffer, size - 1);
+    if (r == -1)
+        return false;
+
+    buffer[r] = '\0';
+    len = (size_t)r;
+#endif
+
+#ifdef __APPLE__
+    uint32_t bufsize = (uint32_t)size;
+
+    if (_NSGetExecutablePath(buffer, &bufsize) != 0)
+        return false;
+
+    len = strlen(buffer);
+#endif
+
+    if (len == 0)
+        return false;
+
+    for (int i = (int)len - 1; i >= 0; i--)
+    {
+        if (buffer[i] == '/')
+        {
+            buffer[i] = '\0';
+            break;
+        }
+    }
+
+    return true;
+}
+
+bool get_temp_file_path(char *buffer, size_t size, const char *filename)
+{
+    const char *tmp = getenv("TMPDIR");
+    if (!tmp)
+        tmp = "/tmp";
+
+    snprintf(buffer, size, "%s/%s", tmp, filename);
+    return true;
 }
 
 #endif
