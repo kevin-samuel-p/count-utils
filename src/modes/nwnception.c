@@ -94,7 +94,7 @@ char *nwns(char *numString, enum NWN_Mode mode)
 
     if (*endPtr != '\0')
     {
-        printf("Bad Input - Non-numeral prtition in string.\n");
+        printf("Bad Input - Non-numeral partition in string.\n");
         return NULL;
     }
     

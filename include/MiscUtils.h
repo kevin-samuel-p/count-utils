@@ -73,7 +73,7 @@ void increment_numstring(char **number);
  * - Removes any trailing carriage return characters.
  * - Strips surrounding whitespace or formatting (may adjust the pointer).
  * - Validates that the resulting string represents a valid number.
- * - Removes leading zeroes (may adjust the pointer).
+ * - Optionally removes leading zeroes (may adjust the pointer).
  *
  * The pointer itself may be updated (e.g., advanced past stripped
  * characters), so a pointer to the string pointer must be provided.
@@ -82,6 +82,8 @@ void increment_numstring(char **number);
  *     Address of a dynamically allocated, null-terminated string pointer.
  *     On success, the pointer may be modified to reference a normalized
  *     substring of the original buffer.
+ * @param stripZeroes
+ *      Boolean value flagging whether to strip leading zeroes or not.
  *
  * @return true  if the resulting string is a valid number after sanitization.
  * @return false if the string is not a valid number.
@@ -89,6 +91,6 @@ void increment_numstring(char **number);
  * @note The input string must be mutable. The function does not allocate
  *       or free memory.
  */
-bool sanitize(char **number);
+bool sanitize(char **number, bool stripZeroes);
 
 #endif /* MISCUTILS_H */

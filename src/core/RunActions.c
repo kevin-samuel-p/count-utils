@@ -39,6 +39,11 @@ bool run_radix(
         break;
 
         case MODE_DECIMAL:
+            if (run_option == 'r')
+            {
+                printf("Sorry, decimal run mode is disabled at this time.\n");
+                return false;
+            }
             base = DECIMAL;
         break;
 
@@ -327,32 +332,30 @@ bool run_tally(
     char formatting,
     bool isNumber
 ) {
-    long long *starting_number;
+    long long starting_number;
+    unsigned long long *v = NULL;
 
     if (!isNumber)
     {
-        starting_number = malloc(sizeof(long long));
-        if (!starting_number)
+        starting_number = parse_tally_marks(string);
+        if (starting_number == -1)
             return false;
-
-        *starting_number = parse_tally_marks(string);
-        if (*starting_number == -1)
-        {
-            free(starting_number);
-            return false;
-        }
     }
     else
     {
-        string_to_number(string, &starting_number);
-        if (!starting_number)
+        string_to_number(string, &v);
+        if (!v)
             return false;
-
-        if (*starting_number >= INT_MAX || *starting_number <= 0)
+        
+        if (*v > INT_MAX)
         {
-            free(starting_number);
+            printf("Bad Input - Number too large.\n");
+            free(v);
             return false;
         }
+
+        starting_number = (long long)(*v);
+        free(v);
     }
 
     bool return_value = runner(
@@ -360,12 +363,11 @@ bool run_tally(
         {
             .mode = MODE_TALLY,
             .func.formatter = tally,
-            .arg.num_llong = *starting_number,
+            .arg.num_llong = starting_number,
             .extra_args = (char[]){formatting, '\0'}
         },
         run_option
     );
 
-    free(starting_number);
     return return_value;
 }

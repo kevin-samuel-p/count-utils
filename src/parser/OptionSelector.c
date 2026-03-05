@@ -20,7 +20,14 @@ char is_run_option(const char *option)
 char is_custom_option(const char *option, enum CountMode mode)
 {
     if (strcmp(option, "c") == 0)
-        return 'c';
+        return (
+            mode != MODE_MEME &&
+            mode != MODE_MIRROR &&
+            mode != MODE_NWN &&
+            mode != MODE_NWNWN &&
+            mode != MODE_NWNWNN
+        ) 
+        ? 'c' : '\0';
 
     int ok = 0;
 

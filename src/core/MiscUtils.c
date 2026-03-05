@@ -147,27 +147,31 @@ void strip_carriage_return(char *s)
 void strip_string(char **v)
 {
     char *s = *v;
-    const char PADDING[] = " \n";
+    const char DELIMITERS[] = " \t\n";
 
     // Remove newline characters and whitespace at the beginning and end of the string
     int n = strlen(s);
     int i;
 
     // lstrip
-    for (
-        i = 0; 
-        i < n && strchr(PADDING, s[i]); 
-        i++
-    );
+    i = strspn(s, DELIMITERS);
     memmove(s, s + i, n - i + 1);
 
     // Adjust new length
     n -= i;
 
+    if (n == 0)
+    {
+        printf("Bad Input - No input was entered.\n");
+        free(s);
+        *v = NULL;
+        return;
+    }
+
     // rstrip
     for (
         i = n - 1;
-        i >= 0 && strchr(PADDING, s[i]);
+        i >= 0 && strchr(DELIMITERS, s[i]);
         i--
     );
     s[i + 1] = '\0';
@@ -178,15 +182,16 @@ void strip_string(char **v)
         *v = temp;
 }
 
-bool sanitize(char **number)
+bool sanitize(char **number, bool stripZeroes)
 {
     strip_carriage_return(*number);
     strip_string(number);
 
-    if (!is_valid_number(*number)) 
+    if (!number || !is_valid_number(*number)) 
         return false;
 
-    strip_leading_zeroes(number);
+    if (stripZeroes)
+        strip_leading_zeroes(number);
 
     return true;
 }
