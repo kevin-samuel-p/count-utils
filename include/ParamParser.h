@@ -2,6 +2,7 @@
 #define PARAMPARSER_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include "ModeSelector.h"
 
 bool param_satisfiability(enum CountMode, char);

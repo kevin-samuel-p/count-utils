@@ -1,0 +1,120 @@
+# ===== Project =====
+TARGET = counter.exe
+OUTDIR = build\windows
+OBJDIR = build\windows\obj
+
+# ===== Compiler =====
+CC = cl
+CFLAGS = /nologo /W4 /std:c11 /Iinclude
+
+# ===== Object List =====
+OBJS = \
+$(OBJDIR)\CustomActions.obj \
+$(OBJDIR)\HelpActions.obj \
+$(OBJDIR)\Inputter.obj \
+$(OBJDIR)\MiscUtils.obj \
+$(OBJDIR)\RunActions.obj \
+$(OBJDIR)\Runner.obj \
+$(OBJDIR)\emoji.obj \
+$(OBJDIR)\increasing.obj \
+$(OBJDIR)\meme.obj \
+$(OBJDIR)\morse.obj \
+$(OBJDIR)\nihongo.obj \
+$(OBJDIR)\nwnception.obj \
+$(OBJDIR)\radix.obj \
+$(OBJDIR)\reps.obj \
+$(OBJDIR)\reversals.obj \
+$(OBJDIR)\roman.obj \
+$(OBJDIR)\tally.obj \
+$(OBJDIR)\CLIParser.obj \
+$(OBJDIR)\ModeSelector.obj \
+$(OBJDIR)\OptionSelector.obj \
+$(OBJDIR)\ParamParser.obj \
+$(OBJDIR)\windows.obj
+
+# ===== Build =====
+
+all: directories $(OUTDIR)\$(TARGET)
+
+directories:
+	if not exist build mkdir build
+	if not exist $(OUTDIR) mkdir $(OUTDIR)
+	if not exist $(OBJDIR) mkdir $(OBJDIR)
+
+# ===== Compile Rules =====
+
+$(OBJDIR)\CustomActions.obj:
+	$(CC) $(CFLAGS) /c src\core\CustomActions.c /Fo$(OBJDIR)\CustomActions.obj
+
+$(OBJDIR)\HelpActions.obj:
+	$(CC) $(CFLAGS) /c src\core\HelpActions.c /Fo$(OBJDIR)\HelpActions.obj
+
+$(OBJDIR)\Inputter.obj:
+	$(CC) $(CFLAGS) /c src\core\Inputter.c /Fo$(OBJDIR)\Inputter.obj
+
+$(OBJDIR)\MiscUtils.obj:
+	$(CC) $(CFLAGS) /c src\core\MiscUtils.c /Fo$(OBJDIR)\MiscUtils.obj
+
+$(OBJDIR)\RunActions.obj:
+	$(CC) $(CFLAGS) /c src\core\RunActions.c /Fo$(OBJDIR)\RunActions.obj
+
+$(OBJDIR)\Runner.obj:
+	$(CC) $(CFLAGS) /c src\core\Runner.c /Fo$(OBJDIR)\Runner.obj
+
+$(OBJDIR)\emoji.obj:
+	$(CC) $(CFLAGS) /c src\modes\emoji.c /Fo$(OBJDIR)\emoji.obj
+
+$(OBJDIR)\increasing.obj:
+	$(CC) $(CFLAGS) /c src\modes\increasing.c /Fo$(OBJDIR)\increasing.obj
+
+$(OBJDIR)\meme.obj:
+	$(CC) $(CFLAGS) /c src\modes\meme.c /Fo$(OBJDIR)\meme.obj
+
+$(OBJDIR)\morse.obj:
+	$(CC) $(CFLAGS) /c src\modes\morse.c /Fo$(OBJDIR)\morse.obj
+
+$(OBJDIR)\nihongo.obj:
+	$(CC) $(CFLAGS) /c src\modes\nihongo.c /Fo$(OBJDIR)\nihongo.obj
+
+$(OBJDIR)\nwnception.obj:
+	$(CC) $(CFLAGS) /c src\modes\nwnception.c /Fo$(OBJDIR)\nwnception.obj
+
+$(OBJDIR)\radix.obj:
+	$(CC) $(CFLAGS) /c src\modes\radix.c /Fo$(OBJDIR)\radix.obj
+
+$(OBJDIR)\reps.obj:
+	$(CC) $(CFLAGS) /c src\modes\reps.c /Fo$(OBJDIR)\reps.obj
+
+$(OBJDIR)\reversals.obj:
+	$(CC) $(CFLAGS) /c src\modes\reversals.c /Fo$(OBJDIR)\reversals.obj
+
+$(OBJDIR)\roman.obj:
+	$(CC) $(CFLAGS) /c src\modes\roman.c /Fo$(OBJDIR)\roman.obj
+
+$(OBJDIR)\tally.obj:
+	$(CC) $(CFLAGS) /c src\modes\tally.c /Fo$(OBJDIR)\tally.obj
+
+$(OBJDIR)\CLIParser.obj:
+	$(CC) $(CFLAGS) /c src\parser\CLIParser.c /Fo$(OBJDIR)\CLIParser.obj
+
+$(OBJDIR)\ModeSelector.obj:
+	$(CC) $(CFLAGS) /c src\parser\ModeSelector.c /Fo$(OBJDIR)\ModeSelector.obj
+
+$(OBJDIR)\OptionSelector.obj:
+	$(CC) $(CFLAGS) /c src\parser\OptionSelector.c /Fo$(OBJDIR)\OptionSelector.obj
+
+$(OBJDIR)\ParamParser.obj:
+	$(CC) $(CFLAGS) /c src\parser\ParamParser.c /Fo$(OBJDIR)\ParamParser.obj
+
+$(OBJDIR)\windows.obj:
+	$(CC) $(CFLAGS) /c src\platform\windows.c /Fo$(OBJDIR)\windows.obj
+
+# ===== Link =====
+
+$(OUTDIR)\$(TARGET): $(OBJS)
+	link /OUT:$@ $(OBJS) User32.lib
+
+# ===== Clean =====
+
+clean:
+	if exist build rmdir /s /q build

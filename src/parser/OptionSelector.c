@@ -1,9 +1,9 @@
-#include "OptionSelector.h";
+#include "OptionSelector.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-#include "ModeSelector.h";
+#include "ModeSelector.h"
 
 char is_run_option(const char *option)
 {

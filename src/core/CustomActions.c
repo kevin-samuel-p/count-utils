@@ -1,6 +1,7 @@
 #include "CustomActions.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
 
@@ -41,7 +42,7 @@ void conversion_output_w(const wchar_t *string)
 
 // -------- ACTION FUNCTIONS --------
 
-bool convert_base(const char *number, enum CountingMode mode, char target)
+bool convert_base(const char *number, enum CountMode mode, char target)
 {
     enum Radix convertFrom;
     enum Radix convertTo;

@@ -41,7 +41,6 @@ map[] =
 bool read_docs(enum CountMode mode)
 {
     char exe_path[FILENAME_MAX];
-    char exe_dir[FILENAME_MAX];
     char filepath[FILENAME_MAX];
     
     if (!get_executable_dir(exe_path, sizeof(exe_path)))

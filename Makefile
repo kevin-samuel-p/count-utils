@@ -1,12 +1,7 @@
-# ===== Project Name =====
 TARGET := counter
-
-# ===== Detect Platform =====
 UNAME_S := $(shell uname -s)
 
-ifeq ($(OS),Windows_NT)
-    PLATFORM := windows
-else ifeq ($(UNAME_S),Linux)
+ifeq ($(UNAME_S),Linux)
     PLATFORM := linux
 else ifeq ($(UNAME_S),Darwin)
     PLATFORM := macos
@@ -14,49 +9,27 @@ else
     $(error Unsupported platform)
 endif
 
-# ===== Compiler Selection =====
-ifeq ($(PLATFORM),windows)
-    CC := cl
-    CFLAGS := /nologo /W4 /std:c11 /Iinclude
-    OUTDIR := build/windows
-    EXE := $(OUTDIR)/$(TARGET).exe
-else
-    CC := gcc
-    CFLAGS := -Wall -Wextra -std=c11 -Iinclude -D_POSIX_C_SOURCE=200809L
-    OUTDIR := build/$(PLATFORM)
-    EXE := $(OUTDIR)/$(TARGET)
-endif
+CC ?= gcc
+CFLAGS = -Wall -Wextra -std=c11 -Iinclude -D_POSIX_C_SOURCE=200809L
 
-# ===== Source Files =====
-SRC_ALL := $(shell find src -name "*.c")
+SRC = $(shell find src -name "*.c" ! -name "windows.c")
+OBJ = $(patsubst src/%.c,build/obj/%.o,$(SRC))
 
-ifeq ($(PLATFORM),windows)
-    SRC := $(filter-out %/posix.c,$(SRC_ALL))
-else
-    SRC := $(filter-out %/windows.c,$(SRC_ALL))
-endif
+TARGET = build/counter
 
-OBJ := $(patsubst src/%.c,$(OUTDIR)/obj/%.o,$(SRC))
+all: directories $(TARGET)
 
-# ===== Build Targets =====
-all: $(EXE)
+$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $(TARGET)
 
-$(EXE): $(OBJ)
-ifeq ($(PLATFORM),windows)
-	link /OUT:$@ $(OBJ)
-else
-	$(CC) $(OBJ) -o $@
-endif
-
-$(OUTDIR)/obj/%.o: src/%.c
-	@mkdir -p $(dir $@)
-ifeq ($(PLATFORM),windows)
-	$(CC) $(CFLAGS) /c $< /Fo$@
-else
+build/obj/%.o: src/%.c
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
-endif
+
+directories:
+	mkdir -p build/obj
 
 clean:
 	rm -rf build
 
-.PHONY: all clean
+.PHONY: all clean directories

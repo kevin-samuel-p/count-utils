@@ -19,39 +19,46 @@ int main(int argc, char *argv[])
     char option, param;
     char *input = NULL;
     unsigned long long *val = NULL;
+    bool isNumber;
 
     // If no args, print info
     if (argc == 1)
     {
         if (!read_docs(0))
             goto Done;
+        goto Success;
     }
 
     // Find mode
     mode = find_mode(argv[1]);
 
+    if (argc == 2)
+    {
+        if (!read_docs(mode))
+            goto Done;
+        goto Success;
+    }
+
     // Help mode
     if (mode == MODE_HELP)
     {
-        if (argc == 2)
+        enum CountMode helpTopic = find_mode(argv[2]);
+        if (!~helpTopic || helpTopic == MODE_HELP)
         {
-            if (!read_docs(MODE_HELP))
-                goto Done;
+            printf(
+                "Invalid Syntax - Command `counter help %s` does not exist.\n"
+                "For supported commands, type\n"
+                "    counter help\n",
+                argv[2]
+            );
+            goto Done;
         }
-        else
-        {
-            enum CountMode helpTopic = find_mode(argv[2]);
-            if (!~helpTopic || helpTopic == MODE_HELP)
-            {
-                printf(
-                    "Invalid Syntax - Command `counter help %s` does not exist.\n"
-                    "For supported commands, type\n"
-                    "    counter help\n",
-                    argv[2]
-                );
-                goto Done;
-            }
-        }
+
+        if (argc > 3)
+            printf("Warning - Extra arguments will be ignored...\n\n");
+            
+        if (!read_docs(helpTopic))
+            goto Done;
 
         goto Success;
     }
@@ -64,13 +71,21 @@ int main(int argc, char *argv[])
         option = is_custom_option(argv[2], mode);
 
     if (!option)
+    {
+        printf(
+            "Invalid Syntax - Command `counter %s %s` does not exist.\n"
+            "For supported commands, type\n"
+            "    counter help %s\n",
+            argv[1], argv[2], argv[1]
+        );
         goto Done;
+    }
 
     // Check for parameter
-    bool takes_param = param_satisfiability(argc, mode, option);
+    bool takes_param = param_satisfiability(mode, option);
     if (takes_param)
     {
-        if (argc < 4)
+        if (argc < 4 && mode != MODE_ROMAN && mode != MODE_TALLY)
         {
             printf(
                 "Invalid Syntax - Expected fourth parameter.\n"
@@ -81,14 +96,14 @@ int main(int argc, char *argv[])
             goto Done;
         }
 
-        param = parse_radix_param(argv[3], mode);
+        param = parse_param((argc >= 4) ? argv[3] : NULL, mode);
         if (!param)
         {
             printf(
                 "Invalid Syntax - Command `counter %s %s %s` does not exist.\n"
                 "For supported commands, type\n"
                 "    counter help %s\n",
-                argv[1], argv[2], argv[3], argv[1]
+                argv[1], argv[2], (argc >= 4) ? argv[3] : NULL, argv[1]
             );
             goto Done;
         }
@@ -146,7 +161,7 @@ int main(int argc, char *argv[])
         break;
 
         case MODE_JAPANESE:
-            bool isNumber = sanitize(&input);
+            isNumber = sanitize(&input);
             if (option == 'c' && !convert_japanese(input, isNumber)) goto Done;
             if (option != 'c' && !run_japanese(input, option, isNumber)) goto Done;
         break;
@@ -157,7 +172,7 @@ int main(int argc, char *argv[])
         break;
 
         case MODE_MORSE:
-            bool isNumber = sanitize(&input);
+            isNumber = sanitize(&input);
             if (option == 'c' && !convert_morse(input, isNumber)) goto Done;
             if (option != 'c' && !run_morse(input, option, isNumber)) goto Done;
         break;
@@ -193,13 +208,13 @@ int main(int argc, char *argv[])
         break;
 
         case MODE_ROMAN:
-            bool isNumber = sanitize(&input);
+            isNumber = sanitize(&input);
             if (option == 'c' && !convert_roman(input, isNumber, param)) goto Done;
             if (option != 'c' && !run_roman(input, option, param, isNumber)) goto Done;
         break;
 
         case MODE_TALLY:
-            bool isNumber = sanitize(&input);
+            isNumber = sanitize(&input);
             if (option == 'c' && !convert_tally(input, isNumber)) goto Done;
             if (option != 'c' && !run_tally(input, option, param, isNumber)) goto Done;
         break;

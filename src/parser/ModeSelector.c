@@ -1,4 +1,4 @@
-#include "ModeSelector.h";
+#include "ModeSelector.h"
 
 #include <stdlib.h>
 #include <string.h>

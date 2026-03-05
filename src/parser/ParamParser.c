@@ -28,6 +28,18 @@ bool param_satisfiability(enum CountMode mode, char option)
 
 char parse_param(const char *arg, enum CountMode mode)
 {
+    // Default check 
+    if (!arg)
+    {
+        if (mode == MODE_ROMAN)
+            return 'l';     // Default parameter is legal representation
+
+        if (mode == MODE_TALLY)
+            return 'd';     // Default parameter is default mode
+
+        return '\0';        // Malformed input
+    }
+
     switch(mode)
     {
         case MODE_BINARY:
@@ -98,6 +110,9 @@ char parse_param(const char *arg, enum CountMode mode)
 
             if (strcmp(arg, "g") == 0 || strcmp(arg, "giant") == 0)
                 return 'g';
+
+            if (strcmp(arg, "i") == 0 || strcmp(arg, "impact") == 0)
+                return 'i';
 
             if (strcmp(arg, "t") == 0 || strcmp(arg, "tiny") == 0)
                 return 't';
