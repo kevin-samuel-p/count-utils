@@ -36,7 +36,7 @@ void conversion_output_w(const wchar_t *string)
 {
     print_wide(string);
     if (copy_to_clipboard(string))
-        printf("Copied value to clipboard!\n");
+        print_wide(L"Copied value to clipboard!\n");
 }
 
 

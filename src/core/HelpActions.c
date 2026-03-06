@@ -85,11 +85,10 @@ bool read_docs(enum CountMode mode)
         if (buffer[0] == '=')
         {
             printf(
-                "\n%s%s\n\n%s\n\n"
+                "\n%s\n\n%s\n\n%s\n\n"
                 "Press Tab to continue,"
-                " or press Esc to exit.\n"
-                "\n%s\n",
-                BR, chunk, BR, BR
+                " or press Esc to exit.\n",
+                BR, chunk, BR
             );
 
             enable_raw_mode();
@@ -116,7 +115,7 @@ bool read_docs(enum CountMode mode)
     }
 
     if (n > 0)
-        printf("\n%s%s\n\n%s\n", BR, chunk, BR);
+        printf("\n%s\n%s\n\n%s\n", BR, chunk, BR);
 
     fclose(fp);
 
