@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "ModeSelector.h"
 
-bool convert_base(const char *, enum CountingMode, char);
+bool convert_base(const char *, enum CountMode, char);
 bool convert_emoji(const char *);
 bool convert_japanese(const char *, bool);
 bool convert_morse(const char *, bool);

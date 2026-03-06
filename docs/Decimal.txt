@@ -10,8 +10,8 @@ DESCRIPTION
         violation of counting bot rules.
 =
 USAGE
-    counter decimal <option> [target]
-    counter normal  <option> [target]
+    count decimal <option> [target]
+    count normal  <option> [target]
 
 OPTIONS
     solorun (s)
@@ -32,11 +32,11 @@ CONVERSION TARGETS
         Convert decimal to octal.
 =
 EXAMPLES
-    counter decimal solorun
-    counter decimal s
+    count decimal solorun
+    count decimal s
 
-    counter decimal convert binary
-    counter decimal c b
+    count decimal convert binary
+    count decimal c b
 =
 NOTES
     - The run option is deprecated and unavailable.

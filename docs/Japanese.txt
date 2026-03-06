@@ -7,7 +7,7 @@ DESCRIPTION
     to and from Hindu-Arabic numerals.
 =
 USAGE
-    counter japanese <option>
+    count japanese <option>
 
 OPTIONS
     run (r)
@@ -26,17 +26,17 @@ OPTIONS
         Alias for convert in reverse.
 =
 EXAMPLES
-    counter japanese run
-    counter japanese r
+    count japanese run
+    count japanese r
 
-    counter japanese solorun
-    counter japanese s
+    count japanese solorun
+    count japanese s
 
-    counter japanese convert
-    counter japanese c
+    count japanese convert
+    count japanese c
 
-    counter japanese translate
-    counter japanese t
+    count japanese translate
+    count japanese t
 =
 NOTES
     - No additional parameters are required.

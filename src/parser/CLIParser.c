@@ -162,6 +162,7 @@ int main(int argc, char *argv[])
         case MODE_EMOJI:
             if (!sanitize(&input, true))
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -172,6 +173,7 @@ int main(int argc, char *argv[])
         case MODE_INCREASING:
             if (!sanitize(&input, true)) 
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -189,6 +191,7 @@ int main(int argc, char *argv[])
         case MODE_MEME:
             if (!sanitize(&input, true))
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -198,6 +201,7 @@ int main(int argc, char *argv[])
         case MODE_MIRROR:
             if (!sanitize(&input, param == 'n')) 
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -214,6 +218,7 @@ int main(int argc, char *argv[])
         case MODE_NOREP:
             if (!sanitize(&input, true)) 
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -235,6 +240,7 @@ int main(int argc, char *argv[])
         case MODE_PALINDROME:
             if (!sanitize(&input, true)) 
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }
@@ -245,6 +251,7 @@ int main(int argc, char *argv[])
         case MODE_REP:
             if (!sanitize(&input, true)) 
             {
+                if (!input) goto Done;
                 printf("Bad Input - Invalid number.\n");
                 goto Done;
             }

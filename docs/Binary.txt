@@ -6,7 +6,7 @@ DESCRIPTION
     Supports binary counting runs and base conversion.
 =
 USAGE
-    counter binary <option> [target]
+    count binary <option> [target]
 
 OPTIONS
     run (r)
@@ -31,14 +31,14 @@ CONVERSION TARGETS
         Convert binary to octal.
 =
 EXAMPLES
-    counter binary run
-    counter binary r
+    count binary run
+    count binary r
 
-    counter binary solorun
-    counter binary s
+    count binary solorun
+    count binary s
 
-    counter binary convert decimal
-    counter binary c d
+    count binary convert decimal
+    count binary c d
 =
 NOTES
     - run and solorun do not accept additional parameters.

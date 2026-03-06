@@ -13,5 +13,5 @@ For queries, contact sadgeis12@Discord
 PS; PRs and Suggestions accepted for novel counting channels.
 
 For general help, type the command
-    counter help
+    count help
 =

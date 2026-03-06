@@ -4,11 +4,11 @@ NAME
 DESCRIPTION
     Work with Numbers-Within-Numbers (NWN) format.
     NWN is a two-level counting system written as A.B, where:
-        - A is the outer counter
-        - B is the inner counter
+        - A is the outer count
+        - B is the inner count
 
-    The inner counter (B) runs from 1 to A, then resets when
-    the outer counter (A) increments.
+    The inner count (B) runs from 1 to A, then resets when
+    the outer count (A) increments.
 =
 RULES
     - Both A and B must be positive integers.
@@ -27,7 +27,7 @@ EXAMPLE SEQUENCE
     ...
 =
 USAGE
-    counter nwn <option>
+    count nwn <option>
 
 OPTIONS
     run (r)
@@ -39,11 +39,11 @@ OPTIONS
         Generates consecutive values.
 =
 EXAMPLES
-    counter nwn run
-    counter nwn r
+    count nwn run
+    count nwn r
 
-    counter nwn solorun
-    counter nwn s
+    count nwn solorun
+    count nwn s
 =
 NOTES
     - No additional parameters are required.

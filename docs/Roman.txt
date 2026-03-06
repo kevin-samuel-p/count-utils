@@ -7,7 +7,7 @@ DESCRIPTION
     to and from Hindu-Arabic numerals.
 =
 USAGE
-    counter roman <option> <output_format>
+    count roman <option> <output_format>
 
 OPTIONS
     run (r)
@@ -31,11 +31,11 @@ OUTPUT FORMATS
             Example: 13500 -> X̅MMMD
 =
 EXAMPLES
-    counter roman run legal
-    counter roman r
+    count roman run legal
+    count roman r
 
-    counter roman solorun idiomatic
-    counter roman s i
+    count roman solorun idiomatic
+    count roman s i
 =
 NOTES
     - Input must be a non-negative number or a valid Roman numeral.

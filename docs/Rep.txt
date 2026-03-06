@@ -6,7 +6,7 @@ DESCRIPTION
     Supports counting runs and verification of repeating numbers.
 =
 USAGE
-    counter rep <option>
+    count rep <option>
 
 OPTIONS
     run (r)
@@ -21,14 +21,14 @@ OPTIONS
         Check whether the inputnumber has any repeating digits.
 =
 EXAMPLES
-    counter norep run
-    counter norep r
+    count norep run
+    count norep r
 
-    counter norep solorun
-    counter norep s
+    count norep solorun
+    count norep s
 
-    counter norep check
-    counter norep c
+    count norep check
+    count norep c
 =
 NOTES
     - No additional parameters are required.

@@ -6,7 +6,7 @@ DESCRIPTION
     Supports hexadecimal counting runs and base conversion.
 =
 USAGE
-    counter hexadecimal <option> [target]
+    count hexadecimal <option> [target]
 
 OPTIONS
     run (r)
@@ -31,14 +31,14 @@ CONVERSION TARGETS
         Convert hexadecimal to octal.
 =
 EXAMPLES
-    counter hexadecimal run
-    counter hexadecimal r
+    count hexadecimal run
+    count hexadecimal r
 
-    counter hexadecimal solorun
-    counter hexadecimal s
+    count hexadecimal solorun
+    count hexadecimal s
 
-    counter hexadecimal convert binary
-    counter hexadecimal c b
+    count hexadecimal convert binary
+    count hexadecimal c b
 =
 NOTES
     - run and solorun do not accept additional parameters.

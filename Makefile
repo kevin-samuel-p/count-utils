@@ -1,5 +1,5 @@
 # ===== Project =====
-TARGET := counter
+TARGET := count
 
 # ===== Detect Platform =====
 UNAME_S := $(shell uname -s)

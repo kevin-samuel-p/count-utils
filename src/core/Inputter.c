@@ -8,8 +8,7 @@
 
 const char TEMP_FILE_NAME[] = 
     "Enter the number here, "
-    "press Ctrl + S, "
-    "and close the file..txt"
+    "save, and close the file..txt"
 ;
 
 char path[FILENAME_MAX] = {0};

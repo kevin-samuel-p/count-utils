@@ -17,10 +17,10 @@ DESCRIPTION
         A1 >= A2 >= A3 >= ... >= Ak
 
     For base rules, see:
-        counter help nwn
+        count help nwn
 
     For NWNWN rules, see:
-        counter help nwnwn
+        count help nwnwn
 =
 RULES
     - All numerals must be positive integers.
@@ -45,7 +45,7 @@ EXAMPLE SEQUENCE
     ...
 =
 USAGE
-    counter nwnwnn <option>
+    count nwnwnn <option>
 
 OPTIONS
     run (r)
@@ -57,11 +57,11 @@ OPTIONS
         Generates consecutive values.
 =
 EXAMPLES
-    counter nwnwnn run
-    counter nwnwnn r
+    count nwnwnn run
+    count nwnwnn r
 
-    counter nwnwnn solorun
-    counter nwnwnn s
+    count nwnwnn solorun
+    count nwnwnn s
 =
 NOTES
     - No additional parameters are required.

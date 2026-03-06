@@ -1,7 +1,7 @@
-COUNTER.EXE
+count.EXE
 
 USAGE:
-    counter <mode> <option> [parameters]
+    count <mode> <option> [parameters]
 
 MODES:
     binary        Binary numbers and conversions
@@ -24,6 +24,6 @@ MODES:
     nwnwnn        Numbers within numbers with N numbers
 
 Run:
-    counter help
-    counter help <mode>   for detailed help
+    count help
+    count help <mode>   for detailed help
 =

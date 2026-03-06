@@ -6,7 +6,7 @@ DESCRIPTION
     Supports counting runs where numbers are reversed before processing.
 =
 USAGE
-    counter mirror <option> <input_mode>
+    count mirror <option> <input_mode>
 
 OPTIONS
     run (r)
@@ -20,18 +20,18 @@ OPTIONS
 INPUT MODES
     mirror (m)
         Indicates that the input number is mirrored (reversed).
-        Example: counter mirror r m
+        Example: count mirror r m
 
     normal (n)
         Indicates that the input number is normal (not mirrored).
-        Example: counter mirror r n
+        Example: count mirror r n
 =
 EXAMPLES
-    counter mirror run mirror
-    counter mirror r m
+    count mirror run mirror
+    count mirror r m
 
-    counter mirror solorun normal
-    counter mirror s n
+    count mirror solorun normal
+    count mirror s n
 =
 NOTES
     - The <input_mode> argument is required for all options.

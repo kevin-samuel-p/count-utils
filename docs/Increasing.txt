@@ -7,7 +7,7 @@ DESCRIPTION
     or equal to the digit before it.
 =
 USAGE
-    counter increasing <option>
+    count increasing <option>
 
 OPTIONS
     run (r)
@@ -25,14 +25,14 @@ OPTIONS
         in non-decreasing order.
 =
 EXAMPLES
-    counter increasing run
-    counter increasing r
+    count increasing run
+    count increasing r
 
-    counter increasing solorun
-    counter increasing s
+    count increasing solorun
+    count increasing s
 
-    counter increasing check
-    counter increasing c
+    count increasing check
+    count increasing c
 =
 NOTES
     - No additional parameters are required.

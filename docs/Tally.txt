@@ -7,7 +7,7 @@ DESCRIPTION
     and conversion to and from numeric values.
 =
 USAGE
-    counter tally <option> <format>
+    count tally <option> <format>
 
 OPTIONS
     run (r)
@@ -44,16 +44,16 @@ FORMATS
         Uses tiny text formatting.
 =
 EXAMPLES
-    counter tally run
-    counter tally r d
-    counter tally run big
-    counter tally r b
+    count tally run
+    count tally r d
+    count tally run big
+    count tally r b
 
-    counter tally solorun compact
-    counter tally s c
+    count tally solorun compact
+    count tally s c
 
-    counter tally convert
-    counter tally c
+    count tally convert
+    count tally c
 =
 NOTES
     - If format is not specified for run or solorun, default format (d) is used.

@@ -7,7 +7,7 @@ DESCRIPTION
     to and from Hindu-Arabic numerals.
 =
 USAGE
-    counter morse <option>
+    count morse <option>
 
 OPTIONS
     run (r)
@@ -23,14 +23,14 @@ OPTIONS
         Convert Morse code input into a Hindu-Arabic number.
 =
 EXAMPLES
-    counter morse run
-    counter morse r
+    count morse run
+    count morse r
 
-    counter morse solorun
-    counter morse s
+    count morse solorun
+    count morse s
 
-    counter morse convert
-    counter morse c
+    count morse convert
+    count morse c
 =
 NOTES
     - No additional parameters are required.

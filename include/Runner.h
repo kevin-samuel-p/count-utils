@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <wchar.h>
 
+#include "ModeSelector.h"
+
 /**
  * @file Runner.h
  * @brief Function-dispatch and interactive runner API.
@@ -36,7 +38,7 @@
 struct Func_Call
 {
     /** Running mode enum used to select function signatures */
-    enum RunMode mode;
+    enum CountMode mode;
 
     /**
      * @union func

@@ -9,9 +9,9 @@ DESCRIPTION
         - B is the middle number
         - C is the inner number
 
-    Each level behaves like an NWN counter relative to the level above it.
+    Each level behaves like an NWN count relative to the level above it.
     For base NWN rules, see:
-        counter help nwn
+        count help nwn
 =
 RULES
     - All numerals must be positive integers.
@@ -36,7 +36,7 @@ EXAMPLE SEQUENCE
     ...
 =
 USAGE
-    counter nwnwn <option>
+    count nwnwn <option>
 
 OPTIONS
     run (r)
@@ -48,11 +48,11 @@ OPTIONS
         Generates consecutive values.
 =
 EXAMPLES
-    counter nwnwn run
-    counter nwnwn r
+    count nwnwn run
+    count nwnwn r
 
-    counter nwnwn solorun
-    counter nwnwn s
+    count nwnwn solorun
+    count nwnwn s
 =
 NOTES
     - No additional parameters are required.

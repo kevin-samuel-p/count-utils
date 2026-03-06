@@ -6,7 +6,7 @@ DESCRIPTION
     Supports emoji counting runs and conversion of numbers into emoji form.
 =
 USAGE
-    counter emoji <option>
+    count emoji <option>
 
 OPTIONS
     run (r)
@@ -25,17 +25,17 @@ OPTIONS
         Convert a numeric input into its emoji representation.
 =
 EXAMPLES
-    counter emoji run
-    counter emoji r
+    count emoji run
+    count emoji r
 
-    counter emoji solorun
-    counter emoji s
+    count emoji solorun
+    count emoji s
 
-    counter emoji convert
-    counter emoji c
+    count emoji convert
+    count emoji c
 
-    counter emoji emojify
-    counter emoji e
+    count emoji emojify
+    count emoji e
 =
 NOTES
     - No additional parameters are required.
