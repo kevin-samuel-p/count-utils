@@ -387,10 +387,10 @@ bool runner(struct Func_Call payload, char run_type)
         free(result);
     }
 
-    printf(
-        "Next value copied to clipboard!\n"
-        "Press Tab to copy next value, "
-        "or press Esc to end the run.\n"
+    print_wide(
+        L"Next value copied to clipboard!\n"
+        L"Press Tab to copy next value, "
+        L"or press Esc to end the run.\n"
     );
 
     while (true) 
@@ -430,10 +430,10 @@ bool runner(struct Func_Call payload, char run_type)
                 free(result);
             }
 
-            printf(
-                "Next value copied to clipboard!\n"
-                "Press Tab to copy next value, "
-                "or press Esc to end the run.\n"
+            print_wide(
+                L"Next value copied to clipboard!\n"
+                L"Press Tab to copy next value, "
+                L"or press Esc to end the run.\n"
             );
         }
     }
