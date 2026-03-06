@@ -70,6 +70,7 @@ jobs:
         run: nmake /f Makefile.win
 
       - name: Package
+        shell: cmd
         run: |
           mkdir package
           copy build\windows\count.exe package\
