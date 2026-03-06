@@ -1,4 +1,7 @@
+# ===== Project =====
 TARGET := counter
+
+# ===== Detect Platform =====
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
@@ -9,26 +12,39 @@ else
     $(error Unsupported platform)
 endif
 
+# ===== Directories =====
+OUTDIR := build/$(PLATFORM)
+OBJDIR := $(OUTDIR)/obj
+
+# ===== Compiler =====
 CC ?= gcc
-CFLAGS = -Wall -Wextra -std=c11 -Iinclude -D_POSIX_C_SOURCE=200809L
+CFLAGS := -Wall -Wextra -std=c11 -Iinclude -D_POSIX_C_SOURCE=200809L
 
-SRC = $(shell find src -name "*.c" ! -name "windows.c")
-OBJ = $(patsubst src/%.c,build/obj/%.o,$(SRC))
+# ===== Sources =====
+SRC := $(shell find src -name "*.c" ! -name "windows.c")
 
-TARGET = build/counter
+# ===== Objects =====
+OBJ := $(patsubst src/%.c,$(OBJDIR)/%.o,$(SRC))
 
-all: directories $(TARGET)
+# ===== Output Binary =====
+TARGET_BIN := $(OUTDIR)/$(TARGET)
 
-$(TARGET): $(OBJ)
-	$(CC) $(OBJ) -o $(TARGET)
+# ===== Build =====
+all: directories $(TARGET_BIN)
 
-build/obj/%.o: src/%.c
+$(TARGET_BIN): $(OBJ)
+	$(CC) $(OBJ) -o $@
+
+# ===== Compile =====
+$(OBJDIR)/%.o: src/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# ===== Directories =====
 directories:
-	mkdir -p build/obj
+	mkdir -p $(OBJDIR)
 
+# ===== Clean =====
 clean:
 	rm -rf build
 

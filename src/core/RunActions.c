@@ -129,39 +129,29 @@ bool run_japanese(const char *string, char run_option, bool isNumber)
     return return_value;
 }
 
-bool run_69(const char *starting_number, char run_option) 
+bool run_meme(const char *starting_number, char run_option, char meme)
 {
-    return runner(
-        (struct Func_Call)
-        {
-            .mode = MODE_MEME,
-            .func.incrementer = next_69_number,
-            .arg.num_char_ptr = starting_number
-        },
-        run_option
-    );
-}
+    void *incrementer;
+    switch(meme)
+    {
+        case (char)(6+9):
+            incrementer = next_69_number;
+        break;
 
-bool run_420(const char *starting_number, char run_option)
-{
-    return runner(
-        (struct Func_Call)
-        {
-            .mode = MODE_MEME,
-            .func.incrementer = next_420_number,
-            .arg.num_char_ptr = starting_number
-        },
-        run_option
-    );
-}
+        case (char)(4+2+0):
+            incrementer = next_420_number;
+        break;
 
-bool run_69420(const char *starting_number, char run_option)
-{
+        case (char)(6+9+4+2+0):
+            incrementer = next_69420_number;
+        break;
+    }
+
     return runner(
         (struct Func_Call)
         {
             .mode = MODE_MEME,
-            .func.incrementer = next_69420_number,
+            .func.incrementer = incrementer,
             .arg.num_char_ptr = starting_number
         },
         run_option

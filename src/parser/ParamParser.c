@@ -64,13 +64,13 @@ char parse_param(const char *arg, enum CountMode mode)
         case MODE_MEME:
         {
             if (strcmp(arg, "69") == 0)
-                return (char)69;
+                return (char)(6+9);
 
             if (strcmp(arg, "420") == 0)
-                return (char)420;
+                return (char)(4+2+0);
 
             if (strcmp(arg, "69420") == 0)
-                return (char)69420;
+                return (char)(6+9+4+2+0);
 
             break;
         }

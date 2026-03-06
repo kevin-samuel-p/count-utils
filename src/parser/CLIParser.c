@@ -154,6 +154,7 @@ int main(int argc, char *argv[])
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
             sanitize(&input, true);
+            if (!input) goto Done;
             if (option == 'c' && !convert_base(input, mode, param)) goto Done;
             if (option != 'c' && !run_radix(input, option, mode)) goto Done;
         break;
@@ -180,8 +181,18 @@ int main(int argc, char *argv[])
 
         case MODE_JAPANESE:
             isNumber = sanitize(&input, true);
+            if (!input) goto Done;
             if (option == 'c' && !convert_japanese(input, isNumber)) goto Done;
             if (option != 'c' && !run_japanese(input, option, isNumber)) goto Done;
+        break;
+
+        case MODE_MEME:
+            if (!sanitize(&input, true))
+            {
+                printf("Bad Input - Invalid number.\n");
+                goto Done;
+            }
+            if (!run_meme(input, option, param)) goto Done;
         break;
 
         case MODE_MIRROR:
@@ -195,6 +206,7 @@ int main(int argc, char *argv[])
 
         case MODE_MORSE:
             isNumber = sanitize(&input, true);
+            if (!input) goto Done;
             if (option == 'c' && !convert_morse(input, isNumber)) goto Done;
             if (option != 'c' && !run_morse(input, option, isNumber)) goto Done;
         break;
@@ -216,6 +228,7 @@ int main(int argc, char *argv[])
         case MODE_NWNWN:
         case MODE_NWNWNN:
             sanitize(&input, false);
+            if (!input) goto Done;
             if (!run_nwns(input, option, mode)) goto Done;
         break;
 
@@ -244,12 +257,14 @@ int main(int argc, char *argv[])
 
         case MODE_ROMAN:
             isNumber = sanitize(&input, true);
+            if (!input) goto Done;
             if (option == 'c' && !convert_roman(input, isNumber, param)) goto Done;
             if (option != 'c' && !run_roman(input, option, param, isNumber)) goto Done;
         break;
 
         case MODE_TALLY:
             isNumber = sanitize(&input, true);
+            if (!input) goto Done;
             if (option == 'c' && !convert_tally(input, isNumber)) goto Done;
             if (option != 'c' && !run_tally(input, option, param, isNumber)) goto Done;
         break;

@@ -160,14 +160,6 @@ void strip_string(char **v)
     // Adjust new length
     n -= i;
 
-    if (n == 0)
-    {
-        printf("Bad Input - No input was entered.\n");
-        free(s);
-        *v = NULL;
-        return;
-    }
-
     // rstrip
     for (
         i = n - 1;
@@ -182,12 +174,25 @@ void strip_string(char **v)
         *v = temp;
 }
 
+bool is_string_empty(const char *string)
+{
+    return strlen(string) == 0;
+}
+
 bool sanitize(char **number, bool stripZeroes)
 {
     strip_carriage_return(*number);
     strip_string(number);
 
-    if (!number || !is_valid_number(*number)) 
+    if (is_string_empty(*number))
+    {
+        printf("Bad Input - Empty string.\n");
+        free(*number);
+        *number = NULL;
+        return false;
+    }
+
+    if (!is_valid_number(*number)) 
         return false;
 
     if (stripZeroes)
