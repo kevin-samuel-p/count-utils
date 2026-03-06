@@ -83,10 +83,11 @@ bool read_docs(enum CountMode mode)
     {
         if (buffer[0] == '=')
         {
-            printf("%s", chunk);
+            printf("\n\n%s", chunk);
             printf(
+                "\n\n\n========================================================================\n\n"
                 "\nPress Tab to continue,"
-                " or press Esc to exit.\n"
+                " or press Esc to exit.\n\n"
             );
 
             enable_raw_mode();
@@ -113,9 +114,11 @@ bool read_docs(enum CountMode mode)
     }
 
     if (n > 0)
-        printf("%s", chunk);
+        printf("\n\n%s", chunk);
 
     fclose(fp);
+
+    printf("\n\n");     // Convenient spacing, easy on the eyes
 
     return true;
 }

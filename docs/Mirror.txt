@@ -37,4 +37,3 @@ NOTES
     - The <input_mode> argument is required for all options.
     - Input must be a non-negative number.
     - Mirrored input cannot have trailing zeroes, as this causes ambiguity.
-=

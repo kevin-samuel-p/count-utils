@@ -36,4 +36,3 @@ NOTES
     - Input must be a non-negative number.
     - Single-digit numbers do not count as palindromes.
     - Leading zeroes (0s at the start of the number) are stripped and do not count.
-=

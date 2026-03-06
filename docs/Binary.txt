@@ -44,4 +44,3 @@ NOTES
     - run and solorun do not accept additional parameters.
     - Input must be a binary number.
     - Maximum supported length is 65 digits.
-=

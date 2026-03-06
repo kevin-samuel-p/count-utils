@@ -40,4 +40,3 @@ EXAMPLES
 NOTES
     - Input must be a non-negative number or a valid Roman numeral.
     - If output format is not specified, the legal representation format will be used by default.
-=

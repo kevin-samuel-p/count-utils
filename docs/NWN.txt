@@ -48,4 +48,3 @@ EXAMPLES
 NOTES
     - No additional parameters are required.
     - Input must be a valid NWN number in the format A.B with no spaces.
-=

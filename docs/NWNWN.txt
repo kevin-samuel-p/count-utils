@@ -57,4 +57,3 @@ EXAMPLES
 NOTES
     - No additional parameters are required.
     - Input must be a valid NWNWN number in the format A.B.C with no spaces.
-=

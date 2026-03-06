@@ -61,4 +61,3 @@ NOTES
     - Input must be a non-negative number or a valid tally mark sequence.
     - Tally mark grouping follows standard 5-mark convention
       (four vertical marks with a strikethrough for the fifth).
-=

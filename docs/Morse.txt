@@ -35,4 +35,3 @@ EXAMPLES
 NOTES
     - No additional parameters are required.
     - Input must be either a non-negative number or a valid Morse code number.
-=

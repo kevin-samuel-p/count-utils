@@ -44,4 +44,3 @@ NOTES
     - run and solorun do not accept additional parameters.
     - Input must be a valid hexadecimal number.
     - Maximum supported length is 16 digits (less than 17 digits).
-=

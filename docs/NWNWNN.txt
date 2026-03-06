@@ -67,4 +67,3 @@ NOTES
     - No additional parameters are required.
     - Input must be a valid NWNWNN number in the format A1.A2.A3.A4...Ak with no spaces.
     - The number of numerals is always equal to the first numeral (A1).
-=

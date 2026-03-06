@@ -42,4 +42,3 @@ NOTES
     - No additional parameters are required.
     - Input must be either a non-negative number or a valid Japanese numeral.
     - Maximum numeric value supported is less than 10^50.
-=

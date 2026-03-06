@@ -43,4 +43,3 @@ EXAMPLES
 NOTES
     - Input must be a non-negative number.
     - The <meme_number> argument is required for all options.
-=
