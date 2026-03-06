@@ -38,7 +38,7 @@ $(TARGET_BIN): $(OBJ)
 # ===== Compile =====
 $(OBJDIR)/%.o: src/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 # ===== Directories =====
 directories:
@@ -49,3 +49,5 @@ clean:
 	rm -rf build
 
 .PHONY: all clean directories
+
+-include $(OBJ:.o=.d)
