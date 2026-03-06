@@ -79,15 +79,17 @@ bool read_docs(enum CountMode mode)
         return false;
     }
 
+    const char BR[] = "========================================================================";
     while (fgets(buffer, sizeof(buffer), fp) != NULL)
     {
         if (buffer[0] == '=')
         {
-            printf("\n\n%s", chunk);
             printf(
-                "\n\n\n========================================================================\n\n"
-                "\nPress Tab to continue,"
-                " or press Esc to exit.\n\n"
+                "\n%s%s\n\n%s\n\n"
+                "Press Tab to continue,"
+                " or press Esc to exit.\n"
+                "\n%s\n",
+                BR, chunk, BR, BR
             );
 
             enable_raw_mode();
@@ -114,7 +116,7 @@ bool read_docs(enum CountMode mode)
     }
 
     if (n > 0)
-        printf("\n\n%s", chunk);
+        printf("\n%s%s\n\n%s\n", BR, chunk, BR);
 
     fclose(fp);
 
