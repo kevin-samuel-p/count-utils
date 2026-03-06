@@ -1,8 +1,10 @@
-name: Build Count
+name: Build and Release
 
 on:
   push:
     branches: [ main ]
+    tags:
+      - "v*"
   pull_request:
     branches: [ main ]
 
@@ -20,11 +22,20 @@ jobs:
       - name: Build
         run: make
 
+      - name: Package
+        run: |
+          mkdir package
+          cp build/count package/
+          cp -r docs package/
+          cp README.md package/ || true
+          cp LICENSE package/ || true
+          tar -czf count-linux-x64.tar.gz -C package .
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: count-linux
-          path: build/linux/count
+          path: count-linux-x64.tar.gz
 
 
   build-macos:
@@ -36,11 +47,20 @@ jobs:
       - name: Build
         run: make
 
+      - name: Package
+        run: |
+          mkdir package
+          cp build/count package/
+          cp -r docs package/
+          cp README.md package/ || true
+          cp LICENSE package/ || true
+          tar -czf count-macos-x64.tar.gz -C package .
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: count-macos
-          path: build/macos/count
+          path: count-macos-x64.tar.gz
 
 
   build-windows:
@@ -55,8 +75,34 @@ jobs:
       - name: Build
         run: nmake /f Makefile.win
 
+      - name: Package
+        run: |
+          mkdir package
+          copy build\windows\count.exe package\
+          xcopy docs package\docs /E /I
+          if exist README.md copy README.md package\
+          if exist LICENSE copy LICENSE package\
+          powershell Compress-Archive package count-windows-x64.zip
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: count-windows
-          path: build/windows/count.exe
+          path: count-windows-x64.zip
+
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-linux, build-macos, build-windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            count-linux/count-linux-x64.tar.gz
+            count-macos/count-macos-x64.tar.gz
+            count-windows/count-windows-x64.zip
