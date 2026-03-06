@@ -48,4 +48,4 @@ EXAMPLES
 =
 NOTES
     - run and solorun do not take additional arguments.
-    - Input must be a valid octal number less than 2000000000000000000000 (21 digits).
+    - Input must be a valid octal number less than 2222222222222222222222 (21 digits).
