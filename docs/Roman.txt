@@ -23,12 +23,10 @@ OUTPUT FORMATS
         Uses correct standard notation for Roman numerals, disregarding the use of M
         when a combining overline can be applied instead.
         Default output format if parameter is not explicitly specified.
-            Example: 13500 -> X̅I̅I̅I̅D
 
     idiomatic (i)
         Prefers using M wherever possible, making numbers more verbose.
         Non-standard, stylistic choice.
-            Example: 13500 -> X̅MMMD
 =
 EXAMPLES
     count roman run legal
