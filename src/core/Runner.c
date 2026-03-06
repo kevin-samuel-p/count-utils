@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <string.h>
 #include <limits.h>
 #include <wchar.h>
 
-#include "platform.h";
-#include "ModeSelector.h";
+#include "platform.h"
+#include "ModeSelector.h"
 #include "MiscUtils.h"
 
 

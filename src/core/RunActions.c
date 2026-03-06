@@ -180,7 +180,7 @@ bool run_morse(const char *string, char run_option, bool isNumber)
     char *starting_number;
 
     if (!isNumber)
-        starting_number = translate_from_morse_code(starting_number);
+        starting_number = translate_from_morse_code(string);
     else
         starting_number = strdup(string);
     
