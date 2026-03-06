@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         printf(
             "Invalid Syntax - Mode %s does not exist.\n"
             "For supported modes, type\n"
-            "    counter help\n",
+            "    count help\n",
             argv[1]
         );
         goto Done;
@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
         if (!~helpTopic || helpTopic == MODE_HELP)
         {
             printf(
-                "Invalid Syntax - Command `counter help %s` does not exist.\n"
+                "Invalid Syntax - Command `count help %s` does not exist.\n"
                 "For supported commands, type\n"
-                "    counter help\n",
+                "    count help\n",
                 argv[2]
             );
             goto Done;
@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
     if (!option)
     {
         printf(
-            "Invalid Syntax - Command `counter %s %s` does not exist.\n"
+            "Invalid Syntax - Command `count %s %s` does not exist.\n"
             "For supported commands, type\n"
-            "    counter help %s\n",
+            "    count help %s\n",
             argv[1], argv[2], argv[1]
         );
         goto Done;
@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
         {
             printf(
                 "Invalid Syntax - Expected fourth parameter.\n"
-                "    counter %s %s <param>\n"
-                "For more information, type `counter help %s`\n",
+                "    count %s %s <param>\n"
+                "For more information, type `count help %s`\n",
                 argv[1], argv[2], argv[1]
             );
             goto Done;
@@ -110,9 +110,9 @@ int main(int argc, char *argv[])
         if (!param)
         {
             printf(
-                "Invalid Syntax - Command `counter %s %s %s` does not exist.\n"
+                "Invalid Syntax - Command `count %s %s %s` does not exist.\n"
                 "For supported commands, type\n"
-                "    counter help %s\n",
+                "    count help %s\n",
                 argv[1], argv[2], (argc >= 4) ? argv[3] : NULL, argv[1]
             );
             goto Done;
