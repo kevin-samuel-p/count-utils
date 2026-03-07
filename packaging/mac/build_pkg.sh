@@ -12,7 +12,7 @@ mkdir -p $BUILD_DIR/usr/local/bin
 mkdir -p $BUILD_DIR/usr/local/share/count/docs
 
 # copy binary
-cp build/count $BUILD_DIR/usr/local/bin/
+cp build/mac/count $BUILD_DIR/usr/local/bin/
 
 # copy docs
 cp docs/* $BUILD_DIR/usr/local/share/count/docs/
