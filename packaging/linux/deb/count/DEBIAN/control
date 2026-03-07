@@ -1,0 +1,7 @@
+Package: counting-tool
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Sadge (sadgeis12@discord.com)
+Description: Counting Tool is a CLI copypaste utility for counting forums supporting multiple counting modes.

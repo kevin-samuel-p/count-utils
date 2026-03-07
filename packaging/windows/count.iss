@@ -1,10 +1,10 @@
 [Setup]
 AppName=Counting Tool
 AppVersion=1.0
-DefaultDirName={pf}\Count
+DefaultDirName={pf}\Counting-Tool
 DefaultGroupName=Counting Tool
 OutputDir=build/windows
-OutputBaseFilename=count-installer
+OutputBaseFilename=counting-tool-installer
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
