@@ -93,6 +93,4 @@ void increment_numstring(char **number);
  */
 bool sanitize(char **number, bool stripZeroes);
 
-char getCharForCorrespondingNumberRadix(int base);
-
 #endif /* MISCUTILS_H */

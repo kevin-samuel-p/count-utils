@@ -156,13 +156,7 @@ int main(int argc, char *argv[])
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
             sanitize(&input, true);
-            if (!input) goto Done;
-
-            // Custom sanitization for radices
-            char *test = convert_base(input, mode, getCharForCorrespondingNumberRadix(mode));
-            if (!test) goto Done;
-            free(test);
-            
+            if (!input || !is_convertible(input, mode)) goto Done;
             if (option == 'c' && !convert_base(input, mode, param)) goto Done;
             if (option != 'c' && !run_radix(input, option, mode)) goto Done;
         break;

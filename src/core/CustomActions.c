@@ -42,6 +42,37 @@ void conversion_output_w(const wchar_t *string)
 
 // -------- ACTION FUNCTIONS --------
 
+bool is_convertible(const char *number, enum CountMode mode)
+{
+    enum Radix base;
+    
+    switch(mode)
+    {
+        case MODE_BINARY:
+            base = BINARY;
+        break;
+
+        case MODE_DECIMAL:
+            base = DECIMAL;
+        break;
+
+        case MODE_HEXADECIMAL:
+            base = HEXADECIMAL;
+        break;
+
+        case MODE_OCTAL:
+            base = OCTAL;
+        break;
+    }
+
+    char *test = convert(number, base, base);
+    if (!test) 
+        return false;
+    
+    free(test);
+    return true;
+}
+
 bool convert_base(const char *number, enum CountMode mode, char target)
 {
     enum Radix convertFrom;
