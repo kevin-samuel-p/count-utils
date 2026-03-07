@@ -31,7 +31,7 @@ Download the file that matches your operating system and follow the instructions
 1. Download the Windows installer:
 
 ```
-counting-tool-installer.exe
+counting-tool-installer-windows.exe
 ```
 
 2. Run the installer.
