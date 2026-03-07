@@ -76,21 +76,18 @@ jobs:
       - name: Build
         run: nmake /f Makefile.win
 
-      - name: Package
-        shell: cmd
-        run: |
-          mkdir package
-          copy build\windows\count.exe package\
-          xcopy docs package\docs /E /I
-          if exist README.md copy README.md package\
-          if exist LICENSE copy LICENSE package\
-          powershell Compress-Archive package counting-tool-windows-x64.zip
+      - name: Install Inno Setup
+        run: choco install innosetup -y
 
-      - name: Upload artifact
+      - name: Build Installer
+        run: |
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\count.iss
+
+      - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: count-windows
-          path: counting-tool-windows-x64.zip
+          name: counting-tool-installer-windows
+          path: packaging/windows/build/*.exe
 
 
   release:
@@ -111,4 +108,4 @@ jobs:
             count-linux/counting-tool-linux-x64.tar.gz
             count-linux/*.deb
             macos-package/*.pkg
-            count-windows/counting-tool-windows-x64.zip
+            counting-tool-installer-windows/*.exe
