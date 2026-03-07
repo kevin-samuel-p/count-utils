@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
     unsigned long long *val = NULL;
     bool isNumber;
 
+    printf("\n\n");       // Convenient spacing, easier on the eyes
+
     // If no args, print info
     if (argc == 1)
     {
@@ -281,6 +283,8 @@ Success:
     --exit_status;
 
 Done:
+    printf("\n\n");     // Convenient spacing, easier on the eyes
+
     delete_temp_file();
     free(input);
     free(val);
