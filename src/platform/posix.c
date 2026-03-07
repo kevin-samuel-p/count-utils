@@ -61,8 +61,33 @@ void print_wide(const wchar_t *text)
         return;
     }
 
-    setlocale(LC_ALL, "");
-    wprintf(L"%ls\n", text);
+    setlocale(LC_CTYPE, "");
+    
+    size_t mb_len = wcstombs(NULL, text, 0);
+    if (mb_len == (size_t)-1)
+    {
+        printf("Bad Input - Invalid wide character sequence.\n");
+        return;
+    }
+
+    if (mb_len == 0)
+    {
+        printf("\n");
+        return;
+    }
+
+    char stack_buf[512];
+    char *out_buf = (mb_len < sizeof(stack_buf)) 
+                        ? stack_buf : malloc(mb_len + 1);
+
+    if (out_buf)
+    {
+        wcstombs(out_buf, text, mb_len + 1);
+        printf("%s\n", out_buf);
+    
+        if (out_buf != stack_buf) 
+            free(out_buf);
+    }
 }
 
 static bool run_command_with_wide_input(const char *command, const wchar_t *text)

@@ -1,0 +1,50 @@
+NAME
+    nwn
+
+DESCRIPTION
+    Work with Numbers-Within-Numbers (NWN) format.
+    NWN is a two-level counting system written as A.B, where:
+        - A is the outer count
+        - B is the inner count
+
+    The inner count (B) runs from 1 to A, then resets when
+    the outer count (A) increments.
+=
+RULES
+    - Both A and B must be positive integers.
+    - The inner number (B) cannot exceed the outer number (A).
+    - Increment B while B < A.
+    - When B = A, increment A and reset B to 1.
+
+EXAMPLE SEQUENCE
+    1.1   // B == A -> increment A, reset B
+    2.1   // B < A -> increment B
+    2.2   // B == A -> increment A, reset B
+    3.1
+    3.2
+    3.3   // B == A -> increment A, reset B
+    4.1
+    ...
+=
+USAGE
+    count nwn <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using NWN numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using NWN numbers.
+        Generates consecutive values.
+=
+EXAMPLES
+    count nwn run
+    count nwn r
+
+    count nwn solorun
+    count nwn s
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a valid NWN number in the format A.B with no spaces.

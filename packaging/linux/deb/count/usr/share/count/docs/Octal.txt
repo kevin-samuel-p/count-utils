@@ -1,0 +1,51 @@
+NAME
+    octal
+
+DESCRIPTION
+    Work with octal numbers.
+    Supports counting runs and conversion between octal and other bases.
+=
+USAGE
+    count octal <option> [target]
+
+OPTIONS
+    run (r)
+        Start a counting run using octal numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using octal numbers.
+        Generates consecutive values.
+
+    convert (c)
+        Convert an octal number to another base.
+=
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert octal to binary.
+
+    decimal (d, dec)
+        Convert octal to decimal.
+
+    hexadecimal (h, hex)
+        Convert octal to hexadecimal.
+=       
+EXAMPLES
+    count octal run
+    count octal r
+
+    count octal solorun
+    count octal s
+
+    count octal convert binary
+    count octal c b
+
+    count octal convert decimal
+    count octal c d
+
+    count octal convert hexadecimal
+    count octal c h
+=
+NOTES
+    - run and solorun do not take additional arguments.
+    - Input must be a valid octal number less than 2222222222222222222222 (21 digits).

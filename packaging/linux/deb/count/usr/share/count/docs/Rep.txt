@@ -1,0 +1,36 @@
+NAME
+    rep
+
+DESCRIPTION
+    Work with numbers that have one or more recurring digits.
+    Supports counting runs and verification of repeating numbers.
+=
+USAGE
+    count rep <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using repeating numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using repeating-numbers.
+        Generates consecutive values.
+
+    check (c)
+        Check whether the inputnumber has any repeating digits.
+=
+EXAMPLES
+    count norep run
+    count norep r
+
+    count norep solorun
+    count norep s
+
+    count norep check
+    count norep c
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a non-negative number less than or equal to 2^64 - 1.
+    - Leading zeroes (0s at the start of the number) are stripped and do not count.

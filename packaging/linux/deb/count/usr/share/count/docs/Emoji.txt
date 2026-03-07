@@ -1,0 +1,42 @@
+NAME
+    emoji
+
+DESCRIPTION
+    Work with emoji-formatted numbers.
+    Supports emoji counting runs and conversion of numbers into emoji form.
+=
+USAGE
+    count emoji <option>
+
+OPTIONS
+    run (r)
+        Start a standard emoji counting run.
+        Generates alternating emoji-formatted values.
+
+    solorun (s)
+        Start a solo emoji counting run.
+        Generates consecutive emoji-formatted values.
+
+    convert (c)
+        Convert a numeric input into its emoji representation.
+
+    emojify (e)
+        Alias for convert.
+        Convert a numeric input into its emoji representation.
+=
+EXAMPLES
+    count emoji run
+    count emoji r
+
+    count emoji solorun
+    count emoji s
+
+    count emoji convert
+    count emoji c
+
+    count emoji emojify
+    count emoji e
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a non-negative number.

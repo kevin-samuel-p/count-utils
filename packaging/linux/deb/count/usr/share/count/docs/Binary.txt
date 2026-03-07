@@ -1,0 +1,46 @@
+NAME
+    binary
+
+DESCRIPTION
+    Work with binary numbers (base 2).
+    Supports binary counting runs and base conversion.
+=
+USAGE
+    count binary <option> [target]
+
+OPTIONS
+    run (r)
+        Start a standard binary counting run.
+        Generates alternating binary values.
+
+    solorun (s)
+        Start a solo binary counting run.
+        Generates consecutive binary values.
+
+    convert (c) <target>
+        Convert a binary number to another base.
+=
+CONVERSION TARGETS
+    decimal (d, dec)
+        Convert binary to decimal.
+
+    hexadecimal (h, hex)
+        Convert binary to hexadecimal.
+
+    octal (o, oct)
+        Convert binary to octal.
+=
+EXAMPLES
+    count binary run
+    count binary r
+
+    count binary solorun
+    count binary s
+
+    count binary convert decimal
+    count binary c d
+=
+NOTES
+    - run and solorun do not accept additional parameters.
+    - Input must be a binary number.
+    - Maximum supported length is 65 digits.

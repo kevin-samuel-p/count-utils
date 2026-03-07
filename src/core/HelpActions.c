@@ -63,7 +63,7 @@ bool read_docs(enum CountMode mode)
 #else
     snprintf(
         filepath, sizeof(filepath), 
-        "/usr/local/share/count/%s", 
+        "/usr/share/count/%s", 
         map[mode].docpath
     );
 #endif
@@ -115,7 +115,7 @@ bool read_docs(enum CountMode mode)
     }
 
     if (n > 0)
-        printf("\n%s\n\n%s\n%s\n\n", BR, chunk, BR);
+        printf("\n%s\n\n%s\n\n%s\n", BR, chunk, BR);
 
     fclose(fp);
 

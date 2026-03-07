@@ -1,0 +1,46 @@
+NAME
+    hexadecimal
+
+DESCRIPTION
+    Work with hexadecimal numbers (base 16).
+    Supports hexadecimal counting runs and base conversion.
+=
+USAGE
+    count hexadecimal <option> [target]
+
+OPTIONS
+    run (r)
+        Start a standard hexadecimal counting run.
+        Generates alternating hexadecimal values.
+
+    solorun (s)
+        Start a solo hexadecimal counting run.
+        Generates consecutive hexadecimal values.
+
+    convert (c) <target>
+        Convert a hexadecimal number to another base.
+=
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert hexadecimal to binary.
+
+    decimal (d, dec)
+        Convert hexadecimal to decimal.
+
+    octal (o, oct)
+        Convert hexadecimal to octal.
+=
+EXAMPLES
+    count hexadecimal run
+    count hexadecimal r
+
+    count hexadecimal solorun
+    count hexadecimal s
+
+    count hexadecimal convert binary
+    count hexadecimal c b
+=
+NOTES
+    - run and solorun do not accept additional parameters.
+    - Input must be a valid hexadecimal number.
+    - Maximum supported length is 16 digits (less than 17 digits).

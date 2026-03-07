@@ -1,0 +1,45 @@
+NAME
+    meme
+
+DESCRIPTION
+    Work with meme numbers such as "69" and "420".
+    Supports counting runs using numbers that contain specific meme digits.
+=
+USAGE
+    count meme <option> <meme_number>
+
+OPTIONS
+    run (r)
+        Start a counting run using the selected meme number.
+        Generates alternating values based on the meme number.
+
+    solorun (s)
+        Start a solo counting run using the selected meme number.
+        Generates consecutive values based on the meme number.
+=
+MEME NUMBERS
+    69
+        Numbers containing "69".
+        Example: count meme r 69
+
+    420
+        Numbers containing "420".
+        Example: count meme r 420
+
+    69420
+        Numbers containing "69" or "420".
+        Example: count meme r 69420
+=
+EXAMPLES
+    count meme run 69
+    count meme r 69
+
+    count meme solorun 420
+    count meme s 420
+
+    count meme run 69420
+    count meme r 69420
+=
+NOTES
+    - Input must be a non-negative number.
+    - The <meme_number> argument is required for all options.

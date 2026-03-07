@@ -1,0 +1,45 @@
+NAME
+    decimal (alias: normal)
+
+DESCRIPTION
+    Work with decimal numbers (base 10).
+    Supports decimal number conversion and limited counting functionality.
+
+    NOTE:
+        Standard decimal run mode has been deprecated due to
+        violation of counting bot rules.
+=
+USAGE
+    count decimal <option> [target]
+    count normal  <option> [target]
+
+OPTIONS
+    solorun (s)
+        Start a solo counting run.
+        Generates consecutive decimal numbers.
+
+    convert (c) <target>
+        Convert a decimal number to another base.
+=
+CONVERSION TARGETS
+    binary (b, bin)
+        Convert decimal to binary.
+
+    hexadecimal (h, hex)
+        Convert decimal to hexadecimal.
+
+    octal (o, oct)
+        Convert decimal to octal.
+=
+EXAMPLES
+    count decimal solorun
+    count decimal s
+
+    count decimal convert binary
+    count decimal c b
+=
+NOTES
+    - The run option is deprecated and unavailable.
+    - solorun does not accept additional parameters.
+    - Input must be a valid unsigned decimal number.
+    - Maximum supported value is less than 2^64.

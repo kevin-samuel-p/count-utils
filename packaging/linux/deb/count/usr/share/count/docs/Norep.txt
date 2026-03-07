@@ -1,0 +1,36 @@
+NAME
+    norep
+
+DESCRIPTION
+    Work with numbers that have no repeating digits.
+    Supports counting runs and verification of non-repeating numbers.
+=
+USAGE
+    count norep <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using non-repeating numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using non-repeating numbers.
+        Generates consecutive values.
+
+    check (c)
+        Check whether the input number has no repeating digits.
+=
+EXAMPLES
+    count norep run
+    count norep r
+
+    count norep solorun
+    count norep s
+
+    count norep check
+    count norep c
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a non-negative number less than or equal to 9876543210.
+    - Leading zeroes in the input are ignored and stripped.

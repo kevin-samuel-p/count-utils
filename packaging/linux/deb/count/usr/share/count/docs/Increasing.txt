@@ -1,0 +1,39 @@
+NAME
+    increasing
+
+DESCRIPTION
+    Work with numbers whose digits are in non-decreasing order.
+    A number is considered increasing if each digit is greater than
+    or equal to the digit before it.
+=
+USAGE
+    count increasing <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using numbers with digits
+        in non-decreasing order.
+        Generates alternating valid values.
+
+    solorun (s)
+        Start a solo counting run using numbers with digits
+        in non-decreasing order.
+        Generates consecutive valid values.
+
+    check (c)
+        Check whether the input number has digits
+        in non-decreasing order.
+=
+EXAMPLES
+    count increasing run
+    count increasing r
+
+    count increasing solorun
+    count increasing s
+
+    count increasing check
+    count increasing c
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a non-negative number.

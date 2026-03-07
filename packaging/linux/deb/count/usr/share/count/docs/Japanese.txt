@@ -1,0 +1,44 @@
+NAME
+    japanese
+
+DESCRIPTION
+    Work with Japanese numerals.
+    Supports counting using Japanese numbers and translation
+    to and from Hindu-Arabic numerals.
+=
+USAGE
+    count japanese <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using Japanese numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using Japanese numbers.
+        Generates consecutive values.
+
+    convert (c)
+        Convert a numeric input into Japanese numeral form.
+
+    translate (t)
+        Convert a Japanese numeral into its Hindu-Arabic number.
+        Alias for convert in reverse.
+=
+EXAMPLES
+    count japanese run
+    count japanese r
+
+    count japanese solorun
+    count japanese s
+
+    count japanese convert
+    count japanese c
+
+    count japanese translate
+    count japanese t
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be either a non-negative number or a valid Japanese numeral.
+    - Maximum numeric value supported is less than 10^50.

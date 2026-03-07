@@ -1,0 +1,39 @@
+NAME
+    mirror
+
+DESCRIPTION
+    Work with mirrored numbers.
+    Supports counting runs where numbers are reversed before processing.
+=
+USAGE
+    count mirror <option> <input_mode>
+
+OPTIONS
+    run (r)
+        Start a counting run using mirrored numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using mirrored numbers.
+        Generates consecutive values.
+=
+INPUT MODES
+    mirror (m)
+        Indicates that the input number is mirrored (reversed).
+        Example: count mirror r m
+
+    normal (n)
+        Indicates that the input number is normal (not mirrored).
+        Example: count mirror r n
+=
+EXAMPLES
+    count mirror run mirror
+    count mirror r m
+
+    count mirror solorun normal
+    count mirror s n
+=
+NOTES
+    - The <input_mode> argument is required for all options.
+    - Input must be a non-negative number.
+    - Mirrored input cannot have trailing zeroes, as this causes ambiguity.
