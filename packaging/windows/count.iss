@@ -1,6 +1,6 @@
 [Setup]
 AppName=Counting Tool
-AppVersion=1.0
+AppVersion=1.0.0
 DefaultDirName={pf}\Counting-Tool
 DefaultGroupName=Counting Tool
 OutputDir=build/windows

@@ -63,7 +63,7 @@ bool read_docs(enum CountMode mode)
 #else
     snprintf(
         filepath, sizeof(filepath), 
-        "/usr/share/count/%s", 
+        "/usr/local/share/count/%s", 
         map[mode].docpath
     );
 #endif
