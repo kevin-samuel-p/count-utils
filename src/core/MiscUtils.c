@@ -200,3 +200,16 @@ bool sanitize(char **number, bool stripZeroes)
 
     return true;
 }
+
+char getCharForCorrespondingNumberRadix(int base)
+{
+    switch(base)
+    {
+        case 2: return 'b';    // BINARY
+        case 8: return 'o';    // OCTAL
+        case 10: return 'd';   // DECIMAL
+        case 16: return 'h';   // HEXADECIMAL
+    }
+
+    return '\0';    // Unknown base
+}
