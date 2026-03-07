@@ -115,7 +115,7 @@ bool read_docs(enum CountMode mode)
     }
 
     if (n > 0)
-        printf("\n%s\n\n%s\n\n%s\n", BR, chunk, BR);
+        printf("\n%s\n\n%s\n\n%s", BR, chunk, BR);
 
     fclose(fp);
 
