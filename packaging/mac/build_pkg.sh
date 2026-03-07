@@ -4,7 +4,7 @@ set -e
 APP_NAME="counting_tool"
 VERSION="1.0.0"
 
-PKG_DIR="packaging/mac/"
+PKG_DIR="packaging/mac"
 
 mkdir -p $PKG_DIR/usr/local/bin
 mkdir -p $PKG_DIR/usr/local/share/count/docs

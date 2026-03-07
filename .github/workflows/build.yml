@@ -61,8 +61,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-package
-          path: macos-package/*.pkg
+          name: count-mac
+          path: packaging/mac/*.pkg
 
   build-windows:
     runs-on: windows-latest
