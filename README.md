@@ -31,7 +31,7 @@ Download the file that matches your operating system and follow the instructions
 1. Download the Windows installer:
 
 ```
-counting-tool-installer-windows.exe
+counting-tool-installer.exe
 ```
 
 2. Run the installer.
@@ -127,7 +127,7 @@ counting_tool_1.0.0.deb
 Install:
 
 ```
-sudo dpkg -i count_1.0.0.deb
+sudo dpkg -i counting_tool_1.0.0.deb
 ```
 
 If dependency repair is required:
