@@ -1,6 +1,6 @@
-# Count
+# Counting Tool
 
-**Count** is a command-line copypaste counting utility.
+**Counting Tool** is a command-line copypaste counting utility.
 It supports multiple counting formats for speedrunning counting forums on Discord.
 
 ---
