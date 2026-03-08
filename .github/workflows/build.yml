@@ -107,5 +107,5 @@ jobs:
           files: |
             count-linux/counting-tool-linux-x64.tar.gz
             count-linux/*.deb
-            macos-package/*.pkg
+            packaging/mac/*.pkg
             counting-tool-installer-windows/*.exe
