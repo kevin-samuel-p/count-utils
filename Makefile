@@ -20,6 +20,11 @@ OBJDIR := $(OUTDIR)/obj
 CC ?= gcc
 CFLAGS := -Wall -Wextra -std=c11 -Iinclude -D_POSIX_C_SOURCE=200809L
 
+ifeq ($(PLATFORM),mac)
+    CC := clang
+    CFLAGS += -arch x86_64 -arch arm64
+endif
+
 # ===== Sources =====
 SRC := $(shell find src -name "*.c" ! -name "windows.c")
 

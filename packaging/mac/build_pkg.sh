@@ -23,6 +23,8 @@ pkgbuild \
   --identifier com.count.cli \
   --version $VERSION \
   --install-location / \
+  --architecture arm64 \
+  --architecture x86_64 \
   $PKG_DIR/${APP_NAME}_${VERSION}.pkg
 
 echo "macOS package created:"
