@@ -20,6 +20,9 @@ enum Radix
     /** Base-2 (binary) */
     BINARY = 2,
 
+    /** Base-3 (ternary) */
+    TERNARY = 3,
+    
     /** Base-8 (octal) */
     OCTAL = 8,
 

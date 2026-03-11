@@ -12,7 +12,8 @@ bool param_satisfiability(enum CountMode mode, char option)
             mode == MODE_BINARY || 
             mode == MODE_DECIMAL || 
             mode == MODE_HEXADECIMAL || 
-            mode == MODE_OCTAL) && 
+            mode == MODE_OCTAL ||
+            mode == MODE_TERNARY) && 
         option == 'c'
     ) || 
         mode == MODE_MEME 
@@ -46,6 +47,7 @@ char parse_param(const char *arg, enum CountMode mode)
         case MODE_DECIMAL:
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
+        case MODE_TERNARY:
         {
             if (strcmp(arg, "binary") == 0 || strcmp(arg, "bin") == 0 || strcmp(arg, "b") == 0)
                 return (mode != MODE_BINARY) ? 'b' : '\0';
@@ -58,6 +60,9 @@ char parse_param(const char *arg, enum CountMode mode)
 
             if (strcmp(arg, "octal") == 0 || strcmp(arg, "oct") == 0 || strcmp(arg, "o") == 0)
                 return (mode != MODE_OCTAL) ? 'o' : '\0';
+
+            if (strcmp(arg, "ternary") == 0 || strcmp(arg, "ter") == 0 || strcmp(arg, "t") == 0)
+                return (mode != MODE_TERNARY) ? 't' : '\0';
         }
         break;
 

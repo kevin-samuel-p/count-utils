@@ -12,9 +12,11 @@ Command;
 
 Command mode_table[] = 
 {
+    { "alpha", MODE_ALPHA },
     { "binary", MODE_BINARY },
     { "decimal", MODE_DECIMAL },
     { "emoji", MODE_EMOJI },
+    { "factor", MODE_FACTORIZATION },
     { "help", MODE_HELP },
     { "hexadecimal", MODE_HEXADECIMAL },
     { "increasing", MODE_INCREASING },
@@ -31,7 +33,8 @@ Command mode_table[] =
     { "palindrome", MODE_PALINDROME },
     { "rep", MODE_REP },
     { "roman", MODE_ROMAN },
-    { "tally", MODE_TALLY }
+    { "tally", MODE_TALLY },
+    { "ternary", MODE_TERNARY }
 };
 
 /* Comparator for bsearch */

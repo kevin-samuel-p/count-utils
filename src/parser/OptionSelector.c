@@ -21,6 +21,7 @@ char is_custom_option(const char *option, enum CountMode mode)
 {
     if (strcmp(option, "c") == 0)
         return (
+            mode != MODE_ALPHA &&
             mode != MODE_MEME &&
             mode != MODE_MIRROR &&
             mode != MODE_NWN &&
@@ -55,7 +56,9 @@ char is_custom_option(const char *option, enum CountMode mode)
         case MODE_DECIMAL:
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
+        case MODE_TERNARY:
 
+        case MODE_FACTORIZATION:
         case MODE_MORSE:
         case MODE_TALLY:
 

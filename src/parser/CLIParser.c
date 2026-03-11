@@ -155,6 +155,7 @@ int main(int argc, char *argv[])
         case MODE_DECIMAL:
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
+        case MODE_TERNARY:
             sanitize(&input, true);
             if (!input || !is_convertible(input, mode)) goto Done;
             if (option == 'c' && !convert_base(input, mode, param)) goto Done;

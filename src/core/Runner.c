@@ -209,6 +209,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
         case MODE_DECIMAL:
         case MODE_HEXADECIMAL:
         case MODE_OCTAL:
+        case MODE_TERNARY:
         {
             if (
                 !call.arg.num_char_ptr || 
