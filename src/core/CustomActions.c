@@ -7,7 +7,9 @@
 
 #include "platform.h"
 
+#include "alpha.h"
 #include "emoji.h"
+#include "factors.h"
 #include "increasing.h"
 #include "meme.h"
 #include "morse.h"
@@ -95,6 +97,10 @@ bool convert_base(const char *number, enum CountMode mode, char target)
         case MODE_OCTAL:
             convertFrom = OCTAL;
         break;
+
+        case MODE_TERNARY:
+            convertFrom = TERNARY;
+        break;
     }
 
     switch(target)
@@ -113,6 +119,10 @@ bool convert_base(const char *number, enum CountMode mode, char target)
 
         case 'o':
             convertTo = OCTAL;
+        break;
+
+        case 't':
+            convertTo = TERNARY;
         break;
     }
 
@@ -134,6 +144,38 @@ bool convert_emoji(const char *number)
 
     conversion_output(converted);
     free(converted);
+
+    return true;
+}
+
+bool convert_factorization(const char *string, bool isNumber)
+{
+    char buffer[32];
+    wchar_t *expression = utf8_to_wide(string);
+    if (!expression)
+        return false;
+
+    unsigned long long value = multiply(expression);
+    free(expression);
+
+    if (!value)
+        return false;
+
+    sprintf(buffer, "%llu", value);
+
+    if (!isNumber)
+    {
+        conversion_output(buffer);
+    }
+    else
+    {
+        expression = factorize(value);
+        if (!expression)
+            return false;
+
+        conversion_output_w(expression);
+        free(expression);
+    }
 
     return true;
 }

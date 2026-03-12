@@ -18,9 +18,11 @@ map[] =
 {
     { 0, "docs/Info.txt" },
     { MODE_HELP, "docs/Help.txt" },
+    { MODE_ALPHA, "docs/Alpha.txt" },
     { MODE_BINARY, "docs/Binary.txt" },
     { MODE_DECIMAL, "docs/Decimal.txt" },
     { MODE_EMOJI, "docs/Emoji.txt" },
+    { MODE_FACTORIZATION, "docs/Factorization.txt" },
     { MODE_HEXADECIMAL, "docs/Hexadecimal.txt" },
     { MODE_INCREASING, "docs/Increasing.txt" },
     { MODE_JAPANESE, "docs/Japanese.txt" },
@@ -35,7 +37,8 @@ map[] =
     { MODE_PALINDROME, "docs/Palindrome.txt" },
     { MODE_REP, "docs/Rep.txt" },
     { MODE_ROMAN, "docs/Roman.txt" },
-    { MODE_TALLY, "docs/Tally.txt" }
+    { MODE_TALLY, "docs/Tally.txt" },
+    { MODE_TERNARY, "docs/Ternary.txt" }
 };
 
 bool read_docs(enum CountMode mode)

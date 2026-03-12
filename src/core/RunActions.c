@@ -8,7 +8,9 @@
 
 #include "platform.h"
 
+#include "alpha.h"
 #include "emoji.h"
+#include "factors.h"
 #include "increasing.h"
 #include "meme.h"
 #include "morse.h"
@@ -54,6 +56,10 @@ bool run_radix(
         case MODE_OCTAL:
             base = OCTAL;
         break;
+
+        case MODE_TERNARY:
+            base = TERNARY;
+        break;
     }
 
     return runner(
@@ -68,6 +74,19 @@ bool run_radix(
     );
 }
 
+bool run_alpha(const char *starting_number, char run_option)
+{
+    return runner(
+        (struct Func_Call)
+        {
+            .mode = MODE_ALPHA,
+            .func.incrementer = next_alphabet_number,
+            .arg.num_char_ptr = starting_number
+        },
+        run_option
+    );
+}
+
 bool run_emoji(const char *starting_number, char run_option)
 {
     return runner(
@@ -76,6 +95,29 @@ bool run_emoji(const char *starting_number, char run_option)
             .mode = MODE_EMOJI,
             .func.formatter = number_to_emoji,
             .arg.num_char_ptr = starting_number
+        },
+        run_option
+    );
+}
+
+bool run_factorization(const char *string, char run_option)
+{  
+    wchar_t *input = utf8_to_wide(string);
+    if (!input)
+        return false;
+
+    unsigned long long starting_number = multiply(input);
+    free(input);
+
+    if (starting_number == 0)
+        return false;
+    
+    return runner(
+        (struct Func_Call)
+        {
+            .mode = MODE_FACTORIZATION,
+            .func.formatter = factorize,
+            .arg.num_ullong = starting_number
         },
         run_option
     );

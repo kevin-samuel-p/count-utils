@@ -5,7 +5,9 @@
 #include "ModeSelector.h"
 
 bool run_radix(const char *, char, enum CountMode);
+bool run_alpha(const char *, char);
 bool run_emoji(const char *, char);
+bool run_factorization(const char *, char);
 bool run_increasing(const char *, char);
 bool run_japanese(const char *, char, bool);
 bool run_meme(const char *, char, char);

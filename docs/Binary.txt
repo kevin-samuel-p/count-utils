@@ -29,6 +29,9 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert binary to octal.
+
+    ternary (t, ter)
+        Convert binary to ternary.
 =
 EXAMPLES
     count binary run

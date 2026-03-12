@@ -1,0 +1,37 @@
+NAME
+    factor
+
+DESCRIPTION
+    Work with factorization. 
+    Supports prime factorization and multiplication.
+=
+USAGE
+    count factor <option>
+
+OPTIONS
+    run (r)
+        Start a counting run with factorized expressions.
+        Generates prime factorization expressions for alternating values.
+
+    solorun (s)
+        Start a solo counting run using factorized expressions.
+        Generates prime factorization expressions for consecutive values.
+
+    convert (c)
+        Factorize a given number, 
+        or combine a factorization expression into the original number.
+=
+EXAMPLES
+    count factor run
+    count factor r
+
+    count factor solorun
+    count factor s
+
+    count factor convert
+    count factor c
+=
+NOTES
+    - No additional parameters are required.
+    - Input must either be a valid number or a valid factorization expression.
+    - The value of the number/expression provided as input should be less than 2^64.

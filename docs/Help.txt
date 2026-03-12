@@ -22,6 +22,9 @@ MODES:
     nwn           Numbers within numbers
     nwnwn         Numbers within numbers within numbers
     nwnwnn        Numbers within numbers with N numbers
+    alpha         Alphabet numbers
+    factor        Prime factorization of numbers
+    ternary       Ternary numbers and conversion
 
 Run:
     count help

@@ -29,6 +29,9 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert hexadecimal to octal.
+
+    ternary (t, ter)
+        Convert hexadecimal to ternary.
 =
 EXAMPLES
     count hexadecimal run

@@ -1,0 +1,32 @@
+NAME
+    alpha
+
+DESCRIPTION
+    Work with alphabet numbers. 
+    The place value system is replaced with alphabets.
+
+EXAMPLE SEQUENCE
+    A, B, C, D, E,..., Y, Z, AA, AB, etc.
+=
+USAGE
+    count alpha <option>
+
+OPTIONS
+    run (r)
+        Start a counting run using alphabet numbers.
+        Generates alternating values.
+
+    solorun (s)
+        Start a solo counting run using alphabet numbers.
+        Generates consecutive values.
+=
+EXAMPLES
+    count alpha run
+    count alpha r
+
+    count alpha solorun
+    count alpha s
+=
+NOTES
+    - No additional parameters are required.
+    - Input must be a valid alphabet number with only alphabetical characters and no numerical characters, spaces, or symbols.

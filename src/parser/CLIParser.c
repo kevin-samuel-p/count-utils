@@ -151,6 +151,12 @@ int main(int argc, char *argv[])
     // Perform action
     switch(mode)
     {
+        case MODE_ALPHA:
+            sanitize(&input, false);
+            if (!input) goto Done;
+            if (!run_alpha(input, option)) goto Done;
+        break;
+
         case MODE_BINARY:
         case MODE_DECIMAL:
         case MODE_HEXADECIMAL:
@@ -171,6 +177,12 @@ int main(int argc, char *argv[])
             }
             if (option == 'c' && !convert_emoji(input)) goto Done; 
             if (option != 'c' && !run_emoji(input, option)) goto Done;
+        break;
+
+        case MODE_FACTORIZATION:
+            isNumber = sanitize(&input, false);
+            if (option == 'c' && !convert_factorization(input, isNumber)) goto Done;
+            if (option != 'c' && !run_factorization(input, option)) goto Done;
         break;
 
         case MODE_INCREASING:

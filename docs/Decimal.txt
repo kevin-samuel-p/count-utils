@@ -30,6 +30,9 @@ CONVERSION TARGETS
 
     octal (o, oct)
         Convert decimal to octal.
+
+    ternary (t, ter)
+        Convert decimal to ternary.
 =
 EXAMPLES
     count decimal solorun

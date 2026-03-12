@@ -61,8 +61,14 @@ $(OBJDIR)\RunActions.obj:
 $(OBJDIR)\Runner.obj:
 	$(CC) $(CFLAGS) /c src\core\Runner.c /Fo$(OBJDIR)\Runner.obj
 
+$(OBJDIR)\alpha.obj:
+	$(CC) $(CFLAGS) /c src\modes\alpha.c /Fo$(OBJDIR)\alpha.obj
+
 $(OBJDIR)\emoji.obj:
 	$(CC) $(CFLAGS) /c src\modes\emoji.c /Fo$(OBJDIR)\emoji.obj
+
+$(OBJDIR)\factors.obj:
+	$(CC) $(CFLAGS) /c src\modes\factors.c /Fo$(OBJDIR)\factors.obj
 
 $(OBJDIR)\increasing.obj:
 	$(CC) $(CFLAGS) /c src\modes\increasing.c /Fo$(OBJDIR)\increasing.obj

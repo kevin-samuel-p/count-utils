@@ -27,6 +27,43 @@ struct Func_Call *dispatcher(struct Func_Call call)
 
     switch (call.mode)
     {
+        case MODE_ALPHA:
+        case MODE_MEME:
+        case MODE_INCREASING:
+        case MODE_PALINDROME:
+        {
+            if (!call.arg.num_char_ptr)
+            {
+                printf("Error - Malformed call to runner dispatcher.\n");
+                free(payload);
+                return NULL;
+            }
+
+            /**
+             *  Signatures that match:
+             *      next_alphabet_number()
+             *      next_69_number()
+             *      next_420_number()
+             *      next_69420_number()
+             *      next_increasing_number()
+             *      next_palindrome()
+             */
+            char *(*incr)(const char *) = call.func.incrementer;
+
+            payload->mode = call.mode;
+            payload->func.incrementer = incr;
+
+            payload->arg.num_char_ptr = incr(call.arg.num_char_ptr);
+            if (!payload->arg.num_char_ptr)
+            {
+                free(payload);
+                return NULL;
+            }
+
+            res = (void *)payload->arg.num_char_ptr;
+            break;
+        }
+        
         case MODE_EMOJI:
         case MODE_MORSE:
         {
@@ -70,38 +107,23 @@ struct Func_Call *dispatcher(struct Func_Call call)
             break;
         }
 
-        case MODE_MEME:
-        case MODE_INCREASING:
-        case MODE_PALINDROME:
+        case MODE_FACTORIZATION:
         {
-            if (!call.arg.num_char_ptr)
+            if (call.arg.num_ullong == 0)
             {
                 printf("Error - Malformed call to runner dispatcher.\n");
                 free(payload);
                 return NULL;
             }
 
-            /**
-             *  Signatures that match:
-             *      next_69_number()
-             *      next_420_number()
-             *      next_69420_number()
-             *      next_increasing_number()
-             *      next_palindrome()
-             */
-            char *(*incr)(const char *) = call.func.incrementer;
+            // Signature matches factorize()
+            wchar_t *(*form)(unsigned long long) = call.func.formatter;
 
             payload->mode = call.mode;
-            payload->func.incrementer = incr;
+            payload->func.formatter = form;
+            payload->arg.num_ullong = call.arg.num_ullong + 1;
 
-            payload->arg.num_char_ptr = incr(call.arg.num_char_ptr);
-            if (!payload->arg.num_char_ptr)
-            {
-                free(payload);
-                return NULL;
-            }
-
-            res = (void *)payload->arg.num_char_ptr;
+            res = (void *)form(call.arg.num_ullong);
             break;
         }
 
@@ -344,9 +366,12 @@ struct Func_Call *dispatcher(struct Func_Call call)
             return NULL;
     }
 
-    if ((
+    if (((
         // Copying to clipboard failed
-        (call.mode == MODE_JAPANESE || call.mode == MODE_ROMAN) ? 
+            call.mode == MODE_FACTORIZATION || 
+            call.mode == MODE_JAPANESE || 
+            call.mode == MODE_ROMAN
+        ) ? 
             !copy_to_clipboard((wchar_t *)res) : 
             !copy_utf8_to_clipboard((char *)res)
         )
