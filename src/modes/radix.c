@@ -40,16 +40,19 @@ const char *radix_name(enum Radix radix)
 
 void number_to_string(char *buffer, unsigned long long number, enum Radix base)
 {
+    int k;
+
     switch(base) 
     {
         case BINARY:
+        case TERNARY:
             int k = 0;
 
             // Construct string in reverse
             do
             {
-                buffer[k++] = '0' + (number & 1);
-                number >>= 1;
+                buffer[k++] = '0' + (number % base);
+                number /= base;
             }
             while (number != 0);
             
@@ -77,30 +80,6 @@ void number_to_string(char *buffer, unsigned long long number, enum Radix base)
 
         case OCTAL:
             sprintf(buffer, "%llo", number);
-        break;
-
-        case TERNARY:
-            int k = 0;
-
-            // Construct string in reverse
-            do
-            {
-                buffer[k++] = '0' + (number % 3);
-                number /= 3;
-            } while (number != 0);
-
-            buffer[k] = '\0';
-
-            // Reverse final order to correct string
-            for (
-                int left = 0, right = k - 1; 
-                left < right; 
-                left++, right--
-            ) {
-                char temp = buffer[left];
-                buffer[left] = buffer[right];
-                buffer[right] = temp;
-            }
         break;
     }
 }

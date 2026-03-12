@@ -15,7 +15,9 @@ $(OBJDIR)\Inputter.obj \
 $(OBJDIR)\MiscUtils.obj \
 $(OBJDIR)\RunActions.obj \
 $(OBJDIR)\Runner.obj \
+$(OBJDIR)\alpha.obj \
 $(OBJDIR)\emoji.obj \
+$(OBJDIR)\factors.obj \
 $(OBJDIR)\increasing.obj \
 $(OBJDIR)\meme.obj \
 $(OBJDIR)\morse.obj \

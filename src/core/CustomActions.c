@@ -65,6 +65,10 @@ bool is_convertible(const char *number, enum CountMode mode)
         case MODE_OCTAL:
             base = OCTAL;
         break;
+
+        case MODE_TERNARY:
+            base = TERNARY;
+        break;
     }
 
     char *test = convert(number, base, base);
