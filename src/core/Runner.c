@@ -123,7 +123,7 @@ struct Func_Call *dispatcher(struct Func_Call call)
             payload->func.formatter = form;
             payload->arg.num_ullong = call.arg.num_ullong + 1;
 
-            res = (void *)form(call.arg.num_ullong);
+            res = (void *)form(payload->arg.num_ullong);
             break;
         }
 
